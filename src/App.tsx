@@ -19,16 +19,8 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
 import { ButtonBase } from '@mui/material'
 import { createClient } from '@hey-api/client-fetch';
-import { OpenAPI, readTodosGetTodosGet } from './client'
-
-OpenAPI.BASE = 'http://127.0.0.1:8000'
-OpenAPI.interceptors.response.use((response) => {
-  if (response.status === 200) {
-    console.log(`request to ${response.url} was successful`);
-  }
-  return response;
-});
-
+import { OpenAPI, PaginateModel_Todo_, readTodosGetTodosGet } from './client'
+import TodoPage from './TodoPage'
 
 const rows: GridRowsProp = [
   { id: 1, col1: 'Hello', col2: 'World' },
@@ -62,14 +54,9 @@ function App() {
     setName("Charles")
   }
 
-  const fetchTodos = () => {
-    readTodosGetTodosGet({ page: 1, perPage: 5 })
-  }
-
-
   return (
     <>
-      <Button onClick={fetchTodos}>get todo list</Button>
+      <TodoPage></TodoPage>
       <List
         sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
         component="nav"
