@@ -17,7 +17,7 @@ function TodoPage() {
     setPage(page + 1)
   }
 
-  const hasNext = false
+  const hasNext = true
 
 
   useEffect(() => {
