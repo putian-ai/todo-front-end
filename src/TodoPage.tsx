@@ -1,5 +1,5 @@
 import "./TodoPage.css";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   PaginateModel_Todo_,
   readTodosGetTodosGet,
@@ -16,6 +16,10 @@ function TodoPage() {
   const [newTaskItem, setNewTaskItem] = useState<string>("");
   const [newTaskPlanTime, setNewTaskPlanTime] = useState<string>("");
   const userId = 1; // Assume you have the user ID from your authentication context
+
+  const handleDateTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setNewTaskPlanTime(event.target.value);
+  };
 
   const fetchTodos = async (page: number, perPage: number) => {
     const data = await readTodosGetTodosGet({ page: page, perPage: perPage });
@@ -43,7 +47,7 @@ function TodoPage() {
         const response = await createTodoCreateTodosPost({
           requestBody: {
             item: newTaskItem,
-            plan_time: newTaskPlanTime,
+            plan_time: dayjs(newTaskPlanTime).format("YYYY-MM-DD HH:mm:ss"),
             user_id: userId,
           },
         });
@@ -125,13 +129,16 @@ function TodoPage() {
           onChange={(e) => setNewTaskItem(e.target.value)}
           variant="outlined"
         />
-        <TextField
-          label="Plan Time (YYYY-MM-DD HH:mm:ss)"
-          value={newTaskPlanTime}
-          onChange={(e) => setNewTaskPlanTime(e.target.value)}
-          variant="outlined"
-          style={{ marginLeft: "10px", width: "100%" }}
-        />
+        <div>
+          <label htmlFor="datetime-input">Select a date and time: </label>
+          {/* Step 3: Set up the input element */}
+          <input
+            type="datetime-local"
+            id="datetime-input"
+            value={newTaskPlanTime}
+            onChange={handleDateTimeChange}
+          />
+        </div>
         <Button
           onClick={addTask}
           variant="contained"
