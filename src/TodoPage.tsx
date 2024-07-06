@@ -1,5 +1,5 @@
 import "./TodoPage.css";
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import {
   PaginateModel_Todo_,
   readTodosGetTodosGet,
@@ -16,6 +16,7 @@ function TodoPage() {
   const [perPage, setPerPage] = useState<number>(5);
   const [todoItem, setTodoItem] = useState<string>("");
   const [todoPlanTime, setTodoPlanTime] = useState<string>("");
+
   const userId = 1;
 
   const fetchTodos = async (page: number, perPage: number) => {
@@ -47,7 +48,7 @@ function TodoPage() {
 
 
 
-
+  //update createTodo with twice fetch
   const createTodo = async () => {
     if (todoItem.trim() && todoPlanTime.trim()) {
       try {
@@ -60,18 +61,8 @@ function TodoPage() {
           },
         });
 
-        const updatedItems = [response, ...(todoPage?.items || [])];
-        if (todoPage) {
-          const updatedTodoPage: PaginateModel_Todo_ = {
-            ...todoPage,
-            items: updatedItems,
-          };
-          setTodoPage(updatedTodoPage);
-        } else {
-          fetchTodos(page, perPage);
-        }
-        setTodoItem("");
-        setTodoPlanTime("");
+        fetchTodos(page, perPage)
+
       } catch (error) {
         console.error("Error creating task:", error);
       }
@@ -83,13 +74,13 @@ function TodoPage() {
   }, [page, perPage]);
 
   const NextPageButton = (
-    <Button onClick={nextPageTodos} disabled={!hasNext}>
+    <Button onClick={nextPageTodos} disabled={hasNext}>
       Next page
     </Button>
   );
 
   const PreviousPageButton = (
-    <Button onClick={prevPageTodos} disabled={page <= 1}>
+    <Button onClick={prevPageTodos} disabled={hasPrev}>
       Previous page
     </Button>
   );
@@ -105,6 +96,11 @@ function TodoPage() {
       <td>{dayjs(item.plan_time).format("YYYY-MM-DD HH:mm")}</td>
     </tr>
   ));
+
+  //handle Date Time change
+  const handleDateTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTodoPlanTime(event.target.value);
+  }
 
   return (
     <>
@@ -136,13 +132,17 @@ function TodoPage() {
           onChange={(e) => setTodoItem(e.target.value)}
           variant="outlined"
         />
-        <TextField
-          label="Plan Time (YYYY-MM-DD HH:mm:ss)"
-          value={todoPlanTime}
-          onChange={(e) => setTodoPlanTime(e.target.value)}
-          variant="outlined"
-          style={{ marginLeft: "10px", width: "100%" }}
-        />
+        <div>
+          <label htmlFor="datetime-input">Select a date and time: </label>
+          {/* Step 3: Set up the input element */}
+          <input
+            type="datetime-local"
+            id="datetime-input"
+            value={todoPlanTime}
+            onChange={handleDateTimeChange}
+          />
+        </div>
+
         <Button
           onClick={createTodo}
           variant="contained"
