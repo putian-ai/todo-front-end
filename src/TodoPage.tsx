@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost } from './client'
 import { Button } from '@mui/material'
 import dayjs from 'dayjs'
+import Pagination from './Pagination'
 
 function TodoPage() {
 
@@ -13,14 +14,6 @@ function TodoPage() {
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
-
-  const hasNext = useMemo(() => {
-    return todoPage === undefined || todoPage.total_items - page * perPage < 0
-  }, [perPage, page, todoPage])
-
-  const hasPrev = useMemo(() => {
-    return todoPage === undefined || page < 2
-  }, [page, todoPage])
 
   const fetchTodos = async (page: number, perPage: number) => {
     const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
@@ -70,25 +63,35 @@ function TodoPage() {
     setPage(page - 1)
   }
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handlePerPageChange = (newPerPage: number) => {
+    setPerPage(newPerPage)
+  }
+
   useEffect(() => {
     fetchTodos(page, perPage)
   }, [page, perPage])
-
-
-  const NextPageButton = <Button onClick={nextPageTodos} disabled={hasNext}>Next page</Button>
-  const PrevPageButton = <Button onClick={prevPageTodos} disabled={hasPrev}>Prev page</Button>
 
 
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
   const todoRows = todoPage?.items.map(item => (
     <tr key={item.id}>
-      <td>{item.item}</td>
-      <td>{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
-      <td>{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
-      <td>
-        <Button onClick={() => deleteTodo(item.id!)} >delete</Button>
-        <Button onClick={() => updateTodo(item.id!)} >update</Button>
+      <td className="border border-gray-200 px-4 py-2">
+        {item.item}
+      </td>
+      <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
+      <td className="border border-gray-200 px-4 py-2">{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
+      <td className="border border-gray-200 px-4 py-2 flex space-x-2">
+        <Button onClick={() => deleteTodo(item.id!)} className="text-red-500 hover:text-red-700">
+          Delete
+        </Button>
+        <Button onClick={() => updateTodo(item.id!)} className="text-blue-500 hover:text-blue-700">
+          Update
+        </Button>
       </td>
     </tr>
   ))
@@ -115,51 +118,57 @@ function TodoPage() {
     { value: 20, label: '20' },
   ]
 
-  const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPerPage(parseInt(event.target.value))
-  };
-
-
 
   if (todoPage)
     return (
       <>
         {GetTodoPageButton}
         <div>
-          <table style={{ border: '1px solid black' }}>
-            <tbody>
+          <table className="table-auto w-full text-left border-collapse border border-gray-200">
+            <thead>
               <tr>
-                <th>Item</th>
-                <th>Create time</th>
-                <th>Plan time</th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Item
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Create Time
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Plan Time
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
+            </thead>
+            <tbody>
               {todoRows}
             </tbody>
           </table>
 
+
+          <Pagination
+            currentPage={page}
+            perPage={perPage}
+            totalItems={todoPage.total_items}
+            onPageChange={handlePageChange}
+            onPerPageChange={handlePerPageChange}
+          >
+          </Pagination>
+
+
           <div>
-            Page: {todoPage.page} &nbsp;
-            Per Page:
-            <select value={perPage} onChange={handlePerPageChange}>
-              {perPageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
 
-            &nbsp;
-            Total: {todoPage.total_items}
-            {PrevPageButton}
-            {NextPageButton}
-            <div>
-              <label htmlFor="addItemName">newItemName: </label>
-              <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item"></input>
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
+              <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
 
-              <label htmlFor="addItemName">newPlanTime: </label>
-              <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item"></input>
-              <button onClick={createTodo}>summit</button>
+              <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
+              <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
+
+              <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
             </div>
+
 
             <div>
               <label htmlFor="updateItemName">newItemName: </label>
