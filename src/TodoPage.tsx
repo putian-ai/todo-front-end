@@ -1,11 +1,12 @@
 import "./TodoPage.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   PaginateModel_Todo_,
   readTodosGetTodosGet,
   createTodoCreateTodosPost,
   TodoDto,
 } from "./client";
+
 import { Button, TextField } from "@mui/material";
 import dayjs from "dayjs";
 
@@ -13,14 +14,25 @@ function TodoPage() {
   const [todoPage, setTodoPage] = useState<PaginateModel_Todo_>();
   const [page, setPage] = useState<number>(1);
   const [perPage, setPerPage] = useState<number>(5);
-  const [newTaskItem, setNewTaskItem] = useState<string>("");
-  const [newTaskPlanTime, setNewTaskPlanTime] = useState<string>("");
-  const userId = 1; // Assume you have the user ID from your authentication context
+  const [todoItem, setTodoItem] = useState<string>("");
+  const [todoPlanTime, setTodoPlanTime] = useState<string>("");
+  const userId = 1;
 
   const fetchTodos = async (page: number, perPage: number) => {
     const data = await readTodosGetTodosGet({ page: page, perPage: perPage });
     setTodoPage(data);
   };
+
+  //change to useMemo() for immunity
+  const hasNext = useMemo(() => {
+    return todoPage === undefined || todoPage.total_items - page * perPage < 0
+  }, [perPage, page, todoPage])
+
+  //change to useMemo() for immunity
+  const hasPrev = useMemo(() => {
+    return todoPage === undefined || page < 2
+  }, [page, todoPage])
+
 
   const nextPageTodos = () => {
     setPage(page + 1);
@@ -32,23 +44,22 @@ function TodoPage() {
     }
   };
 
-  const hasNext = () => {
-    if (!todoPage) return false;
-    return page < Math.ceil(todoPage.total_items / perPage);
-  };
 
-  const addTask = async () => {
-    if (newTaskItem.trim() && newTaskPlanTime.trim()) {
+
+
+
+  const createTodo = async () => {
+    if (todoItem.trim() && todoPlanTime.trim()) {
       try {
         const response = await createTodoCreateTodosPost({
           requestBody: {
-            item: newTaskItem,
-            plan_time: newTaskPlanTime,
+            item: todoItem,
+            //Edit the format of selecting time
+            plan_time: dayjs(todoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
             user_id: userId,
           },
         });
 
-        // Assuming response contains the created task
         const updatedItems = [response, ...(todoPage?.items || [])];
         if (todoPage) {
           const updatedTodoPage: PaginateModel_Todo_ = {
@@ -59,8 +70,8 @@ function TodoPage() {
         } else {
           fetchTodos(page, perPage);
         }
-        setNewTaskItem("");
-        setNewTaskPlanTime("");
+        setTodoItem("");
+        setTodoPlanTime("");
       } catch (error) {
         console.error("Error creating task:", error);
       }
@@ -72,7 +83,7 @@ function TodoPage() {
   }, [page, perPage]);
 
   const NextPageButton = (
-    <Button onClick={nextPageTodos} disabled={!hasNext()}>
+    <Button onClick={nextPageTodos} disabled={!hasNext}>
       Next page
     </Button>
   );
@@ -121,19 +132,19 @@ function TodoPage() {
       <div style={{ marginTop: "20px" }}>
         <TextField
           label="New Task Item"
-          value={newTaskItem}
-          onChange={(e) => setNewTaskItem(e.target.value)}
+          value={todoItem}
+          onChange={(e) => setTodoItem(e.target.value)}
           variant="outlined"
         />
         <TextField
           label="Plan Time (YYYY-MM-DD HH:mm:ss)"
-          value={newTaskPlanTime}
-          onChange={(e) => setNewTaskPlanTime(e.target.value)}
+          value={todoPlanTime}
+          onChange={(e) => setTodoPlanTime(e.target.value)}
           variant="outlined"
           style={{ marginLeft: "10px", width: "100%" }}
         />
         <Button
-          onClick={addTask}
+          onClick={createTodo}
           variant="contained"
           color="primary"
           style={{ marginLeft: "10px" }}
