@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CreateTodoCreateTodosPostData, PaginateModel_Todo_, Todo, TodoDto, createTodoCreateTodosPost, readTodosGetTodosGet } from './client'
+import { CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost } from './client'
 import { Button } from '@mui/material'
 import dayjs from 'dayjs'
 
@@ -9,8 +9,10 @@ function TodoPage() {
   const [page, setPage] = useState<number>(1)
   const [perPage, setPerPage] = useState<number>(5)
   const [userId, setUserId] = useState<number>(1)
-  const [todoItem, settodoItem] = useState<string>('')
-  const [todoPlanTime, settodoPlanTime] = useState<string>('')
+  const [addTodoItem, setAddtodoItem] = useState<string>('')
+  const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
+  const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
+  const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
 
   const hasNext = useMemo(() => {
     return todoPage === undefined || todoPage.total_items - page * perPage < 0
@@ -28,8 +30,8 @@ function TodoPage() {
   const createTodo = async () => {
     const data: CreateTodoCreateTodosPostData = {
       requestBody: {
-        item: todoItem,
-        plan_time: dayjs(todoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
+        item: addTodoItem,
+        plan_time: dayjs(addTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         user_id: userId
       }
     }
@@ -39,7 +41,26 @@ function TodoPage() {
 
   const deleteTodo = async (id: number) => {
     console.log(`Delete: ${id}`)
+    const data: DeleteTodosDeleteTodosTodoIdDeleteData = {
+      todoId: id
+    }
+    await deleteTodosDeleteTodosTodoIdDelete(data)
+    fetchTodos(page, perPage)
   }
+
+  const updateTodo = async (id: number) => {
+    console.log(`Update: ${id}`)
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: id,
+      requestBody: {
+        item: updateTodoItem,
+        plan_time: dayjs(updateTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    fetchTodos(page, perPage)
+  }
+
 
   const nextPageTodos = async () => {
     setPage(page + 1)
@@ -67,16 +88,25 @@ function TodoPage() {
       <td>{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
       <td>
         <Button onClick={() => deleteTodo(item.id!)} >delete</Button>
+        <Button onClick={() => updateTodo(item.id!)} >update</Button>
       </td>
     </tr>
   ))
 
   const handleTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    settodoItem(event.target.value);
+    setAddtodoItem(event.target.value);
   };
 
   const handleTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    settodoPlanTime(event.target.value);
+    setAddtodoPlanTime(event.target.value);
+  };
+
+  const handleUpdateTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdatetodoItem(event.target.value);
+  };
+
+  const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdatetodoPlanTime(event.target.value);
   };
 
   const perPageOptions = [
@@ -124,11 +154,19 @@ function TodoPage() {
             {NextPageButton}
             <div>
               <label htmlFor="addItemName">newItemName: </label>
-              <input type="text" value={todoItem} onChange={handleTodoItemChange} name="item"></input>
+              <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item"></input>
 
               <label htmlFor="addItemName">newPlanTime: </label>
-              <input type="datetime-local" value={todoPlanTime} onChange={handleTodoPlanTimeChange} name="item"></input>
+              <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item"></input>
               <button onClick={createTodo}>summit</button>
+            </div>
+
+            <div>
+              <label htmlFor="updateItemName">newItemName: </label>
+              <input type="text" value={updateTodoItem} onChange={handleUpdateTodoItemChange} name="item"></input>
+
+              <label htmlFor="updateItemName">newPlanTime: </label>
+              <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
             </div>
 
           </div>
