@@ -97,9 +97,24 @@ function TodoPage() {
     </tr>
   ));
 
+  const perPageOptions = [
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+  ]
+
   //handle Date Time change
   const handleDateTimeChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTodoPlanTime(event.target.value);
+  }
+
+
+  const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setPerPage(parseInt(event.target.value))
+  };
+
+  const handleTodoItemChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTodoItem(event.target.value);
   }
 
   return (
@@ -118,20 +133,31 @@ function TodoPage() {
             <tbody>{todoRows}</tbody>
           </table>
           <div>
-            Page: {todoPage.page} &nbsp; Per Page: {todoPage.per_page} &nbsp;
+            Page: {todoPage.page} &nbsp;
+            Per Page: {todoPage.per_page} &nbsp;
+            Per Page:
+            <select value={perPage} onChange={handlePerPageChange}>
+              {perPageOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            &nbsp;
             Total: {todoPage.total_items}
+            
             {PreviousPageButton}
             {NextPageButton}
           </div>
         </div>
       )}
-      <div style={{ marginTop: "20px" }}>
-        <TextField
-          label="New Task Item"
-          value={todoItem}
-          onChange={(e) => setTodoItem(e.target.value)}
-          variant="outlined"
-        />
+      
+      <div style={{ marginTop: "30px" }}>
+
+        <label htmlFor="addItemName">newItemName: </label>
+        <input type="text" value={todoItem} onChange={handleTodoItemChange} name="item">
+        </input>
+
         <div>
           <label htmlFor="datetime-input">Select a date and time: </label>
           {/* Step 3: Set up the input element */}
@@ -149,7 +175,7 @@ function TodoPage() {
           color="primary"
           style={{ marginLeft: "10px" }}
         >
-          Add Task
+          Submit
         </Button>
       </div>
     </>
