@@ -23,7 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 # Environments
 .env
 .venv
@@ -31,4 +34,8 @@ env/
 venv/
 ENV/
 env.bak/
+<<<<<<< HEAD
 venv.bak/
+=======
+venv.bak/
+>>>>>>> origin/main
