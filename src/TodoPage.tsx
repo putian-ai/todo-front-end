@@ -3,6 +3,7 @@ import { CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, 
 import { Button } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
+import InlineEdit from './InLineEdit'
 
 function TodoPage() {
 
@@ -14,6 +15,10 @@ function TodoPage() {
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
+  const [testValue, setTestValue] = useState<string>('Hahahahah')
+  const handleTestValueChange = (newValue: string) => {
+    setTestValue(newValue)
+  }
 
   const fetchTodos = async (page: number, perPage: number) => {
     const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
@@ -75,6 +80,9 @@ function TodoPage() {
       <td className="border border-gray-200 px-4 py-2">
         {item.item}
       </td>
+      <td className="border border-gray-200 px-4 py-2">
+      <InlineEdit value={updateTodoItem} onChange={handleClickUpdateTodoItemChange}></InlineEdit>
+      </td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
@@ -99,7 +107,9 @@ function TodoPage() {
   const handleUpdateTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoItem(event.target.value);
   };
-
+  const handleClickUpdateTodoItemChange = (newTodoItem: string) => {
+    setUpdatetodoItem(newTodoItem);
+  };
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
   };
@@ -113,6 +123,9 @@ function TodoPage() {
           <table className="table-auto w-full text-left border-collapse border border-gray-200">
             <thead>
               <tr>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Item
+                </th>
                 <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Item
                 </th>
@@ -162,6 +175,10 @@ function TodoPage() {
 
               <label htmlFor="updateItemName">newPlanTime: </label>
               <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
+
+
+
+              <InlineEdit value={testValue} onChange={handleTestValueChange}></InlineEdit>
             </div>
 
           </div>
