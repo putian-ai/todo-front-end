@@ -55,14 +55,6 @@ function TodoPage() {
   }
 
 
-  const nextPageTodos = async () => {
-    setPage(page + 1)
-  }
-
-  const prevPageTodos = async () => {
-    setPage(page - 1)
-  }
-
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
   }
@@ -111,12 +103,6 @@ function TodoPage() {
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
   };
-
-  const perPageOptions = [
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-  ]
 
 
   if (todoPage)
