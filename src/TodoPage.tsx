@@ -8,6 +8,7 @@ import {
 import { Button, TextField, Box, Container } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
+import { useDebounceEffect } from 'ahooks'
 
 function TodoPage() {
 
@@ -101,14 +102,30 @@ function TodoPage() {
     setPerPage(newPerPage)
   }
 
+  //delete searchQuery in hook
   useEffect(() => {
     if (searchQuery) {
       searchTodos(searchQuery, page, perPage);
     } else {
       fetchTodos(page, perPage)
     }
-  }, [page, perPage, searchQuery])
+  }, [page, perPage])
 
+  //use debounce for query entering
+  useDebounceEffect(
+    () => {
+      if (searchQuery) {
+        searchTodos(searchQuery, page, perPage);
+      }
+    },
+    [searchQuery],
+    {
+      wait: 500,
+    }
+  );
+
+
+  //revise search with debounce
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
