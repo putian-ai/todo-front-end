@@ -1,10 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost } from './client'
-import { Button } from '@mui/material'
+import {
+  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  getTodosByItemNameGetTodosByItemNameItemNameGet
+
+
+} from './client'
+import { Button, TextField, Box, Container } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
+
 import InlineEdit from './InLineEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
+
 
 function TodoPage() {
 
@@ -16,13 +23,38 @@ function TodoPage() {
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
+
 
 
 
   const fetchTodos = async (page: number, perPage: number) => {
-    const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
-    setTodoPage(data)
+    setLoading(true);
+    try {
+      const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
+      setTodoPage(data);
+    } catch (error) {
+      console.error('Failed to fetch todos', error);
+    } finally {
+      setLoading(false);
+    }
   }
+
+
+  //add method to search todos by its name
+  const searchTodos = async (itemName: string, page: number, perPage: number) => {
+    setLoading(true);
+    try {
+      const data = await getTodosByItemNameGetTodosByItemNameItemNameGet({ itemName, page, perPage })
+      setTodoPage(data);
+    } catch (error) {
+      console.error('Failed to search todos', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const createTodo = async () => {
     const data: CreateTodoCreateTodosPostData = {
@@ -90,9 +122,35 @@ function TodoPage() {
     await fetchTodos(page, perPage)
   };
 
+  //delete searchQuery in hook
   useEffect(() => {
-    fetchTodos(page, perPage)
+    if (searchQuery) {
+      searchTodos(searchQuery, page, perPage);
+    } else {
+      fetchTodos(page, perPage)
+    }
   }, [page, perPage])
+
+
+  //use debounce for query entering
+  useDebounceEffect(
+    () => {
+      if (searchQuery) {
+        searchTodos(searchQuery, page, perPage);
+      }
+    },
+    [searchQuery],
+    {
+      wait: 500,
+    }
+  );
+
+
+  //revise search with debounce
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
 
   useDebounceEffect(
     () => {
@@ -103,6 +161,7 @@ function TodoPage() {
       wait: 1000,
     },
   );
+
 
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
@@ -146,18 +205,38 @@ function TodoPage() {
   };
 
 
+  const perPageOptions = [
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+  ]
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (todoPage)
     return (
-      <>
-        <div>
-          {GetTodoPageButton}
-          <div >
+
+      <Container>
+        <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
+        <Box my={4}>
+          <TextField
+            label="Search Todos"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            fullWidth
+            margin="normal"
+          />
+        </Box>
+        <Box></Box>
+        <>
+
+          <div>
+
             <table className="table-auto w-full text-left border-collapse border border-gray-200">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Item
-                  </th>
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Item
                   </th>
@@ -194,6 +273,18 @@ function TodoPage() {
                 <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
                 <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
 
+
+                <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
+                <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
+
+
+                <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
+              </div>
+        
+              <div className="flex flex-col space-y-2">
+                <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
+                <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
+
                 <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
                 <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
 
@@ -207,17 +298,15 @@ function TodoPage() {
 
                 <label htmlFor="updateItemName">newPlanTime: </label>
                 <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
-
-
-
               </div>
 
             </div>
 
           </div>
-        </div>
 
-      </>
+
+        </>
+      </Container>
     )
 
 
@@ -226,6 +315,7 @@ function TodoPage() {
       {GetTodoPageButton}
     </>
   )
+
 }
 
 export default TodoPage
