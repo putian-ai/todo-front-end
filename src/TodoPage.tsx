@@ -194,8 +194,6 @@ function TodoPage() {
         <Box></Box>
         <>
 
-          {GetTodoPageButton}
-
           <div>
             <table className="table-auto w-full text-left border-collapse border border-gray-200">
               <thead>
