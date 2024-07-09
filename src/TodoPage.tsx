@@ -4,6 +4,7 @@ import { Button } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
 import InlineEdit from './InLineEdit'
+import { useDebounceEffect, useDebounceFn } from 'ahooks'
 
 function TodoPage() {
 
@@ -15,10 +16,8 @@ function TodoPage() {
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
-  const [testValue, setTestValue] = useState<string>('Hahahahah')
-  const handleTestValueChange = (newValue: string) => {
-    setTestValue(newValue)
-  }
+
+
 
   const fetchTodos = async (page: number, perPage: number) => {
     const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
@@ -56,7 +55,7 @@ function TodoPage() {
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
-    fetchTodos(page, perPage)
+    await fetchTodos(page, perPage)
   }
 
 
@@ -68,10 +67,42 @@ function TodoPage() {
     setPerPage(newPerPage)
   }
 
+
+  const { run } = useDebounceFn(
+    async (newTodoItem: string, todoItem: Todo) => {
+      handleClickUpdateTodoItemChange(newTodoItem, todoItem)
+    },
+    {
+      wait: 500,
+    },
+  );
+
+  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: Todo) => {
+    setUpdatetodoItem(newTodoItem);
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: newTodoItem,
+        plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  };
+
   useEffect(() => {
     fetchTodos(page, perPage)
   }, [page, perPage])
 
+  useDebounceEffect(
+    () => {
+      console.log(updateTodoItem)
+    },
+    [updateTodoItem],
+    {
+      wait: 1000,
+    },
+  );
 
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
@@ -81,7 +112,10 @@ function TodoPage() {
         {item.item}
       </td>
       <td className="border border-gray-200 px-4 py-2">
-      <InlineEdit value={updateTodoItem} onChange={handleClickUpdateTodoItemChange}></InlineEdit>
+        <InlineEdit
+          value={item.item}
+          onChange={(newValue) => run(newValue, item)}
+        ></InlineEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
@@ -107,9 +141,6 @@ function TodoPage() {
   const handleUpdateTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoItem(event.target.value);
   };
-  const handleClickUpdateTodoItemChange = (newTodoItem: string) => {
-    setUpdatetodoItem(newTodoItem);
-  };
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
   };
@@ -118,73 +149,73 @@ function TodoPage() {
   if (todoPage)
     return (
       <>
-        {GetTodoPageButton}
         <div>
-          <table className="table-auto w-full text-left border-collapse border border-gray-200">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Item
-                </th>
-                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Item
-                </th>
-                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Create Time
-                </th>
-                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Plan Time
-                </th>
-                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {todoRows}
-            </tbody>
-          </table>
+          {GetTodoPageButton}
+          <div >
+            <table className="table-auto w-full text-left border-collapse border border-gray-200">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Item
+                  </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Item
+                  </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Create Time
+                  </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Plan Time
+                  </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {todoRows}
+              </tbody>
+            </table>
 
 
-          <Pagination
-            currentPage={page}
-            perPage={perPage}
-            totalItems={todoPage.total_items}
-            onPageChange={handlePageChange}
-            onPerPageChange={handlePerPageChange}
-          >
-          </Pagination>
-
-
-          <div>
-
-            <div className="flex flex-col space-y-2">
-              <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
-              <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
-
-              <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
-              <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
-
-              <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
-            </div>
+            <Pagination
+              currentPage={page}
+              perPage={perPage}
+              totalItems={todoPage.total_items}
+              onPageChange={handlePageChange}
+              onPerPageChange={handlePerPageChange}
+            >
+            </Pagination>
 
 
             <div>
-              <label htmlFor="updateItemName">newItemName: </label>
-              <input type="text" value={updateTodoItem} onChange={handleUpdateTodoItemChange} name="item"></input>
 
-              <label htmlFor="updateItemName">newPlanTime: </label>
-              <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
+              <div className="flex flex-col space-y-2">
+                <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
+                <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
+
+                <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
+                <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
+
+                <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
+              </div>
+
+
+              <div>
+                <label htmlFor="updateItemName">newItemName: </label>
+                <input type="text" value={updateTodoItem} onChange={handleUpdateTodoItemChange} name="item"></input>
+
+                <label htmlFor="updateItemName">newPlanTime: </label>
+                <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
 
 
 
-              <InlineEdit value={testValue} onChange={handleTestValueChange}></InlineEdit>
+              </div>
+
             </div>
 
           </div>
-
         </div>
-
 
       </>
     )
