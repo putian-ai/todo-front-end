@@ -8,7 +8,10 @@ import {
 import { Button, TextField, Box, Container } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
-import { useDebounceEffect } from 'ahooks'
+
+import InlineEdit from './InLineEdit'
+import { useDebounceEffect, useDebounceFn } from 'ahooks'
+
 
 function TodoPage() {
 
@@ -22,6 +25,8 @@ function TodoPage() {
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+
+
 
 
   const fetchTodos = async (page: number, perPage: number) => {
@@ -82,17 +87,9 @@ function TodoPage() {
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
-    fetchTodos(page, perPage)
+    await fetchTodos(page, perPage)
   }
 
-
-  const nextPageTodos = async () => {
-    setPage(page + 1)
-  }
-
-  const prevPageTodos = async () => {
-    setPage(page - 1)
-  }
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
@@ -102,6 +99,29 @@ function TodoPage() {
     setPerPage(newPerPage)
   }
 
+
+  const { run } = useDebounceFn(
+    async (newTodoItem: string, todoItem: Todo) => {
+      handleClickUpdateTodoItemChange(newTodoItem, todoItem)
+    },
+    {
+      wait: 500,
+    },
+  );
+
+  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: Todo) => {
+    setUpdatetodoItem(newTodoItem);
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: newTodoItem,
+        plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  };
+
   //delete searchQuery in hook
   useEffect(() => {
     if (searchQuery) {
@@ -110,6 +130,7 @@ function TodoPage() {
       fetchTodos(page, perPage)
     }
   }, [page, perPage])
+
 
   //use debounce for query entering
   useDebounceEffect(
@@ -131,12 +152,29 @@ function TodoPage() {
   };
 
 
+  useDebounceEffect(
+    () => {
+      console.log(updateTodoItem)
+    },
+    [updateTodoItem],
+    {
+      wait: 1000,
+    },
+  );
+
+
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
   const todoRows = todoPage?.items.map(item => (
     <tr key={item.id}>
       <td className="border border-gray-200 px-4 py-2">
         {item.item}
+      </td>
+      <td className="border border-gray-200 px-4 py-2">
+        <InlineEdit
+          value={item.item}
+          onChange={(newValue) => run(newValue, item)}
+        ></InlineEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
@@ -162,10 +200,10 @@ function TodoPage() {
   const handleUpdateTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoItem(event.target.value);
   };
-
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
   };
+
 
   const perPageOptions = [
     { value: 5, label: '5' },
@@ -195,6 +233,7 @@ function TodoPage() {
         <>
 
           <div>
+
             <table className="table-auto w-full text-left border-collapse border border-gray-200">
               <thead>
                 <tr>
@@ -230,6 +269,18 @@ function TodoPage() {
 
             <div>
 
+              <div className="flex flex-col space-y-2">
+                <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
+                <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
+
+
+                <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
+                <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
+
+
+                <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
+              </div>
+        
               <div className="flex flex-col space-y-2">
                 <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
                 <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
