@@ -8,8 +8,8 @@ import {
 import { Button, TextField, Box, Container } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
-
-import InlineEdit from './InLineEdit'
+import InlineTimeEdit from './InLineTimeEdit'
+import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
 
 
@@ -28,7 +28,7 @@ function TodoPage() {
 
 
 
-
+  //////////////////////////////////////////////////////////////////////////增查删改
   const fetchTodos = async (page: number, perPage: number) => {
     setLoading(true);
     try {
@@ -89,7 +89,7 @@ function TodoPage() {
     await updateTodosUpdateTodosTodoIdPost(data)
     await fetchTodos(page, perPage)
   }
-
+  //////////////////////////////////////////////////
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
@@ -100,7 +100,7 @@ function TodoPage() {
   }
 
 
-  const { run } = useDebounceFn(
+  const { run: runUpdateTodoItem } = useDebounceFn(
     async (newTodoItem: string, todoItem: Todo) => {
       handleClickUpdateTodoItemChange(newTodoItem, todoItem)
     },
@@ -116,6 +116,28 @@ function TodoPage() {
       requestBody: {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  };
+
+  const { run: runUpdateTodoPlanTime } = useDebounceFn(
+    async (newTodoPlanTime: string, todoItem: Todo) => {
+      handleClickUpdateTodoPlanTimeChange(newTodoPlanTime, todoItem)
+    },
+    {
+      wait: 500,
+    },
+  );
+
+  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
+    setUpdatetodoPlanTime(newTodoPlanTime);
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: todoItem.item,
+        plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -168,16 +190,16 @@ function TodoPage() {
   const todoRows = todoPage?.items.map(item => (
     <tr key={item.id}>
       <td className="border border-gray-200 px-4 py-2">
-        {item.item}
-      </td>
-      <td className="border border-gray-200 px-4 py-2">
-        <InlineEdit
+        <InlineTextEdit
           value={item.item}
-          onChange={(newValue) => run(newValue, item)}
-        ></InlineEdit>
+          onChange={(newValue) => runUpdateTodoItem(newValue, item)}
+        ></InlineTextEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
-      <td className="border border-gray-200 px-4 py-2">{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
+      <td className="border border-gray-200 px-4 py-2">
+        <InlineTimeEdit value={dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')} onChange={(newValue) => runUpdateTodoPlanTime(newValue, item)}>
+        </InlineTimeEdit>
+      </td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
         <Button onClick={() => deleteTodo(item.id!)} className="text-red-500 hover:text-red-700">
           Delete
@@ -204,16 +226,6 @@ function TodoPage() {
     setUpdatetodoPlanTime(event.target.value);
   };
 
-
-  const perPageOptions = [
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-  ]
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   if (todoPage)
     return (
@@ -280,7 +292,7 @@ function TodoPage() {
 
                 <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
               </div>
-        
+
               <div className="flex flex-col space-y-2">
                 <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
                 <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />

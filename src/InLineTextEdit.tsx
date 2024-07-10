@@ -6,7 +6,7 @@ interface InlineEditProps {
   onChange: (newValue: string) => void;
 }
 
-const InlineEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
+const InlineTextEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +32,7 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
     }
   }, [isEditing])
 
-  
+
   return (
     <span
       onClick={handleClick}
@@ -53,4 +53,4 @@ const InlineEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
   );
 };
 
-export default InlineEdit;
+export default InlineTextEdit;
