@@ -24,16 +24,19 @@ export type Todo = {
     create_time?: string;
     plan_time?: string | null;
     user_id?: number;
+    content?: string | null;
 };
 
 export type TodoDto = {
     item: string;
     plan_time: string | null;
+    content: string | null;
     user_id: number;
 };
 
 export type UpdateTodoDto = {
     item: string;
+    content: string | null;
     plan_time: string | null;
 };
 

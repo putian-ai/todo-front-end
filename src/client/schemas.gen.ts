@@ -105,6 +105,17 @@ export const $Todo = {
         user_id: {
             type: 'integer',
             title: 'User Id'
+        },
+        content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content'
         }
     },
     type: 'object',
@@ -129,13 +140,24 @@ export const $TodoDto = {
             ],
             title: 'Plan Time'
         },
+        content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content'
+        },
         user_id: {
             type: 'integer',
             title: 'User Id'
         }
     },
     type: 'object',
-    required: ['item', 'plan_time', 'user_id'],
+    required: ['item', 'plan_time', 'content', 'user_id'],
     title: 'TodoDto'
 } as const;
 
@@ -144,6 +166,17 @@ export const $UpdateTodoDto = {
         item: {
             type: 'string',
             title: 'Item'
+        },
+        content: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content'
         },
         plan_time: {
             anyOf: [
@@ -158,7 +191,7 @@ export const $UpdateTodoDto = {
         }
     },
     type: 'object',
-    required: ['item', 'plan_time'],
+    required: ['item', 'content', 'plan_time'],
     title: 'UpdateTodoDto'
 } as const;
 

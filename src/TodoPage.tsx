@@ -11,6 +11,10 @@ import Pagination from './Pagination'
 import InlineTimeEdit from './InLineTimeEdit'
 import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
+import InlineMarkDownEdit from './InLineMarkDownEdit'
+import { createRoot } from 'react-dom/client'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 
 function TodoPage() {
@@ -18,13 +22,21 @@ function TodoPage() {
   const [todoPage, setTodoPage] = useState<PaginateModel_Todo_>()
   const [page, setPage] = useState<number>(1)
   const [perPage, setPerPage] = useState<number>(5)
+
   const [userId, setUserId] = useState<number>(1)
+
   const [addTodoItem, setAddtodoItem] = useState<string>('')
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
+
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
+  const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
+
+
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+
+  const markdown = `# This is a heading This is some paragraph text with *emphasis* and **strong emphasis**. You can also create [links](https://www.example.com).`;
 
 
 
@@ -61,7 +73,8 @@ function TodoPage() {
       requestBody: {
         item: addTodoItem,
         plan_time: dayjs(addTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
-        user_id: userId
+        user_id: userId,
+        content: updateTodoContent
       }
     }
     await createTodoCreateTodosPost(data)
@@ -84,6 +97,7 @@ function TodoPage() {
       requestBody: {
         item: updateTodoItem,
         plan_time: dayjs(updateTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
+        content: updateTodoContent
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -116,6 +130,7 @@ function TodoPage() {
       requestBody: {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+        content: todoItem.content ?? null,
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -138,6 +153,30 @@ function TodoPage() {
       requestBody: {
         item: todoItem.item,
         plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
+        content: todoItem.content ?? null,
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  };
+
+  const { run: runUpdateTodoContent } = useDebounceFn(
+    async (newTodoContent: string, todoItem: Todo) => {
+      handleClickUpdateTodoContentChange(newTodoContent, todoItem)
+    },
+    {
+      wait: 500,
+    },
+  );
+
+  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: Todo) => {
+    setUpdatetodoContent(newTodoContent);
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: todoItem.item,
+        plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+        content: newTodoContent,
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -200,6 +239,9 @@ function TodoPage() {
         <InlineTimeEdit value={dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')} onChange={(newValue) => runUpdateTodoPlanTime(newValue, item)}>
         </InlineTimeEdit>
       </td>
+      <td className="border border-gray-200 px-4 py-2">
+        <InlineMarkDownEdit value={item.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, item)}></InlineMarkDownEdit>
+      </td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
         <Button onClick={() => deleteTodo(item.id!)} className="text-red-500 hover:text-red-700">
           Delete
@@ -259,6 +301,9 @@ function TodoPage() {
                     Plan Time
                   </th>
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    content
+                  </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -315,7 +360,9 @@ function TodoPage() {
             </div>
 
           </div>
-
+          <div>
+            <ReactMarkdown>{markdown}</ReactMarkdown>
+          </div>
 
         </>
       </Container>

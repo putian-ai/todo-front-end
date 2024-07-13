@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "openapi-ts": "openapi-ts -i http://127.0.0.1:8000/openapi.json -o src/client",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -21,7 +22,9 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-markdown": "^9.0.1",
+    "rehype-raw": "^7.0.0"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.48.0",
