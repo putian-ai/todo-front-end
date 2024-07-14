@@ -15,6 +15,7 @@ import InlineMarkDownEdit from './InLineMarkDownEdit'
 import { createRoot } from 'react-dom/client'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
+import Markdown from 'react-markdown'
 
 
 function TodoPage() {
@@ -36,7 +37,13 @@ function TodoPage() {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
-  const markdown = `# This is a heading This is some paragraph text with *emphasis* and **strong emphasis**. You can also create [links](https://www.example.com).`;
+  const [selectedTodo, setSelectedTodo] = useState<Todo>()
+  const selectedTodoItem = selectedTodo ? `
+
+  # **${selectedTodo!.item}**
+
+`: null
+
 
 
 
@@ -181,6 +188,7 @@ function TodoPage() {
     }
     await updateTodosUpdateTodosTodoIdPost(data)
     await fetchTodos(page, perPage)
+    if (selectedTodo) selectedTodo!.content = newTodoContent
   };
 
   //delete searchQuery in hook
@@ -223,6 +231,19 @@ function TodoPage() {
     },
   );
 
+  useDebounceEffect(
+    () => {
+      console.log(updateTodoContent)
+    },
+    [updateTodoContent],
+    {
+      wait: 1000,
+    },
+  );
+
+  const clickItem = (item: Todo) => {
+    setSelectedTodo(item)
+  }
 
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
@@ -230,8 +251,10 @@ function TodoPage() {
     <tr key={item.id}>
       <td className="border border-gray-200 px-4 py-2">
         <InlineTextEdit
+          item={item}
           value={item.item}
           onChange={(newValue) => runUpdateTodoItem(newValue, item)}
+          onClick={clickItem}
         ></InlineTextEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
@@ -272,21 +295,20 @@ function TodoPage() {
   if (todoPage)
     return (
 
-      <Container>
-        <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
-        <Box my={4}>
-          <TextField
-            label="Search Todos"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            fullWidth
-            margin="normal"
-          />
-        </Box>
-        <Box></Box>
-        <>
-
-          <div>
+      <div>
+        <div className="flex flex-row w-full">
+          <div className='h-screen overflow-y-auto p-10 flex-none w-[700px]'>
+            <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
+            <Box my={4}>
+              <TextField
+                label="Search Todos"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                fullWidth
+                margin="normal"
+              />
+            </Box>
+            <Box></Box>
 
             <table className="table-auto w-full text-left border-collapse border border-gray-200">
               <thead>
@@ -360,12 +382,21 @@ function TodoPage() {
             </div>
 
           </div>
-          <div>
-            <ReactMarkdown>{markdown}</ReactMarkdown>
+          <div className='h-screen overflow-y-auto flex-auto'>
+            {selectedTodo ?
+              <div >
+                <Markdown className='text-5xl '>
+                  {selectedTodoItem}
+                </Markdown>
+                <InlineMarkDownEdit value={selectedTodo.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, selectedTodo)}></InlineMarkDownEdit>
+              </div> :
+              <span>Pick one!</span>
+            }
+
           </div>
 
-        </>
-      </Container>
+        </div>
+      </div>
     )
 
 

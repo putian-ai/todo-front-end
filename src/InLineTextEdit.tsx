@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { Todo } from "./client";
 
 interface InlineEditProps {
   value: string;
+  item: Todo
 
   onChange: (newValue: string) => void;
+  onClick: (item: Todo) => void;
 }
 
-const InlineTextEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
+const InlineTextEdit: React.FC<InlineEditProps> = ({ value, item, onChange, onClick }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,6 +25,7 @@ const InlineTextEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
 
   const handleClick = () => {
     setIsEditing(true);
+    onClick(item);
   };
 
   useEffect(() => {
