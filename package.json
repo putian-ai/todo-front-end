@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
     "@hey-api/client-fetch": "^0.1.6",
+    "@mdxeditor/editor": "^3.8.0",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "@mui/x-data-grid": "^7.8.0",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.48.0",
+    "@tailwindcss/typography": "^0.5.13",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",

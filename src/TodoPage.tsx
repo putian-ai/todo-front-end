@@ -248,7 +248,7 @@ function TodoPage() {
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
   const todoRows = todoPage?.items.map(item => (
-    <tr key={item.id}>
+    <tr key={`${item.id}-${item.content}`}>
       <td className="border border-gray-200 px-4 py-2">
         <InlineTextEdit
           item={item}
@@ -262,7 +262,8 @@ function TodoPage() {
         <InlineTimeEdit value={dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')} onChange={(newValue) => runUpdateTodoPlanTime(newValue, item)}>
         </InlineTimeEdit>
       </td>
-      <td className="border border-gray-200 px-4 py-2">
+      <td className="border border-gray-200 px-4 py-2 max-w-7">
+        {item.content ?? ''}
         <InlineMarkDownEdit value={item.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, item)}></InlineMarkDownEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
@@ -297,7 +298,7 @@ function TodoPage() {
 
       <div>
         <div className="flex flex-row w-full">
-          <div className='h-screen overflow-y-auto p-10 flex-none w-[700px]'>
+          <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
             <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
             <Box my={4}>
               <TextField
@@ -382,10 +383,10 @@ function TodoPage() {
             </div>
 
           </div>
-          <div className='h-screen overflow-y-auto flex-auto'>
+          <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
             {selectedTodo ?
               <div >
-                <Markdown className='text-5xl '>
+                <Markdown className='text-4xl flex justify-start'>
                   {selectedTodoItem}
                 </Markdown>
                 <InlineMarkDownEdit value={selectedTodo.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, selectedTodo)}></InlineMarkDownEdit>
