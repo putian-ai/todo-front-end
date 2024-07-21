@@ -8,42 +8,35 @@ export type PaginateModel_Todo_ = {
     page: number;
     per_page: number;
     total_items: number;
-    items: Array<Todo>;
+    items: Array<app__main__Todo>;
 };
 
-export type PaginateModel_User_ = {
-    page: number;
-    per_page: number;
-    total_items: number;
-    items: Array<User>;
+export type PkOnlyTodoasumwy = {
+    id?: number;
 };
 
-export type Todo = {
-    id?: number | null;
-    item: string;
-    create_time?: string;
-    plan_time?: string | null;
-    user_id?: number;
-    content?: string | null;
+export type PkOnlyUseruysbbs = {
+    id?: number;
 };
 
 export type TodoDto = {
     item: string;
-    plan_time: string | null;
-    content: string | null;
+    plan_time: string;
     user_id: number;
+    content: string;
 };
 
 export type UpdateTodoDto = {
     item: string;
-    content: string | null;
-    plan_time: string | null;
+    plan_time: string;
+    content: string;
 };
 
 export type User = {
     id?: number | null;
     user_name: string;
     pwd: string;
+    todo_list?: unknown;
 };
 
 export type UserDto = {
@@ -57,11 +50,37 @@ export type ValidationError = {
     type: string;
 };
 
+export type app__main__Todo = {
+    id?: number | null;
+    item: string;
+    create_time?: string | null;
+    plan_time?: string | null;
+    content?: string | null;
+    user_id: number;
+    user?: unknown;
+};
+
+export type ormar__models__helpers__relations__Todo = {
+    id?: number | null;
+    item: string;
+    create_time?: string | null;
+    plan_time?: string | null;
+    content?: string | null;
+    user_id: number;
+    user?: unknown;
+};
+
+export type CreateUserCreateUsersPostData = {
+    requestBody: UserDto;
+};
+
+export type CreateUserCreateUsersPostResponse = User;
+
 export type CreateTodoCreateTodosPostData = {
     requestBody: TodoDto;
 };
 
-export type CreateTodoCreateTodosPostResponse = Todo;
+export type CreateTodoCreateTodosPostResponse = app__main__Todo;
 
 export type ReadTodosGetTodosGetData = {
     page: number;
@@ -81,33 +100,7 @@ export type UpdateTodosUpdateTodosTodoIdPostData = {
     todoId: number;
 };
 
-export type UpdateTodosUpdateTodosTodoIdPostResponse = Todo;
-
-export type CreateUserCreateUsersPostData = {
-    requestBody: UserDto;
-};
-
-export type CreateUserCreateUsersPostResponse = User;
-
-export type DeleteUserDeleteUsersUserIdDeleteData = {
-    userId: number;
-};
-
-export type DeleteUserDeleteUsersUserIdDeleteResponse = unknown;
-
-export type ReadUsersGetUsersGetData = {
-    page: number;
-    perPage: number;
-};
-
-export type ReadUsersGetUsersGetResponse = PaginateModel_User_;
-
-export type UpdateUserUpdateUsersUserIdPostData = {
-    requestBody: UserDto;
-    userId: number;
-};
-
-export type UpdateUserUpdateUsersUserIdPostResponse = unknown;
+export type UpdateTodosUpdateTodosTodoIdPostResponse = app__main__Todo;
 
 export type GetUserByTodoGetUserByTodoTodoIdGetData = {
     todoId: number;
@@ -140,6 +133,21 @@ export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse = PaginateModel_Todo_;
 
 export type $OpenApiTs = {
+    '/create_users/': {
+        post: {
+            req: CreateUserCreateUsersPostData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: User;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
     '/create_todos/': {
         post: {
             req: CreateTodoCreateTodosPostData;
@@ -147,7 +155,7 @@ export type $OpenApiTs = {
                 /**
                  * Successful Response
                  */
-                200: Todo;
+                200: app__main__Todo;
                 /**
                  * Validation Error
                  */
@@ -192,67 +200,7 @@ export type $OpenApiTs = {
                 /**
                  * Successful Response
                  */
-                200: Todo;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/create_users/': {
-        post: {
-            req: CreateUserCreateUsersPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: User;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/delete_users/{user_id}': {
-        delete: {
-            req: DeleteUserDeleteUsersUserIdDeleteData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_users/': {
-        get: {
-            req: ReadUsersGetUsersGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_User_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/update_users/{user_id}': {
-        post: {
-            req: UpdateUserUpdateUsersUserIdPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
+                200: app__main__Todo;
                 /**
                  * Validation Error
                  */

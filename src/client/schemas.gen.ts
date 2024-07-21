@@ -30,7 +30,7 @@ export const $PaginateModel_Todo_ = {
         },
         items: {
             items: {
-                '$ref': '#/components/schemas/Todo'
+                '$ref': '#/components/schemas/app__main__Todo'
             },
             type: 'array',
             title: 'Items'
@@ -41,86 +41,26 @@ export const $PaginateModel_Todo_ = {
     title: 'PaginateModel[Todo]'
 } as const;
 
-export const $PaginateModel_User_ = {
-    properties: {
-        page: {
-            type: 'integer',
-            title: 'Page'
-        },
-        per_page: {
-            type: 'integer',
-            title: 'Per Page'
-        },
-        total_items: {
-            type: 'integer',
-            title: 'Total Items'
-        },
-        items: {
-            items: {
-                '$ref': '#/components/schemas/User'
-            },
-            type: 'array',
-            title: 'Items'
-        }
-    },
-    type: 'object',
-    required: ['page', 'per_page', 'total_items', 'items'],
-    title: 'PaginateModel[User]'
-} as const;
-
-export const $Todo = {
+export const $PkOnlyTodoasumwy = {
     properties: {
         id: {
-            anyOf: [
-                {
-                    type: 'integer'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Id'
-        },
-        item: {
-            type: 'string',
-            title: 'Item'
-        },
-        create_time: {
-            type: 'string',
-            format: 'date-time',
-            title: 'Create Time'
-        },
-        plan_time: {
-            anyOf: [
-                {
-                    type: 'string',
-                    format: 'date-time'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Plan Time'
-        },
-        user_id: {
             type: 'integer',
-            title: 'User Id'
-        },
-        content: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Content'
+            title: 'Id'
         }
     },
     type: 'object',
-    required: ['item'],
-    title: 'Todo'
+    title: 'PkOnlyTodoasumwy'
+} as const;
+
+export const $PkOnlyUseruysbbs = {
+    properties: {
+        id: {
+            type: 'integer',
+            title: 'Id'
+        }
+    },
+    type: 'object',
+    title: 'PkOnlyUseruysbbs'
 } as const;
 
 export const $TodoDto = {
@@ -130,34 +70,20 @@ export const $TodoDto = {
             title: 'Item'
         },
         plan_time: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
+            type: 'string',
             title: 'Plan Time'
-        },
-        content: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Content'
         },
         user_id: {
             type: 'integer',
             title: 'User Id'
+        },
+        content: {
+            type: 'string',
+            title: 'Content'
         }
     },
     type: 'object',
-    required: ['item', 'plan_time', 'content', 'user_id'],
+    required: ['item', 'plan_time', 'user_id', 'content'],
     title: 'TodoDto'
 } as const;
 
@@ -167,31 +93,17 @@ export const $UpdateTodoDto = {
             type: 'string',
             title: 'Item'
         },
-        content: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
-            title: 'Content'
-        },
         plan_time: {
-            anyOf: [
-                {
-                    type: 'string'
-                },
-                {
-                    type: 'null'
-                }
-            ],
+            type: 'string',
             title: 'Plan Time'
+        },
+        content: {
+            type: 'string',
+            title: 'Content'
         }
     },
     type: 'object',
-    required: ['item', 'content', 'plan_time'],
+    required: ['item', 'plan_time', 'content'],
     title: 'UpdateTodoDto'
 } as const;
 
@@ -210,16 +122,38 @@ export const $User = {
         },
         user_name: {
             type: 'string',
+            maxLength: 12,
+            minLength: 3,
             title: 'User Name'
         },
         pwd: {
             type: 'string',
+            maxLength: 12,
+            minLength: 3,
             title: 'Pwd'
+        },
+        todo_list: {
+            title: 'Todo List'
         }
     },
     type: 'object',
     required: ['user_name', 'pwd'],
-    title: 'User'
+    title: 'User',
+    example: {
+        id: 0,
+        pwd: 'string',
+        todo_list: [
+            {
+                content: 'string',
+                create_time: 'datetime',
+                id: 0,
+                item: 'string',
+                plan_time: 'datetime',
+                user_id: 0
+            }
+        ],
+        user_name: 'string'
+    }
 } as const;
 
 export const $UserDto = {
@@ -266,4 +200,176 @@ export const $ValidationError = {
     type: 'object',
     required: ['loc', 'msg', 'type'],
     title: 'ValidationError'
+} as const;
+
+export const $app__main__Todo = {
+    properties: {
+        id: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Id'
+        },
+        item: {
+            type: 'string',
+            maxLength: 1000,
+            title: 'Item'
+        },
+        create_time: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Create Time',
+            default: '2024-07-21T11:50:41.131151'
+        },
+        plan_time: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Plan Time'
+        },
+        content: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 5000
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content'
+        },
+        user_id: {
+            type: 'integer',
+            title: 'User Id'
+        },
+        user: {
+            title: 'User'
+        }
+    },
+    type: 'object',
+    required: ['item', 'user_id'],
+    title: 'Todo',
+    example: {
+        content: 'string',
+        create_time: 'datetime',
+        id: 0,
+        item: 'string',
+        plan_time: 'datetime',
+        user: {
+            id: 0,
+            pwd: 'string',
+            user_name: 'string'
+        },
+        user_id: 0
+    }
+} as const;
+
+export const $ormar__models__helpers__relations__Todo = {
+    properties: {
+        id: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Id'
+        },
+        item: {
+            type: 'string',
+            maxLength: 1000,
+            title: 'Item'
+        },
+        create_time: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Create Time',
+            default: '2024-07-21T11:50:41.131151'
+        },
+        plan_time: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Plan Time'
+        },
+        content: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 5000
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content'
+        },
+        user_id: {
+            type: 'integer',
+            title: 'User Id'
+        },
+        user: {
+            title: 'User'
+        }
+    },
+    type: 'object',
+    required: ['item', 'user_id'],
+    title: 'Todo',
+    example: {
+        content: 'string',
+        create_time: 'datetime',
+        id: 0,
+        item: 'string',
+        plan_time: 'datetime',
+        user: {
+            id: 0,
+            pwd: 'string',
+            todo_list: [
+                {
+                    content: 'string',
+                    create_time: 'datetime',
+                    id: 0,
+                    item: 'string',
+                    plan_time: 'datetime',
+                    user_id: 0
+                }
+            ],
+            user_name: 'string'
+        },
+        user_id: 0
+    }
 } as const;
