@@ -4,6 +4,8 @@ export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
 
+export type IMPORTANCE = 0 | 1 | 2 | 3;
+
 export type PaginateModel_Todo_ = {
     page: number;
     per_page: number;
@@ -11,11 +13,11 @@ export type PaginateModel_Todo_ = {
     items: Array<app__main__Todo>;
 };
 
-export type PkOnlyTodoasumwy = {
+export type PkOnlyTodofmdnkq = {
     id?: number;
 };
 
-export type PkOnlyUseruysbbs = {
+export type PkOnlyUsergijmjy = {
     id?: number;
 };
 
@@ -24,12 +26,14 @@ export type TodoDto = {
     plan_time: string;
     user_id: number;
     content: string;
+    importance: IMPORTANCE;
 };
 
 export type UpdateTodoDto = {
     item: string;
     plan_time: string;
     content: string;
+    importance: IMPORTANCE;
 };
 
 export type User = {
@@ -58,6 +62,7 @@ export type app__main__Todo = {
     content?: string | null;
     user_id: number;
     user?: unknown;
+    importance?: IMPORTANCE | null;
 };
 
 export type ormar__models__helpers__relations__Todo = {
@@ -68,6 +73,7 @@ export type ormar__models__helpers__relations__Todo = {
     content?: string | null;
     user_id: number;
     user?: unknown;
+    importance?: IMPORTANCE | null;
 };
 
 export type CreateUserCreateUsersPostData = {
@@ -123,6 +129,14 @@ export type GetTodosByItemNameGetTodosByItemNameItemNameGetData = {
 };
 
 export type GetTodosByItemNameGetTodosByItemNameItemNameGetResponse = PaginateModel_Todo_;
+
+export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = {
+    itemImportance: IMPORTANCE;
+    page: number;
+    perPage: number;
+};
+
+export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
 
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
     page: number;
@@ -241,6 +255,21 @@ export type $OpenApiTs = {
     '/get_todos_by_item_name/{item_name}': {
         get: {
             req: GetTodosByItemNameGetTodosByItemNameItemNameGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: PaginateModel_Todo_;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/get_todos_by_item_importance/{item_importance}': {
+        get: {
+            req: GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData;
             res: {
                 /**
                  * Successful Response

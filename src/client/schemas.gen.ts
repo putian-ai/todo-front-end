@@ -14,6 +14,12 @@ export const $HTTPValidationError = {
     title: 'HTTPValidationError'
 } as const;
 
+export const $IMPORTANCE = {
+    type: 'integer',
+    enum: [0, 1, 2, 3],
+    title: 'IMPORTANCE'
+} as const;
+
 export const $PaginateModel_Todo_ = {
     properties: {
         page: {
@@ -41,7 +47,7 @@ export const $PaginateModel_Todo_ = {
     title: 'PaginateModel[Todo]'
 } as const;
 
-export const $PkOnlyTodoasumwy = {
+export const $PkOnlyTodofmdnkq = {
     properties: {
         id: {
             type: 'integer',
@@ -49,10 +55,10 @@ export const $PkOnlyTodoasumwy = {
         }
     },
     type: 'object',
-    title: 'PkOnlyTodoasumwy'
+    title: 'PkOnlyTodofmdnkq'
 } as const;
 
-export const $PkOnlyUseruysbbs = {
+export const $PkOnlyUsergijmjy = {
     properties: {
         id: {
             type: 'integer',
@@ -60,7 +66,7 @@ export const $PkOnlyUseruysbbs = {
         }
     },
     type: 'object',
-    title: 'PkOnlyUseruysbbs'
+    title: 'PkOnlyUsergijmjy'
 } as const;
 
 export const $TodoDto = {
@@ -80,10 +86,13 @@ export const $TodoDto = {
         content: {
             type: 'string',
             title: 'Content'
+        },
+        importance: {
+            '$ref': '#/components/schemas/IMPORTANCE'
         }
     },
     type: 'object',
-    required: ['item', 'plan_time', 'user_id', 'content'],
+    required: ['item', 'plan_time', 'user_id', 'content', 'importance'],
     title: 'TodoDto'
 } as const;
 
@@ -100,10 +109,13 @@ export const $UpdateTodoDto = {
         content: {
             type: 'string',
             title: 'Content'
+        },
+        importance: {
+            '$ref': '#/components/schemas/IMPORTANCE'
         }
     },
     type: 'object',
-    required: ['item', 'plan_time', 'content'],
+    required: ['item', 'plan_time', 'content', 'importance'],
     title: 'UpdateTodoDto'
 } as const;
 
@@ -231,7 +243,7 @@ export const $app__main__Todo = {
                 }
             ],
             title: 'Create Time',
-            default: '2024-07-21T11:50:41.131151'
+            default: '2024-07-22T14:26:28.883587'
         },
         plan_time: {
             anyOf: [
@@ -263,6 +275,17 @@ export const $app__main__Todo = {
         },
         user: {
             title: 'User'
+        },
+        importance: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/IMPORTANCE'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            default: 0
         }
     },
     type: 'object',
@@ -312,7 +335,7 @@ export const $ormar__models__helpers__relations__Todo = {
                 }
             ],
             title: 'Create Time',
-            default: '2024-07-21T11:50:41.131151'
+            default: '2024-07-22T14:26:28.883587'
         },
         plan_time: {
             anyOf: [
@@ -344,6 +367,17 @@ export const $ormar__models__helpers__relations__Todo = {
         },
         user: {
             title: 'User'
+        },
+        importance: {
+            anyOf: [
+                {
+                    '$ref': '#/components/schemas/IMPORTANCE'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            default: 0
         }
     },
     type: 'object',
