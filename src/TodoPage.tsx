@@ -8,9 +8,14 @@ import {
 import { Button, TextField, Box, Container } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
-
-import InlineEdit from './InLineEdit'
+import InlineTimeEdit from './InLineTimeEdit'
+import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
+import InlineMarkDownEdit from './InLineMarkDownEdit'
+import { createRoot } from 'react-dom/client'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
+import Markdown from 'react-markdown'
 
 
 function TodoPage() {
@@ -18,17 +23,31 @@ function TodoPage() {
   const [todoPage, setTodoPage] = useState<PaginateModel_Todo_>()
   const [page, setPage] = useState<number>(1)
   const [perPage, setPerPage] = useState<number>(5)
+
   const [userId, setUserId] = useState<number>(1)
+
   const [addTodoItem, setAddtodoItem] = useState<string>('')
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
+
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
+  const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
+
+
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
+  const [selectedTodo, setSelectedTodo] = useState<Todo>()
+  const selectedTodoItem = selectedTodo ? `
+
+  # **${selectedTodo!.item}**
+
+`: null
 
 
 
+
+  //////////////////////////////////////////////////////////////////////////增查删改
   const fetchTodos = async (page: number, perPage: number) => {
     setLoading(true);
     try {
@@ -61,7 +80,8 @@ function TodoPage() {
       requestBody: {
         item: addTodoItem,
         plan_time: dayjs(addTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
-        user_id: userId
+        user_id: userId,
+        content: updateTodoContent
       }
     }
     await createTodoCreateTodosPost(data)
@@ -84,12 +104,13 @@ function TodoPage() {
       requestBody: {
         item: updateTodoItem,
         plan_time: dayjs(updateTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
+        content: updateTodoContent
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
     await fetchTodos(page, perPage)
   }
-
+  //////////////////////////////////////////////////
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage)
@@ -100,7 +121,7 @@ function TodoPage() {
   }
 
 
-  const { run } = useDebounceFn(
+  const { run: runUpdateTodoItem } = useDebounceFn(
     async (newTodoItem: string, todoItem: Todo) => {
       handleClickUpdateTodoItemChange(newTodoItem, todoItem)
     },
@@ -116,10 +137,58 @@ function TodoPage() {
       requestBody: {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+        content: todoItem.content ?? null,
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
     await fetchTodos(page, perPage)
+  };
+
+  const { run: runUpdateTodoPlanTime } = useDebounceFn(
+    async (newTodoPlanTime: string, todoItem: Todo) => {
+      handleClickUpdateTodoPlanTimeChange(newTodoPlanTime, todoItem)
+    },
+    {
+      wait: 500,
+    },
+  );
+
+  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
+    setUpdatetodoPlanTime(newTodoPlanTime);
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: todoItem.item,
+        plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
+        content: todoItem.content ?? null,
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  };
+
+  const { run: runUpdateTodoContent } = useDebounceFn(
+    async (newTodoContent: string, todoItem: Todo) => {
+      handleClickUpdateTodoContentChange(newTodoContent, todoItem)
+    },
+    {
+      wait: 500,
+    },
+  );
+
+  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: Todo) => {
+    setUpdatetodoContent(newTodoContent);
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: todoItem.item,
+        plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+        content: newTodoContent,
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+    if (selectedTodo) selectedTodo!.content = newTodoContent
   };
 
   //delete searchQuery in hook
@@ -162,22 +231,41 @@ function TodoPage() {
     },
   );
 
+  useDebounceEffect(
+    () => {
+      console.log(updateTodoContent)
+    },
+    [updateTodoContent],
+    {
+      wait: 1000,
+    },
+  );
+
+  const clickItem = (item: Todo) => {
+    setSelectedTodo(item)
+  }
 
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
   const todoRows = todoPage?.items.map(item => (
-    <tr key={item.id}>
+    <tr key={`${item.id}-${item.content}`}>
       <td className="border border-gray-200 px-4 py-2">
-        {item.item}
-      </td>
-      <td className="border border-gray-200 px-4 py-2">
-        <InlineEdit
+        <InlineTextEdit
+          item={item}
           value={item.item}
-          onChange={(newValue) => run(newValue, item)}
-        ></InlineEdit>
+          onChange={(newValue) => runUpdateTodoItem(newValue, item)}
+          onClick={clickItem}
+        ></InlineTextEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</td>
-      <td className="border border-gray-200 px-4 py-2">{dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}</td>
+      <td className="border border-gray-200 px-4 py-2">
+        <InlineTimeEdit value={dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')} onChange={(newValue) => runUpdateTodoPlanTime(newValue, item)}>
+        </InlineTimeEdit>
+      </td>
+      <td className="border border-gray-200 px-4 py-2 max-w-7">
+        {item.content ?? ''}
+        <InlineMarkDownEdit value={item.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, item)}></InlineMarkDownEdit>
+      </td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
         <Button onClick={() => deleteTodo(item.id!)} className="text-red-500 hover:text-red-700">
           Delete
@@ -205,34 +293,23 @@ function TodoPage() {
   };
 
 
-  const perPageOptions = [
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-  ]
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   if (todoPage)
     return (
 
-      <Container>
-        <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
-        <Box my={4}>
-          <TextField
-            label="Search Todos"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            fullWidth
-            margin="normal"
-          />
-        </Box>
-        <Box></Box>
-        <>
-
-          <div>
+      <div>
+        <div className="flex flex-row w-full">
+          <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
+            <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
+            <Box my={4}>
+              <TextField
+                label="Search Todos"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                fullWidth
+                margin="normal"
+              />
+            </Box>
+            <Box></Box>
 
             <table className="table-auto w-full text-left border-collapse border border-gray-200">
               <thead>
@@ -245,6 +322,9 @@ function TodoPage() {
                   </th>
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Plan Time
+                  </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    content
                   </th>
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
@@ -280,7 +360,7 @@ function TodoPage() {
 
                 <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
               </div>
-        
+
               <div className="flex flex-col space-y-2">
                 <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
                 <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
@@ -303,10 +383,21 @@ function TodoPage() {
             </div>
 
           </div>
+          <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
+            {selectedTodo ?
+              <div >
+                <Markdown className='text-4xl flex justify-start'>
+                  {selectedTodoItem}
+                </Markdown>
+                <InlineMarkDownEdit value={selectedTodo.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, selectedTodo)}></InlineMarkDownEdit>
+              </div> :
+              <span>Pick one!</span>
+            }
 
+          </div>
 
-        </>
-      </Container>
+        </div>
+      </div>
     )
 
 

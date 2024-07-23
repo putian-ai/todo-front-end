@@ -3,13 +3,30 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, DeleteUserDeleteUsersUserIdDeleteData, DeleteUserDeleteUsersUserIdDeleteResponse, ReadUsersGetUsersGetData, ReadUsersGetUsersGetResponse, UpdateUserUpdateUsersUserIdPostData, UpdateUserUpdateUsersUserIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+import type { CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+
+/**
+ * Create User
+ * @param data The data for the request.
+ * @param data.requestBody
+ * @returns User Successful Response
+ * @throws ApiError
+ */
+export const createUserCreateUsersPost = (data: CreateUserCreateUsersPostData): CancelablePromise<CreateUserCreateUsersPostResponse> => { return __request(OpenAPI, {
+    method: 'POST',
+    url: '/create_users/',
+    body: data.requestBody,
+    mediaType: 'application/json',
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
 
 /**
  * Create Todo
  * @param data The data for the request.
  * @param data.requestBody
- * @returns Todo Successful Response
+ * @returns app__main__Todo Successful Response
  * @throws ApiError
  */
 export const createTodoCreateTodosPost = (data: CreateTodoCreateTodosPostData): CancelablePromise<CreateTodoCreateTodosPostResponse> => { return __request(OpenAPI, {
@@ -65,7 +82,7 @@ export const deleteTodosDeleteTodosTodoIdDelete = (data: DeleteTodosDeleteTodosT
  * @param data The data for the request.
  * @param data.todoId
  * @param data.requestBody
- * @returns Todo Successful Response
+ * @returns app__main__Todo Successful Response
  * @throws ApiError
  */
 export const updateTodosUpdateTodosTodoIdPost = (data: UpdateTodosUpdateTodosTodoIdPostData): CancelablePromise<UpdateTodosUpdateTodosTodoIdPostResponse> => { return __request(OpenAPI, {
@@ -73,82 +90,6 @@ export const updateTodosUpdateTodosTodoIdPost = (data: UpdateTodosUpdateTodosTod
     url: '/update_todos/{todo_id}',
     path: {
         todo_id: data.todoId
-    },
-    body: data.requestBody,
-    mediaType: 'application/json',
-    errors: {
-        422: 'Validation Error'
-    }
-}); };
-
-/**
- * Create User
- * @param data The data for the request.
- * @param data.requestBody
- * @returns User Successful Response
- * @throws ApiError
- */
-export const createUserCreateUsersPost = (data: CreateUserCreateUsersPostData): CancelablePromise<CreateUserCreateUsersPostResponse> => { return __request(OpenAPI, {
-    method: 'POST',
-    url: '/create_users/',
-    body: data.requestBody,
-    mediaType: 'application/json',
-    errors: {
-        422: 'Validation Error'
-    }
-}); };
-
-/**
- * Delete User
- * @param data The data for the request.
- * @param data.userId
- * @returns unknown Successful Response
- * @throws ApiError
- */
-export const deleteUserDeleteUsersUserIdDelete = (data: DeleteUserDeleteUsersUserIdDeleteData): CancelablePromise<DeleteUserDeleteUsersUserIdDeleteResponse> => { return __request(OpenAPI, {
-    method: 'DELETE',
-    url: '/delete_users/{user_id}',
-    path: {
-        user_id: data.userId
-    },
-    errors: {
-        422: 'Validation Error'
-    }
-}); };
-
-/**
- * Read Users
- * @param data The data for the request.
- * @param data.page
- * @param data.perPage
- * @returns PaginateModel_User_ Successful Response
- * @throws ApiError
- */
-export const readUsersGetUsersGet = (data: ReadUsersGetUsersGetData): CancelablePromise<ReadUsersGetUsersGetResponse> => { return __request(OpenAPI, {
-    method: 'GET',
-    url: '/get_users/',
-    query: {
-        page: data.page,
-        per_page: data.perPage
-    },
-    errors: {
-        422: 'Validation Error'
-    }
-}); };
-
-/**
- * Update User
- * @param data The data for the request.
- * @param data.userId
- * @param data.requestBody
- * @returns unknown Successful Response
- * @throws ApiError
- */
-export const updateUserUpdateUsersUserIdPost = (data: UpdateUserUpdateUsersUserIdPostData): CancelablePromise<UpdateUserUpdateUsersUserIdPostResponse> => { return __request(OpenAPI, {
-    method: 'POST',
-    url: '/update_users/{user_id}',
-    path: {
-        user_id: data.userId
     },
     body: data.requestBody,
     mediaType: 'application/json',
