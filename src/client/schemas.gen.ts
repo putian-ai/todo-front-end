@@ -47,7 +47,7 @@ export const $PaginateModel_Todo_ = {
     title: 'PaginateModel[Todo]'
 } as const;
 
-export const $PkOnlyTodofmdnkq = {
+export const $PkOnlyTodocxqoks = {
     properties: {
         id: {
             type: 'integer',
@@ -55,10 +55,10 @@ export const $PkOnlyTodofmdnkq = {
         }
     },
     type: 'object',
-    title: 'PkOnlyTodofmdnkq'
+    title: 'PkOnlyTodocxqoks'
 } as const;
 
-export const $PkOnlyUsergijmjy = {
+export const $PkOnlyUserqxlbrs = {
     properties: {
         id: {
             type: 'integer',
@@ -66,7 +66,7 @@ export const $PkOnlyUsergijmjy = {
         }
     },
     type: 'object',
-    title: 'PkOnlyUsergijmjy'
+    title: 'PkOnlyUserqxlbrs'
 } as const;
 
 export const $TodoDto = {
@@ -243,7 +243,7 @@ export const $app__main__Todo = {
                 }
             ],
             title: 'Create Time',
-            default: '2024-07-22T14:26:28.883587'
+            default: '2024-07-25T21:36:04.712954'
         },
         plan_time: {
             anyOf: [
@@ -335,7 +335,7 @@ export const $ormar__models__helpers__relations__Todo = {
                 }
             ],
             title: 'Create Time',
-            default: '2024-07-22T14:26:28.883587'
+            default: '2024-07-25T21:36:04.712954'
         },
         plan_time: {
             anyOf: [

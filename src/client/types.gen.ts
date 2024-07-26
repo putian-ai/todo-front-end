@@ -13,11 +13,11 @@ export type PaginateModel_Todo_ = {
     items: Array<app__main__Todo>;
 };
 
-export type PkOnlyTodofmdnkq = {
+export type PkOnlyTodocxqoks = {
     id?: number;
 };
 
-export type PkOnlyUsergijmjy = {
+export type PkOnlyUserqxlbrs = {
     id?: number;
 };
 

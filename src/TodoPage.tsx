@@ -81,7 +81,8 @@ function TodoPage() {
         item: addTodoItem,
         plan_time: dayjs(addTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         user_id: userId,
-        content: updateTodoContent
+        content: updateTodoContent,
+        importance: 0
       }
     }
     await createTodoCreateTodosPost(data)
