@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
-  getTodosByItemNameGetTodosByItemNameItemNameGet
+  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  getTodosByItemNameGetTodosByItemNameItemNameGet,
+  IMPORTANCE
 
 
 } from './client'
@@ -16,6 +17,7 @@ import { createRoot } from 'react-dom/client'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import Markdown from 'react-markdown'
+import InlineSelectEdit from './InlineSelectEdit'
 
 
 function TodoPage() {
@@ -32,12 +34,14 @@ function TodoPage() {
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
   const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
+  const [updateTodoImportance, setUpdatetodoImportance] = useState<IMPORTANCE>(0)
+
 
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
-  const [selectedTodo, setSelectedTodo] = useState<Todo>()
+  const [selectedTodo, setSelectedTodo] = useState<TodoDto>()
   const selectedTodoItem = selectedTodo ? `
 
   # **${selectedTodo!.item}**
@@ -82,7 +86,8 @@ function TodoPage() {
         plan_time: dayjs(addTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         user_id: userId,
         content: updateTodoContent,
-        importance: 0
+        importance: updateTodoImportance,
+        id: 0
       }
     }
     await createTodoCreateTodosPost(data)
@@ -105,7 +110,8 @@ function TodoPage() {
       requestBody: {
         item: updateTodoItem,
         plan_time: dayjs(updateTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
-        content: updateTodoContent
+        content: updateTodoContent,
+        importance: updateTodoImportance
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -123,7 +129,7 @@ function TodoPage() {
 
 
   const { run: runUpdateTodoItem } = useDebounceFn(
-    async (newTodoItem: string, todoItem: Todo) => {
+    async (newTodoItem: string, todoItem: TodoDto) => {
       handleClickUpdateTodoItemChange(newTodoItem, todoItem)
     },
     {
@@ -131,7 +137,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: Todo) => {
+  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: TodoDto) => {
     setUpdatetodoItem(newTodoItem);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -139,6 +145,7 @@ function TodoPage() {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
         content: todoItem.content ?? null,
+        importance: todoItem.importance ?? 0
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -146,7 +153,7 @@ function TodoPage() {
   };
 
   const { run: runUpdateTodoPlanTime } = useDebounceFn(
-    async (newTodoPlanTime: string, todoItem: Todo) => {
+    async (newTodoPlanTime: string, todoItem: TodoDto) => {
       handleClickUpdateTodoPlanTimeChange(newTodoPlanTime, todoItem)
     },
     {
@@ -154,7 +161,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
+  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: TodoDto) => {
     setUpdatetodoPlanTime(newTodoPlanTime);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -162,6 +169,7 @@ function TodoPage() {
         item: todoItem.item,
         plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         content: todoItem.content ?? null,
+        importance: todoItem.importance ?? 0
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -169,7 +177,7 @@ function TodoPage() {
   };
 
   const { run: runUpdateTodoContent } = useDebounceFn(
-    async (newTodoContent: string, todoItem: Todo) => {
+    async (newTodoContent: string, todoItem: TodoDto) => {
       handleClickUpdateTodoContentChange(newTodoContent, todoItem)
     },
     {
@@ -177,7 +185,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: Todo) => {
+  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: TodoDto) => {
     setUpdatetodoContent(newTodoContent);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -185,12 +193,28 @@ function TodoPage() {
         item: todoItem.item,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
         content: newTodoContent,
+        importance: todoItem.importance ?? 0
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
     await fetchTodos(page, perPage)
     if (selectedTodo) selectedTodo!.content = newTodoContent
   };
+
+  const handleClickUpdateTodoImportanceChange = async (updateTodoImportance: IMPORTANCE, todoItem: TodoDto) => {
+    setUpdatetodoImportance(updateTodoImportance)
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: todoItem.item,
+        plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+        content: todoItem.content ?? null,
+        importance: updateTodoImportance
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  }
 
   //delete searchQuery in hook
   useEffect(() => {
@@ -242,7 +266,7 @@ function TodoPage() {
     },
   );
 
-  const clickItem = (item: Todo) => {
+  const clickItem = (item: TodoDto) => {
     setSelectedTodo(item)
   }
 
@@ -275,6 +299,20 @@ function TodoPage() {
           Update
         </Button>
       </td>
+      <td className="border border-gray-200 px-4 py-2">
+        <InlineSelectEdit
+          value={item.importance ?? 0}
+          options={[
+            { value: 0, label: 'None' },
+            { value: 1, label: 'Low' },
+            { value: 2, label: 'Middle' },
+            { value: 3, label: 'High' }
+          ]}
+
+          //got issues on the type of importance
+          onChange={(newImportance) => handleClickUpdateTodoImportanceChange(newImportance as IMPORTANCE, item)}
+        ></InlineSelectEdit>
+      </td>
     </tr>
   ))
 
@@ -292,6 +330,9 @@ function TodoPage() {
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
   };
+  // const handleUpdateTodoImportanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setUpdatetodoImportance(event.target.value);
+  // };
 
 
   if (todoPage)

@@ -22,6 +22,7 @@ export type PkOnlyUserqxlbrs = {
 };
 
 export type TodoDto = {
+    id: number;
     item: string;
     plan_time: string;
     user_id: number;
