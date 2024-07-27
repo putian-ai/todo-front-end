@@ -310,7 +310,7 @@ function TodoPage() {
           ]}
 
           //got issues on the type of importance
-          onChange={(newImportance) => handleClickUpdateTodoImportanceChange(newImportance as IMPORTANCE, item)}
+          onChange={(newImportance) => handleClickUpdateTodoImportanceChange(newImportance, item as TodoDto)}
         ></InlineSelectEdit>
       </td>
     </tr>
