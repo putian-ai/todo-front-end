@@ -371,6 +371,9 @@ function TodoPage() {
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
                   </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Importance
+                  </th>
                 </tr>
               </thead>
               <tbody>
