@@ -330,9 +330,11 @@ function TodoPage() {
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
   };
-  // const handleUpdateTodoImportanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setUpdatetodoImportance(event.target.value);
-  // };
+
+  const handleUpdateTodoImportanceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = parseInt(event.target.value,10) as IMPORTANCE;
+    setUpdatetodoImportance(newValue);
+  };
 
 
   if (todoPage)
@@ -402,29 +404,18 @@ function TodoPage() {
                 <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
                 <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
 
+                <label htmlFor="addImportance" className="text-gray-700">Importance: </label>
+              <select value={updateTodoImportance} onChange={handleUpdateTodoImportanceChange} className="border rounded-md px-2 py-1">
+                <option value={0}>None</option>
+                <option value={1}>Low</option>
+                <option value={2}>Middle</option>
+                <option value={3}>High</option>
+              </select>
+                
+
 
                 <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
               </div>
-
-              <div className="flex flex-col space-y-2">
-                <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
-                <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
-
-                <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
-                <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
-
-                <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
-              </div>
-
-
-              <div>
-                <label htmlFor="updateItemName">newItemName: </label>
-                <input type="text" value={updateTodoItem} onChange={handleUpdateTodoItemChange} name="item"></input>
-
-                <label htmlFor="updateItemName">newPlanTime: </label>
-                <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
-              </div>
-
             </div>
 
           </div>
@@ -438,12 +429,10 @@ function TodoPage() {
               </div> :
               <span>Pick one!</span>
             }
-
           </div>
-
         </div>
       </div>
-    )
+    );
 
 
   return (
