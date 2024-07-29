@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
     "@hey-api/client-fetch": "^0.1.6",
-    "@mdxeditor/editor": "^3.8.0",
+    "@mdxeditor/editor": "^3.10.1",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "@mui/x-data-grid": "^7.8.0",

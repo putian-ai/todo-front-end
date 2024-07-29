@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
-  getTodosByItemNameGetTodosByItemNameItemNameGet
+  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  getTodosByItemNameGetTodosByItemNameItemNameGet,
+  IMPORTANCE
 
 
 } from './client'
@@ -16,6 +17,7 @@ import { createRoot } from 'react-dom/client'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import Markdown from 'react-markdown'
+import InlineSelectEdit from './InlineSelectEdit'
 
 
 function TodoPage() {
@@ -32,12 +34,14 @@ function TodoPage() {
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
   const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
+  const [updateTodoImportance, setUpdatetodoImportance] = useState<IMPORTANCE>(0)
+
 
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
-  const [selectedTodo, setSelectedTodo] = useState<Todo>()
+  const [selectedTodo, setSelectedTodo] = useState<TodoDto>()
   const selectedTodoItem = selectedTodo ? `
 
   # **${selectedTodo!.item}**
@@ -81,7 +85,9 @@ function TodoPage() {
         item: addTodoItem,
         plan_time: dayjs(addTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         user_id: userId,
-        content: updateTodoContent
+        content: updateTodoContent,
+        importance: updateTodoImportance,
+        id: 0
       }
     }
     await createTodoCreateTodosPost(data)
@@ -104,7 +110,8 @@ function TodoPage() {
       requestBody: {
         item: updateTodoItem,
         plan_time: dayjs(updateTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
-        content: updateTodoContent
+        content: updateTodoContent,
+        importance: updateTodoImportance
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -122,7 +129,7 @@ function TodoPage() {
 
 
   const { run: runUpdateTodoItem } = useDebounceFn(
-    async (newTodoItem: string, todoItem: Todo) => {
+    async (newTodoItem: string, todoItem: TodoDto) => {
       handleClickUpdateTodoItemChange(newTodoItem, todoItem)
     },
     {
@@ -130,7 +137,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: Todo) => {
+  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: TodoDto) => {
     setUpdatetodoItem(newTodoItem);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -138,6 +145,7 @@ function TodoPage() {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
         content: todoItem.content ?? null,
+        importance: todoItem.importance ?? 0
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -145,7 +153,7 @@ function TodoPage() {
   };
 
   const { run: runUpdateTodoPlanTime } = useDebounceFn(
-    async (newTodoPlanTime: string, todoItem: Todo) => {
+    async (newTodoPlanTime: string, todoItem: TodoDto) => {
       handleClickUpdateTodoPlanTimeChange(newTodoPlanTime, todoItem)
     },
     {
@@ -153,7 +161,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
+  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: TodoDto) => {
     setUpdatetodoPlanTime(newTodoPlanTime);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -161,6 +169,7 @@ function TodoPage() {
         item: todoItem.item,
         plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         content: todoItem.content ?? null,
+        importance: todoItem.importance ?? 0
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
@@ -168,7 +177,7 @@ function TodoPage() {
   };
 
   const { run: runUpdateTodoContent } = useDebounceFn(
-    async (newTodoContent: string, todoItem: Todo) => {
+    async (newTodoContent: string, todoItem: TodoDto) => {
       handleClickUpdateTodoContentChange(newTodoContent, todoItem)
     },
     {
@@ -176,7 +185,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: Todo) => {
+  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: TodoDto) => {
     setUpdatetodoContent(newTodoContent);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -184,12 +193,28 @@ function TodoPage() {
         item: todoItem.item,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
         content: newTodoContent,
+        importance: todoItem.importance ?? 0
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
     await fetchTodos(page, perPage)
     if (selectedTodo) selectedTodo!.content = newTodoContent
   };
+
+  const handleClickUpdateTodoImportanceChange = async (updateTodoImportance: IMPORTANCE, todoItem: TodoDto) => {
+    setUpdatetodoImportance(updateTodoImportance)
+    const data: UpdateTodosUpdateTodosTodoIdPostData = {
+      todoId: todoItem.id!,
+      requestBody: {
+        item: todoItem.item,
+        plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
+        content: todoItem.content ?? null,
+        importance: updateTodoImportance
+      }
+    }
+    await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  }
 
   //delete searchQuery in hook
   useEffect(() => {
@@ -241,7 +266,7 @@ function TodoPage() {
     },
   );
 
-  const clickItem = (item: Todo) => {
+  const clickItem = (item: TodoDto) => {
     setSelectedTodo(item)
   }
 
@@ -274,6 +299,20 @@ function TodoPage() {
           Update
         </Button>
       </td>
+      <td className="border border-gray-200 px-4 py-2">
+        <InlineSelectEdit
+          value={item.importance ?? 0}
+          options={[
+            { value: 0, label: 'None' },
+            { value: 1, label: 'Low' },
+            { value: 2, label: 'Middle' },
+            { value: 3, label: 'High' }
+          ]}
+
+          //got issues on the type of importance
+          onChange={(newImportance) => handleClickUpdateTodoImportanceChange(newImportance, item as TodoDto)}
+        ></InlineSelectEdit>
+      </td>
     </tr>
   ))
 
@@ -290,6 +329,11 @@ function TodoPage() {
   };
   const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUpdatetodoPlanTime(event.target.value);
+  };
+
+  const handleUpdateTodoImportanceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = parseInt(event.target.value,10) as IMPORTANCE;
+    setUpdatetodoImportance(newValue);
   };
 
 
@@ -329,6 +373,9 @@ function TodoPage() {
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
                   </th>
+                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Importance
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -357,29 +404,18 @@ function TodoPage() {
                 <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
                 <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
 
+                <label htmlFor="addImportance" className="text-gray-700">Importance: </label>
+              <select value={updateTodoImportance} onChange={handleUpdateTodoImportanceChange} className="border rounded-md px-2 py-1">
+                <option value={0}>None</option>
+                <option value={1}>Low</option>
+                <option value={2}>Middle</option>
+                <option value={3}>High</option>
+              </select>
+                
+
 
                 <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
               </div>
-
-              <div className="flex flex-col space-y-2">
-                <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
-                <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
-
-                <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
-                <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
-
-                <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
-              </div>
-
-
-              <div>
-                <label htmlFor="updateItemName">newItemName: </label>
-                <input type="text" value={updateTodoItem} onChange={handleUpdateTodoItemChange} name="item"></input>
-
-                <label htmlFor="updateItemName">newPlanTime: </label>
-                <input type="datetime-local" value={updateTodoPlanTime} onChange={handleUpdateTodoPlanTimeChange} name="item"></input>
-              </div>
-
             </div>
 
           </div>
@@ -393,12 +429,10 @@ function TodoPage() {
               </div> :
               <span>Pick one!</span>
             }
-
           </div>
-
         </div>
       </div>
-    )
+    );
 
 
   return (
