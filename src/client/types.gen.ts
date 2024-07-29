@@ -4,21 +4,30 @@ export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
 
-export type IMPORTANCE = 0 | 1 | 2 | 3;
+export type Importance = 0 | 1 | 2 | 3;
 
 export type PaginateModel_Todo_ = {
     page: number;
     per_page: number;
     total_items: number;
-    items: Array<app__main__Todo>;
+    items: Array<Todo>;
 };
 
-export type PkOnlyTodofmdnkq = {
-    id?: number;
+export type Tag = {
+    id: number;
+    name: string;
+    color: string;
 };
 
-export type PkOnlyUsergijmjy = {
-    id?: number;
+export type Todo = {
+    id: number;
+    item: string;
+    create_time: string;
+    plan_time: string | null;
+    content: string | null;
+    user_id: number;
+    importance: Importance;
+    tags: Array<Tag> | null;
 };
 
 export type TodoDto = {
@@ -26,21 +35,20 @@ export type TodoDto = {
     plan_time: string;
     user_id: number;
     content: string;
-    importance: IMPORTANCE;
+    importance: Importance;
 };
 
 export type UpdateTodoDto = {
     item: string;
     plan_time: string;
     content: string;
-    importance: IMPORTANCE;
+    importance: Importance;
 };
 
 export type User = {
-    id?: number | null;
+    id: number;
     user_name: string;
     pwd: string;
-    todo_list?: unknown;
 };
 
 export type UserDto = {
@@ -54,28 +62,6 @@ export type ValidationError = {
     type: string;
 };
 
-export type app__main__Todo = {
-    id?: number | null;
-    item: string;
-    create_time?: string | null;
-    plan_time?: string | null;
-    content?: string | null;
-    user_id: number;
-    user?: unknown;
-    importance?: IMPORTANCE | null;
-};
-
-export type ormar__models__helpers__relations__Todo = {
-    id?: number | null;
-    item: string;
-    create_time?: string | null;
-    plan_time?: string | null;
-    content?: string | null;
-    user_id: number;
-    user?: unknown;
-    importance?: IMPORTANCE | null;
-};
-
 export type CreateUserCreateUsersPostData = {
     requestBody: UserDto;
 };
@@ -86,7 +72,7 @@ export type CreateTodoCreateTodosPostData = {
     requestBody: TodoDto;
 };
 
-export type CreateTodoCreateTodosPostResponse = app__main__Todo;
+export type CreateTodoCreateTodosPostResponse = Todo;
 
 export type ReadTodosGetTodosGetData = {
     page: number;
@@ -106,7 +92,7 @@ export type UpdateTodosUpdateTodosTodoIdPostData = {
     todoId: number;
 };
 
-export type UpdateTodosUpdateTodosTodoIdPostResponse = app__main__Todo;
+export type UpdateTodosUpdateTodosTodoIdPostResponse = Todo;
 
 export type GetUserByTodoGetUserByTodoTodoIdGetData = {
     todoId: number;
@@ -131,7 +117,7 @@ export type GetTodosByItemNameGetTodosByItemNameItemNameGetData = {
 export type GetTodosByItemNameGetTodosByItemNameItemNameGetResponse = PaginateModel_Todo_;
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = {
-    itemImportance: IMPORTANCE;
+    itemImportance: Importance;
     page: number;
     perPage: number;
 };
@@ -169,7 +155,7 @@ export type $OpenApiTs = {
                 /**
                  * Successful Response
                  */
-                200: app__main__Todo;
+                200: Todo;
                 /**
                  * Validation Error
                  */
@@ -214,7 +200,7 @@ export type $OpenApiTs = {
                 /**
                  * Successful Response
                  */
-                200: app__main__Todo;
+                200: Todo;
                 /**
                  * Validation Error
                  */

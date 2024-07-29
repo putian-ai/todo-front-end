@@ -26,7 +26,7 @@ export const createUserCreateUsersPost = (data: CreateUserCreateUsersPostData): 
  * Create Todo
  * @param data The data for the request.
  * @param data.requestBody
- * @returns app__main__Todo Successful Response
+ * @returns Todo Successful Response
  * @throws ApiError
  */
 export const createTodoCreateTodosPost = (data: CreateTodoCreateTodosPostData): CancelablePromise<CreateTodoCreateTodosPostResponse> => { return __request(OpenAPI, {
@@ -82,7 +82,7 @@ export const deleteTodosDeleteTodosTodoIdDelete = (data: DeleteTodosDeleteTodosT
  * @param data The data for the request.
  * @param data.todoId
  * @param data.requestBody
- * @returns app__main__Todo Successful Response
+ * @returns Todo Successful Response
  * @throws ApiError
  */
 export const updateTodosUpdateTodosTodoIdPost = (data: UpdateTodosUpdateTodosTodoIdPostData): CancelablePromise<UpdateTodosUpdateTodosTodoIdPostResponse> => { return __request(OpenAPI, {
