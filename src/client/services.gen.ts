@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+import type { CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
 
 /**
  * Create User
@@ -23,10 +23,27 @@ export const createUserCreateUsersPost = (data: CreateUserCreateUsersPostData): 
 }); };
 
 /**
+ * Create Tag
+ * @param data The data for the request.
+ * @param data.requestBody
+ * @returns Tag Successful Response
+ * @throws ApiError
+ */
+export const createTagCreateTagPost = (data: CreateTagCreateTagPostData): CancelablePromise<CreateTagCreateTagPostResponse> => { return __request(OpenAPI, {
+    method: 'POST',
+    url: '/create_tag/',
+    body: data.requestBody,
+    mediaType: 'application/json',
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
+
+/**
  * Create Todo
  * @param data The data for the request.
  * @param data.requestBody
- * @returns app__main__Todo Successful Response
+ * @returns Todo Successful Response
  * @throws ApiError
  */
 export const createTodoCreateTodosPost = (data: CreateTodoCreateTodosPostData): CancelablePromise<CreateTodoCreateTodosPostResponse> => { return __request(OpenAPI, {
@@ -78,11 +95,29 @@ export const deleteTodosDeleteTodosTodoIdDelete = (data: DeleteTodosDeleteTodosT
 }); };
 
 /**
+ * Delete Tags
+ * @param data The data for the request.
+ * @param data.tagId
+ * @returns unknown Successful Response
+ * @throws ApiError
+ */
+export const deleteTagsDeleteTagTagIdDelete = (data: DeleteTagsDeleteTagTagIdDeleteData): CancelablePromise<DeleteTagsDeleteTagTagIdDeleteResponse> => { return __request(OpenAPI, {
+    method: 'DELETE',
+    url: '/delete_tag/{tag_id}',
+    path: {
+        tag_id: data.tagId
+    },
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
+
+/**
  * Update Todos
  * @param data The data for the request.
  * @param data.todoId
  * @param data.requestBody
- * @returns app__main__Todo Successful Response
+ * @returns Todo Successful Response
  * @throws ApiError
  */
 export const updateTodosUpdateTodosTodoIdPost = (data: UpdateTodosUpdateTodosTodoIdPostData): CancelablePromise<UpdateTodosUpdateTodosTodoIdPostResponse> => { return __request(OpenAPI, {
