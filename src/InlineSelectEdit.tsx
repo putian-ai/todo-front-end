@@ -1,20 +1,20 @@
 import React from 'react';
-import { IMPORTANCE } from './client';
+import { Importance } from './client';
 
 interface Option {
-    value: IMPORTANCE;
+    value: Importance;
     label: string;
 }
 
 interface InlineSelectEditProps {
-    value: IMPORTANCE;
+    value: Importance;
     options: Option[];
-    onChange: (newValue: IMPORTANCE) => void;
+    onChange: (newValue: Importance) => void;
 }
 
 const InlineSelectEdit: React.FC<InlineSelectEditProps> = ({ value, options, onChange }) => {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onChange(parseInt(e.target.value, 10) as IMPORTANCE);
+        onChange(parseInt(e.target.value, 10) as Importance);
     };
 
     return (

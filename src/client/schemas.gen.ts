@@ -127,12 +127,11 @@ export const $Todo = {
             ],
             title: 'Content'
         },
-        user_id: {
-            type: 'integer',
-            title: 'User Id'
-        },
         importance: {
             '$ref': '#/components/schemas/Importance'
+        },
+        user: {
+            '$ref': '#/components/schemas/User'
         },
         tags: {
             anyOf: [
@@ -150,7 +149,7 @@ export const $Todo = {
         }
     },
     type: 'object',
-    required: ['id', 'item', 'create_time', 'plan_time', 'content', 'user_id', 'importance', 'tags'],
+    required: ['id', 'item', 'create_time', 'plan_time', 'content', 'importance', 'user', 'tags'],
     title: 'Todo'
 } as const;
 
@@ -213,14 +212,10 @@ export const $User = {
         user_name: {
             type: 'string',
             title: 'User Name'
-        },
-        pwd: {
-            type: 'string',
-            title: 'Pwd'
         }
     },
     type: 'object',
-    required: ['id', 'user_name', 'pwd'],
+    required: ['id', 'user_name'],
     title: 'User'
 } as const;
 

@@ -31,8 +31,8 @@ export type Todo = {
     create_time: string;
     plan_time: string | null;
     content: string | null;
-    user_id: number;
     importance: Importance;
+    user: User;
     tags: Array<Tag> | null;
 };
 
@@ -54,7 +54,6 @@ export type UpdateTodoDto = {
 export type User = {
     id: number;
     user_name: string;
-    pwd: string;
 };
 
 export type UserDto = {

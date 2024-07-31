@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
   getTodosByItemNameGetTodosByItemNameItemNameGet,
-  IMPORTANCE
+  Importance
 
 
 } from './client'
@@ -34,14 +34,14 @@ function TodoPage() {
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
   const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
-  const [updateTodoImportance, setUpdatetodoImportance] = useState<IMPORTANCE>(0)
+  const [updateTodoImportance, setUpdatetodoImportance] = useState<Importance>(0)
 
 
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
 
-  const [selectedTodo, setSelectedTodo] = useState<TodoDto>()
+  const [selectedTodo, setSelectedTodo] = useState<Todo>()
   const selectedTodoItem = selectedTodo ? `
 
   # **${selectedTodo!.item}**
@@ -87,7 +87,6 @@ function TodoPage() {
         user_id: userId,
         content: updateTodoContent,
         importance: updateTodoImportance,
-        id: 0
       }
     }
     await createTodoCreateTodosPost(data)
@@ -129,7 +128,7 @@ function TodoPage() {
 
 
   const { run: runUpdateTodoItem } = useDebounceFn(
-    async (newTodoItem: string, todoItem: TodoDto) => {
+    async (newTodoItem: string, todoItem: Todo) => {
       handleClickUpdateTodoItemChange(newTodoItem, todoItem)
     },
     {
@@ -137,14 +136,14 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: TodoDto) => {
+  const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: Todo) => {
     setUpdatetodoItem(newTodoItem);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
       requestBody: {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
-        content: todoItem.content ?? null,
+        content: todoItem.content ?? '',
         importance: todoItem.importance ?? 0
       }
     }
@@ -153,7 +152,7 @@ function TodoPage() {
   };
 
   const { run: runUpdateTodoPlanTime } = useDebounceFn(
-    async (newTodoPlanTime: string, todoItem: TodoDto) => {
+    async (newTodoPlanTime: string, todoItem: Todo) => {
       handleClickUpdateTodoPlanTimeChange(newTodoPlanTime, todoItem)
     },
     {
@@ -161,14 +160,14 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: TodoDto) => {
+  const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
     setUpdatetodoPlanTime(newTodoPlanTime);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
       requestBody: {
         item: todoItem.item,
         plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
-        content: todoItem.content ?? null,
+        content: todoItem.content ?? '',
         importance: todoItem.importance ?? 0
       }
     }
@@ -177,7 +176,7 @@ function TodoPage() {
   };
 
   const { run: runUpdateTodoContent } = useDebounceFn(
-    async (newTodoContent: string, todoItem: TodoDto) => {
+    async (newTodoContent: string, todoItem: Todo) => {
       handleClickUpdateTodoContentChange(newTodoContent, todoItem)
     },
     {
@@ -185,7 +184,7 @@ function TodoPage() {
     },
   );
 
-  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: TodoDto) => {
+  const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: Todo) => {
     setUpdatetodoContent(newTodoContent);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
@@ -201,14 +200,14 @@ function TodoPage() {
     if (selectedTodo) selectedTodo!.content = newTodoContent
   };
 
-  const handleClickUpdateTodoImportanceChange = async (updateTodoImportance: IMPORTANCE, todoItem: TodoDto) => {
+  const handleClickUpdateTodoImportanceChange = async (updateTodoImportance: Importance, todoItem: Todo) => {
     setUpdatetodoImportance(updateTodoImportance)
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
       requestBody: {
         item: todoItem.item,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
-        content: todoItem.content ?? null,
+        content: todoItem.content ?? '',
         importance: updateTodoImportance
       }
     }
@@ -266,7 +265,7 @@ function TodoPage() {
     },
   );
 
-  const clickItem = (item: TodoDto) => {
+  const clickItem = (item: Todo) => {
     setSelectedTodo(item)
   }
 
@@ -310,7 +309,7 @@ function TodoPage() {
           ]}
 
           //got issues on the type of importance
-          onChange={(newImportance) => handleClickUpdateTodoImportanceChange(newImportance, item as TodoDto)}
+          onChange={(newImportance) => handleClickUpdateTodoImportanceChange(newImportance, item)}
         ></InlineSelectEdit>
       </td>
     </tr>
@@ -332,7 +331,7 @@ function TodoPage() {
   };
 
   const handleUpdateTodoImportanceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newValue = parseInt(event.target.value,10) as IMPORTANCE;
+    const newValue = parseInt(event.target.value, 10) as Importance;
     setUpdatetodoImportance(newValue);
   };
 
@@ -405,13 +404,13 @@ function TodoPage() {
                 <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
 
                 <label htmlFor="addImportance" className="text-gray-700">Importance: </label>
-              <select value={updateTodoImportance} onChange={handleUpdateTodoImportanceChange} className="border rounded-md px-2 py-1">
-                <option value={0}>None</option>
-                <option value={1}>Low</option>
-                <option value={2}>Middle</option>
-                <option value={3}>High</option>
-              </select>
-                
+                <select value={updateTodoImportance} onChange={handleUpdateTodoImportanceChange} className="border rounded-md px-2 py-1">
+                  <option value={0}>None</option>
+                  <option value={1}>Low</option>
+                  <option value={2}>Middle</option>
+                  <option value={3}>High</option>
+                </select>
+
 
 
                 <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
