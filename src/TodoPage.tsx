@@ -18,6 +18,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import Markdown from 'react-markdown'
 import InlineSelectEdit from './InlineSelectEdit'
+import InlineTagEdit from './InLineTagEdit'
 
 
 function TodoPage() {
@@ -421,6 +422,11 @@ function TodoPage() {
           <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
             {selectedTodo ?
               <div >
+
+                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onChange={function (newValue: string): void {
+                  throw new Error('Function not implemented.')
+                }}></InlineTagEdit>
+
                 <Markdown className='text-4xl flex justify-start'>
                   {selectedTodoItem}
                 </Markdown>
