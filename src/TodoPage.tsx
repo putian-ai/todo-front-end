@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
   getTodosByItemNameGetTodosByItemNameItemNameGet,
-  Importance
+  Importance,
+  DeleteTagsDeleteTagTagIdDeleteData,
+
 
 
 } from './client'
@@ -216,6 +218,13 @@ function TodoPage() {
     await fetchTodos(page, perPage)
   }
 
+  const handleClickDeleteTodoTag = async (deleteTodoTagId: number) => {
+    const data: DeleteTagsDeleteTagTagIdDeleteData = {
+      tagId: deleteTodoTagId
+    }
+
+  }
+
   //delete searchQuery in hook
   useEffect(() => {
     if (searchQuery) {
@@ -423,9 +432,7 @@ function TodoPage() {
             {selectedTodo ?
               <div >
 
-                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onChange={function (newValue: string): void {
-                  throw new Error('Function not implemented.')
-                }}></InlineTagEdit>
+                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)}></InlineTagEdit>
 
                 <Markdown className='text-4xl flex justify-start'>
                   {selectedTodoItem}

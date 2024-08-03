@@ -14,10 +14,10 @@ interface InlineEditProps {
     value: Tag[];
     item: Todo
 
-    onChange: (newValue: string) => void;
+    onDelete: (index: number) => void;
 }
 
-const InlineTagEdit: React.FC<InlineEditProps> = ({ value }) => {
+const InlineTagEdit: React.FC<InlineEditProps> = ({ value, onDelete }) => {
 
     const suggestions = [
         { id: "India", text: "India", className: "red" },
@@ -63,12 +63,18 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value }) => {
     };
 
 
+    const handleDelete = (index: number) => {
+        onDelete(value[index].id);
+    }
+
+
+
     return (
         <ReactTags
             tags={tags}
             suggestions={suggestions}
             separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
-            // handleDelete={handleDelete}
+            handleDelete={handleDelete}
             // handleAddition={handleAddition}
             handleDrag={handleDrag}
             handleTagClick={handleTagClick}
