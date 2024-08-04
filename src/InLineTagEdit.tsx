@@ -13,11 +13,11 @@ interface ITag {
 interface InlineEditProps {
     value: Tag[];
     item: Todo
-
+    onAddition: (tagName: string, todoUserId: number) => void;
     onDelete: (index: number) => void;
 }
 
-const InlineTagEdit: React.FC<InlineEditProps> = ({ value, onDelete }) => {
+const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAddition }) => {
 
     const suggestions = [
         { id: "India", text: "India", className: "red" },
@@ -66,7 +66,9 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, onDelete }) => {
     const handleDelete = (index: number) => {
         onDelete(value[index].id);
     }
-
+    const handleAddition = (tag: ITag) => {
+        onAddition(tag.className, item.user.id)
+    }
 
 
     return (
@@ -75,7 +77,7 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, onDelete }) => {
             suggestions={suggestions}
             separators={[SEPARATORS.ENTER, SEPARATORS.COMMA]}
             handleDelete={handleDelete}
-            // handleAddition={handleAddition}
+            handleAddition={handleAddition}
             handleDrag={handleDrag}
             handleTagClick={handleTagClick}
             inputFieldPosition="inline"

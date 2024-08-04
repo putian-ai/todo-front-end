@@ -4,6 +4,9 @@ import {
   getTodosByItemNameGetTodosByItemNameItemNameGet,
   Importance,
   DeleteTagsDeleteTagTagIdDeleteData,
+  deleteTagsDeleteTagTagIdDelete,
+  createTagCreateTagPost,
+  CreateTagCreateTagPostData,
 
 
 
@@ -51,6 +54,8 @@ function TodoPage() {
 
 `: null
 
+  // TODO: needs to be delete
+  const [tempTodoTagColorString, setTempTodoTagColorString] = useState("1111111")
 
 
 
@@ -222,7 +227,20 @@ function TodoPage() {
     const data: DeleteTagsDeleteTagTagIdDeleteData = {
       tagId: deleteTodoTagId
     }
+    await deleteTagsDeleteTagTagIdDelete(data)
+    await fetchTodos(page, perPage)
+  }
 
+  const handleClickAdditionTodoTag = async (newTodoTagName: string, newTodoTagUserId: number) => {
+    const data: CreateTagCreateTagPostData = {
+      requestBody: {
+        user_id: newTodoTagUserId,
+        name: newTodoTagName,
+        color: tempTodoTagColorString
+      }
+    }
+    await createTagCreateTagPost(data)
+    await fetchTodos(page, perPage)
   }
 
   //delete searchQuery in hook
@@ -432,7 +450,7 @@ function TodoPage() {
             {selectedTodo ?
               <div >
 
-                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)}></InlineTagEdit>
+                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
 
                 <Markdown className='text-4xl flex justify-start'>
                   {selectedTodoItem}
