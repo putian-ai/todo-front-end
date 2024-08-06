@@ -73,6 +73,10 @@ export const $TagDto = {
             type: 'integer',
             title: 'User Id'
         },
+        todo_id: {
+            type: 'integer',
+            title: 'Todo Id'
+        },
         name: {
             type: 'string',
             title: 'Name'
@@ -85,7 +89,7 @@ export const $TagDto = {
         }
     },
     type: 'object',
-    required: ['user_id', 'name', 'color'],
+    required: ['user_id', 'todo_id', 'name', 'color'],
     title: 'TagDto'
 } as const;
 
