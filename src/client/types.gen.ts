@@ -21,6 +21,7 @@ export type Tag = {
 
 export type TagDto = {
     user_id: number;
+    todo_id: number;
     name: string;
     color: string;
 };

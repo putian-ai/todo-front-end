@@ -2,7 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
   getTodosByItemNameGetTodosByItemNameItemNameGet,
-  Importance
+  Importance,
+  DeleteTagsDeleteTagTagIdDeleteData,
+  deleteTagsDeleteTagTagIdDelete,
+  createTagCreateTagPost,
+  CreateTagCreateTagPostData,
+
 
 
 } from './client'
@@ -18,6 +23,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import Markdown from 'react-markdown'
 import InlineSelectEdit from './InlineSelectEdit'
+import InlineTagEdit from './InLineTagEdit'
 
 
 function TodoPage() {
@@ -48,6 +54,8 @@ function TodoPage() {
 
 `: null
 
+  // TODO: needs to be delete
+  const [tempTodoTagColorString, setTempTodoTagColorString] = useState("1111111")
 
 
 
@@ -57,6 +65,8 @@ function TodoPage() {
     try {
       const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
       setTodoPage(data);
+      let result2 = data.items.find((item) => item.id == selectedTodo?.id)
+      if (result2) setSelectedTodo(result2)
     } catch (error) {
       console.error('Failed to fetch todos', error);
     } finally {
@@ -212,6 +222,30 @@ function TodoPage() {
       }
     }
     await updateTodosUpdateTodosTodoIdPost(data)
+    await fetchTodos(page, perPage)
+  }
+
+  const handleClickDeleteTodoTag = async (deleteTodoTagId: number) => {
+    const data: DeleteTagsDeleteTagTagIdDeleteData = {
+      tagId: deleteTodoTagId
+    }
+    await deleteTagsDeleteTagTagIdDelete(data)
+    await fetchTodos(page, perPage)
+  }
+
+  const handleClickAdditionTodoTag = async (newTodoTagName: string, newTodoTagUserId: number) => {
+    if (!selectedTodo) {
+      throw new Error('NO SELECTED ERROR!')
+    }
+    const data: CreateTagCreateTagPostData = {
+      requestBody: {
+        todo_id: selectedTodo?.id,
+        user_id: newTodoTagUserId,
+        name: newTodoTagName,
+        color: tempTodoTagColorString
+      }
+    }
+    await createTagCreateTagPost(data)
     await fetchTodos(page, perPage)
   }
 
@@ -421,6 +455,9 @@ function TodoPage() {
           <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
             {selectedTodo ?
               <div >
+
+                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
+
                 <Markdown className='text-4xl flex justify-start'>
                   {selectedTodoItem}
                 </Markdown>
