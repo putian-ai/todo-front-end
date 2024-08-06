@@ -7,6 +7,8 @@ import {
   deleteTagsDeleteTagTagIdDelete,
   createTagCreateTagPost,
   CreateTagCreateTagPostData,
+  GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData,
+  getTodoByTodoIdGetTodoByTodoIdTodoIdGet,
 
 
 
@@ -65,8 +67,8 @@ function TodoPage() {
     try {
       const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
       setTodoPage(data);
-      let result2 = data.items.find((item) => item.id == selectedTodo?.id)
-      if (result2) setSelectedTodo(result2)
+      // let result2 = data.items.find((item) => item.id == selectedTodo?.id)
+      // if (result2) setSelectedTodo(result2)
     } catch (error) {
       console.error('Failed to fetch todos', error);
     } finally {
@@ -229,8 +231,16 @@ function TodoPage() {
     const data: DeleteTagsDeleteTagTagIdDeleteData = {
       tagId: deleteTodoTagId
     }
+    const data2: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
+      page: 1,
+      perPage: 1,
+      todoId: selectedTodo?.id ?? -1
+    }
+
     await deleteTagsDeleteTagTagIdDelete(data)
-    await fetchTodos(page, perPage)
+    // await fetchTodos(page, perPage)
+    const selectedDeleteTagTodo = await getTodoByTodoIdGetTodoByTodoIdTodoIdGet(data2)
+    setSelectedTodo(selectedDeleteTagTodo.items[0])
   }
 
   const handleClickAdditionTodoTag = async (newTodoTagName: string, newTodoTagUserId: number) => {
@@ -245,8 +255,17 @@ function TodoPage() {
         color: tempTodoTagColorString
       }
     }
+
+    const data2: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
+      page: 1,
+      perPage: 1,
+      todoId: selectedTodo?.id ?? -1
+    }
+
     await createTagCreateTagPost(data)
-    await fetchTodos(page, perPage)
+    // await fetchTodos(page, perPage)
+    const selectedAddTagTodo = await getTodoByTodoIdGetTodoByTodoIdTodoIdGet(data2)
+    setSelectedTodo(selectedAddTagTodo.items[0])
   }
 
   //delete searchQuery in hook

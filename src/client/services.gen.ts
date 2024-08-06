@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+import type { CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
 
 /**
  * Create User
@@ -215,6 +215,31 @@ export const getTodosByImportanceGetTodosByItemImportanceItemImportanceGet = (da
     url: '/get_todos_by_item_importance/{item_importance}',
     path: {
         item_importance: data.itemImportance
+    },
+    query: {
+        page: data.page,
+        per_page: data.perPage
+    },
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
+
+/**
+ * Get Todo By Todo Id
+ * Get todo by the todo_id
+ * @param data The data for the request.
+ * @param data.todoId
+ * @param data.page
+ * @param data.perPage
+ * @returns PaginateModel_Todo_ Successful Response
+ * @throws ApiError
+ */
+export const getTodoByTodoIdGetTodoByTodoIdTodoIdGet = (data: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData): CancelablePromise<GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse> => { return __request(OpenAPI, {
+    method: 'GET',
+    url: '/get_todo_by_todo_id/{todo_id}',
+    path: {
+        todo_id: data.todoId
     },
     query: {
         page: data.page,
