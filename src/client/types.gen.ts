@@ -142,6 +142,14 @@ export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = 
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
 
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
+    page: number;
+    perPage: number;
+    todoId: number;
+};
+
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = PaginateModel_Todo_;
+
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
     page: number;
     perPage: number;
@@ -304,6 +312,21 @@ export type $OpenApiTs = {
     '/get_todos_by_item_importance/{item_importance}': {
         get: {
             req: GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: PaginateModel_Todo_;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/get_todo_by_todo_id/{todo_id}': {
+        get: {
+            req: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData;
             res: {
                 /**
                  * Successful Response
