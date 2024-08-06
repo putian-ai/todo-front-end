@@ -67,7 +67,7 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAdd
         onDelete(value[index].id);
     }
     const handleAddition = (tag: ITag) => {
-        onAddition(tag.className, item.user.id)
+        onAddition(tag.id, item.user.id)
     }
 
 

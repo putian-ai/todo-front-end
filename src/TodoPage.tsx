@@ -65,6 +65,8 @@ function TodoPage() {
     try {
       const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
       setTodoPage(data);
+      let result2 = data.items.find((item) => item.id == selectedTodo?.id)
+      if (result2) setSelectedTodo(result2)
     } catch (error) {
       console.error('Failed to fetch todos', error);
     } finally {
@@ -232,8 +234,12 @@ function TodoPage() {
   }
 
   const handleClickAdditionTodoTag = async (newTodoTagName: string, newTodoTagUserId: number) => {
+    if (!selectedTodo) {
+      throw new Error('NO SELECTED ERROR!')
+    }
     const data: CreateTagCreateTagPostData = {
       requestBody: {
+        todo_id: selectedTodo?.id,
         user_id: newTodoTagUserId,
         name: newTodoTagName,
         color: tempTodoTagColorString
