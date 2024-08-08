@@ -13,7 +13,7 @@ import {
 
 
 } from './client'
-import { Button, TextField, Box, Container } from '@mui/material'
+import { TextField, Box, Container } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
 import InlineTimeEdit from './InLineTimeEdit'
@@ -26,6 +26,7 @@ import rehypeRaw from 'rehype-raw'
 import Markdown from 'react-markdown'
 import InlineSelectEdit from './InlineSelectEdit'
 import InlineTagEdit from './InLineTagEdit'
+import { Button } from './components/ui/button'
 
 
 function TodoPage() {
@@ -344,7 +345,7 @@ function TodoPage() {
         <InlineMarkDownEdit value={item.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, item)}></InlineMarkDownEdit>
       </td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
-        <Button onClick={() => deleteTodo(item.id!)} className="text-red-500 hover:text-red-700">
+        <Button onClick={() => deleteTodo(item.id!)} variant="destructive">
           Delete
         </Button>
         <Button onClick={() => updateTodo(item.id!)} className="text-blue-500 hover:text-blue-700">
