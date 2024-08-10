@@ -66,13 +66,6 @@ function TodoPage() {
   // TODO: needs to be delete
   const [tempTodoTagColorString, setTempTodoTagColorString] = useState("1111111")
 
-  const tempTodoTableData = [
-    {
-      id: 1,
-      item: "testTodo",
-      planTime: "111111"
-    },
-  ]
 
 
 
