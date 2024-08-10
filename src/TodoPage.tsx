@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
   getTodosByItemNameGetTodosByItemNameItemNameGet,
@@ -13,21 +13,22 @@ import {
 
 
 } from './client'
-import { TextField, Box, Container } from '@mui/material'
+import { TextField, Box } from '@mui/material'
 import dayjs from 'dayjs'
 import Pagination from './Pagination'
 import InlineTimeEdit from './InLineTimeEdit'
 import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
 import InlineMarkDownEdit from './InLineMarkDownEdit'
-import { createRoot } from 'react-dom/client'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
 import Markdown from 'react-markdown'
 import InlineSelectEdit from './InlineSelectEdit'
 import InlineTagEdit from './InLineTagEdit'
 import { Button } from './components/ui/button'
-
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 
 function TodoPage() {
 
@@ -41,7 +42,6 @@ function TodoPage() {
   const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
 
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
-  const [updateTodoPlanTime, setUpdatetodoPlanTime] = useState<string>('')
   const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
   const [updateTodoImportance, setUpdatetodoImportance] = useState<Importance>(0)
 
@@ -366,98 +366,97 @@ function TodoPage() {
   if (todoPage)
     return (
 
-      <div>
-        <div className="flex flex-row w-full">
-          <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
-            <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
-            <Box my={4}>
-              <TextField
-                label="Search Todos"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                fullWidth
-                margin="normal"
-              />
-            </Box>
-            <Box></Box>
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel>
+          <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
+          <Box my={4}>
+            <TextField
+              label="Search Todos"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              fullWidth
+              margin="normal"
+            />
+          </Box>
+          <Box></Box>
 
-            <table className="table-auto w-full text-left border-collapse border border-gray-200">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Item
-                  </th>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Create Time
-                  </th>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Plan Time
-                  </th>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Actions
-                  </th>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    Importance
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {todoRows}
-              </tbody>
-            </table>
-
-
-            <Pagination
-              currentPage={page}
-              perPage={perPage}
-              totalItems={todoPage.total_items}
-              onPageChange={handlePageChange}
-              onPerPageChange={handlePerPageChange}
-            >
-            </Pagination>
+          <table className="table-auto w-full text-left border-collapse border border-gray-200">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Item
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Create Time
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Plan Time
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Actions
+                </th>
+                <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
+                  Importance
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {todoRows}
+            </tbody>
+          </table>
 
 
-            <div>
-
-              <div className="flex flex-col space-y-2">
-                <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
-                <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
-
-
-                <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
-                <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
-
-                <label htmlFor="addImportance" className="text-gray-700">Importance: </label>
-                <select value={updateTodoImportance} onChange={handleUpdateTodoImportanceChange} className="border rounded-md px-2 py-1">
-                  <option value={0}>None</option>
-                  <option value={1}>Low</option>
-                  <option value={2}>Middle</option>
-                  <option value={3}>High</option>
-                </select>
+          <Pagination
+            currentPage={page}
+            perPage={perPage}
+            totalItems={todoPage.total_items}
+            onPageChange={handlePageChange}
+            onPerPageChange={handlePerPageChange}
+          >
+          </Pagination>
 
 
+          <div>
 
-                <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
-              </div>
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="addItemName" className="text-gray-700">newItemName: </label>
+              <input type="text" value={addTodoItem} onChange={handleTodoItemChange} name="item" className="border rounded-md px-2 py-1" />
+
+
+              <label htmlFor="addItemName" className="text-gray-700">newPlanTime: </label>
+              <input type="datetime-local" value={addTodoPlanTime} onChange={handleTodoPlanTimeChange} name="item" className="border rounded-md px-2 py-1" />
+
+              <label htmlFor="addImportance" className="text-gray-700">Importance: </label>
+              <select value={updateTodoImportance} onChange={handleUpdateTodoImportanceChange} className="border rounded-md px-2 py-1">
+                <option value={0}>None</option>
+                <option value={1}>Low</option>
+                <option value={2}>Middle</option>
+                <option value={3}>High</option>
+              </select>
+
+
+
+              <button onClick={createTodo} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Submit</button>
             </div>
-
           </div>
-          <div className='h-screen overflow-y-auto p-10 flex-none w-[1000px]'>
-            {selectedTodo ?
-              <div >
 
-                <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel>
+          {selectedTodo ?
+            <div >
 
-                <Markdown className='text-4xl flex justify-start'>
-                  {selectedTodoItem}
-                </Markdown>
-                <InlineMarkDownEdit value={selectedTodo.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, selectedTodo)}></InlineMarkDownEdit>
-              </div> :
-              <span>Pick one!</span>
-            }
-          </div>
-        </div>
-      </div>
+              <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
+
+              <Markdown className='text-4xl flex justify-start'>
+                {selectedTodoItem}
+              </Markdown>
+              <InlineMarkDownEdit value={selectedTodo.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, selectedTodo)}></InlineMarkDownEdit>
+            </div> :
+            <span>Pick one!</span>
+          }
+        </ResizablePanel>
+      </ResizablePanelGroup>
     );
 
 
