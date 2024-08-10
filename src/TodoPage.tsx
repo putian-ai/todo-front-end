@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
   getTodosByItemNameGetTodosByItemNameItemNameGet,
@@ -26,16 +26,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+
 import { TodoTableData, columns } from "./columns"
 import { DataTable } from "./data-table"
 
@@ -65,6 +56,12 @@ function TodoPage() {
   # **${selectedTodo!.item}**
 
 `: null
+  const todoTableData: TodoTableData[] = useMemo<TodoTableData[]>(() => (todoPage?.items ?? []).map(item => ({
+    id: item.id,
+    item: item.item,
+    planTime: item.plan_time
+  }))
+    , [todoPage])
 
   // TODO: needs to be delete
   const [tempTodoTagColorString, setTempTodoTagColorString] = useState("1111111")
@@ -366,8 +363,6 @@ function TodoPage() {
   ))
 
 
-
-
   const handleTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddtodoItem(event.target.value);
   };
@@ -389,7 +384,7 @@ function TodoPage() {
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
 
-          <DataTable columns={columns} data={tempTodoTableData} />
+          <DataTable columns={columns} data={todoTableData} />
 
         </ResizablePanel>
         <ResizableHandle withHandle />
