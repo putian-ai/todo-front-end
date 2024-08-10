@@ -9,9 +9,6 @@ import {
   CreateTagCreateTagPostData,
   GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData,
   getTodoByTodoIdGetTodoByTodoIdTodoIdGet,
-
-
-
 } from './client'
 import { TextField, Box } from '@mui/material'
 import dayjs from 'dayjs'
@@ -29,6 +26,18 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { TodoTableData, columns } from "./columns"
+import { DataTable } from "./data-table"
 
 function TodoPage() {
 
@@ -59,6 +68,14 @@ function TodoPage() {
 
   // TODO: needs to be delete
   const [tempTodoTagColorString, setTempTodoTagColorString] = useState("1111111")
+
+  const tempTodoTableData = [
+    {
+      id: 1,
+      item: "testTodo",
+      planTime: "111111"
+    },
+  ]
 
 
 
@@ -348,6 +365,9 @@ function TodoPage() {
     </tr>
   ))
 
+
+
+
   const handleTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddtodoItem(event.target.value);
   };
@@ -367,6 +387,12 @@ function TodoPage() {
     return (
 
       <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel>
+
+          <DataTable columns={columns} data={tempTodoTableData} />
+
+        </ResizablePanel>
+        <ResizableHandle withHandle />
         <ResizablePanel>
           <Button onClick={() => fetchTodos(page, perPage)}>Get Todo Page</Button>
           <Box my={4}>
