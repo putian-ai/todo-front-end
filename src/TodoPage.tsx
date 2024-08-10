@@ -115,20 +115,7 @@ function TodoPage() {
     fetchTodos(page, perPage)
   }
 
-  const updateTodo = async (id: number) => {
-    console.log(`Update: ${id}`)
-    const data: UpdateTodosUpdateTodosTodoIdPostData = {
-      todoId: id,
-      requestBody: {
-        item: updateTodoItem,
-        plan_time: dayjs(updateTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
-        content: updateTodoContent,
-        importance: updateTodoImportance
-      }
-    }
-    await updateTodosUpdateTodosTodoIdPost(data)
-    await fetchTodos(page, perPage)
-  }
+
   //////////////////////////////////////////////////
 
   const handlePageChange = (newPage: number) => {
@@ -174,7 +161,6 @@ function TodoPage() {
   );
 
   const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
-    setUpdatetodoPlanTime(newTodoPlanTime);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
       todoId: todoItem.id!,
       requestBody: {
@@ -340,16 +326,9 @@ function TodoPage() {
         <InlineTimeEdit value={dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')} onChange={(newValue) => runUpdateTodoPlanTime(newValue, item)}>
         </InlineTimeEdit>
       </td>
-      <td className="border border-gray-200 px-4 py-2 max-w-7">
-        {item.content ?? ''}
-        <InlineMarkDownEdit value={item.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, item)}></InlineMarkDownEdit>
-      </td>
       <td className="border border-gray-200 px-4 py-2 flex space-x-2">
         <Button onClick={() => deleteTodo(item.id!)} variant="destructive">
           Delete
-        </Button>
-        <Button onClick={() => updateTodo(item.id!)} className="text-blue-500 hover:text-blue-700">
-          Update
         </Button>
       </td>
       <td className="border border-gray-200 px-4 py-2">
@@ -377,12 +356,6 @@ function TodoPage() {
     setAddtodoPlanTime(event.target.value);
   };
 
-  const handleUpdateTodoItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdatetodoItem(event.target.value);
-  };
-  const handleUpdateTodoPlanTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdatetodoPlanTime(event.target.value);
-  };
 
   const handleUpdateTodoImportanceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = parseInt(event.target.value, 10) as Importance;
@@ -419,9 +392,6 @@ function TodoPage() {
                   </th>
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Plan Time
-                  </th>
-                  <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    content
                   </th>
                   <th className="px-4 py-2 bg-gray-100 text-xs font-medium text-gray-700 uppercase tracking-wider">
                     Actions
