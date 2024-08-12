@@ -396,7 +396,7 @@ function TodoPage() {
             <TodoItem
               key={item.id}
               item={item}
-              onDelete={() => handleDelete(item.id)} // Pass a function to handle deletion
+              onDelete={() => deleteTodo(item.id!)} // Pass a function to handle deletion
               onCheck={() => handleToggle(item.id)} // Pass a function to handle toggle
               onUpdate={function (updatedText: string): void {
               }}
