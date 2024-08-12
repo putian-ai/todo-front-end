@@ -399,7 +399,9 @@ function TodoPage() {
               onDelete={() => deleteTodo(item.id!)} // Pass a function to handle deletion
               onCheck={() => handleToggle(item.id)} // Pass a function to handle toggle
               onUpdate={(newValue) => runUpdateTodoItem(newValue, item)}
-              onClick={clickItem} />
+              onClick={clickItem} onTimeUpdate={function (updatedTime: Date): void {
+                throw new Error('Function not implemented.')
+              }} />
           ))}
         </ResizablePanel>
         <ResizableHandle withHandle />

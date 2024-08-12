@@ -12,12 +12,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from './components/ui/button';
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 interface TodoItemProps {
   item: Todo;
   onDelete: (item: Todo) => void;
   onCheck?: () => void;
   onUpdate: (updatedText: string) => void; // Callback to update the todo text
+  onTimeUpdate: (updatedTime: Date) => void; // Callback to update the todo time
   onClick: (item: Todo) => void;
 }
 
@@ -26,10 +29,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
   onDelete,
   onCheck,
   onUpdate,
+  onTimeUpdate,
   onClick,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(item.item);
+  const [selectedDate, setSelectedDate] = useState(dayjs(item.plan_time).toDate());
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSpanClick = () => {
@@ -67,8 +72,6 @@ const TodoItem: React.FC<TodoItemProps> = ({
     }
   }, [isEditing]);
 
-
-
   return (
     <div className="flex items-center justify-between py-2 px-4 border-b border-gray-200">
       <div className="flex items-center flex-1 gap-2">
@@ -94,9 +97,26 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </span>
         )}
       </div>
-      <div className="text-gray-500 text-[12px]">
-        {dayjs(item.plan_time).format('YYYY-MM-DD HH:mm')}
-      </div>
+      <Popover>
+        <PopoverTrigger asChild>
+          <div
+            className="text-gray-500 text-[12px] cursor-pointer"
+          >
+            {dayjs(selectedDate).format('YYYY-MM-DD HH:mm')}
+          </div>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0">
+          <Calendar
+            mode="datetime"
+            selected={selectedDate}
+            onSelect={(date) => {
+              setSelectedDate(date)
+              onTimeUpdate(date)
+            }}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
