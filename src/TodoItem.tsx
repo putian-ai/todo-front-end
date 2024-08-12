@@ -41,6 +41,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditText(e.target.value);
+    // onUpdate(e.target.value);
   };
 
   const handleInputBlur = () => {
@@ -89,7 +90,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
             className="text-gray-800 cursor-text w-full text-left"
             onClick={handleSpanClick}
           >
-            {item.item}
+            {editText}
           </span>
         )}
       </div>

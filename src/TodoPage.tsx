@@ -398,8 +398,7 @@ function TodoPage() {
               item={item}
               onDelete={() => deleteTodo(item.id!)} // Pass a function to handle deletion
               onCheck={() => handleToggle(item.id)} // Pass a function to handle toggle
-              onUpdate={function (updatedText: string): void {
-              }}
+              onUpdate={(newValue) => runUpdateTodoItem(newValue, item)}
               onClick={clickItem} />
           ))}
         </ResizablePanel>
@@ -486,7 +485,7 @@ function TodoPage() {
               <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
 
               <Markdown className='text-4xl flex justify-start'>
-                {selectedTodoItem}
+                {selectedTodo.item}
               </Markdown>
               <InlineMarkDownEdit value={selectedTodo.content ?? ''} onChange={(newContent) => runUpdateTodoContent(newContent, selectedTodo)}></InlineMarkDownEdit>
             </div> :
