@@ -6,7 +6,9 @@ function App() {
 
   return (
     <>
-      <TodoPage></TodoPage>
+      <div className="h-screen w-screen">
+        <TodoPage></TodoPage>
+      </div>
     </>
   );
 }

@@ -29,6 +29,7 @@ import {
 
 import { TodoTableData, columns } from "./columns"
 import { DataTable } from "./data-table"
+import TodoItem from './TodoItem'
 
 function TodoPage() {
 
@@ -370,15 +371,37 @@ function TodoPage() {
     setUpdatetodoImportance(newValue);
   };
 
+  const todos = [
+    { text: '前端加 react router', category: 'Putian-Todo' },
+    { text: 'haasdhhcc', category: '收藏箱' },
+    // ... more todos
+  ];
 
+  function handleDelete(index: number): void {
+
+  }
+
+  function handleToggle(index: number): void {
+
+  }
   if (todoPage)
+
     return (
 
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
 
-          <DataTable columns={columns} data={todoTableData} />
-
+          {/* <DataTable columns={columns} data={todoTableData} /> */}
+          {todoPage.items.map((item) => (
+            <TodoItem
+              key={item.id}
+              item={item}
+              onDelete={() => handleDelete(item.id)} // Pass a function to handle deletion
+              onCheck={() => handleToggle(item.id)} // Pass a function to handle toggle
+              onUpdate={function (updatedText: string): void {
+              }}
+              onClick={clickItem} />
+          ))}
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel>
