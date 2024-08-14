@@ -143,12 +143,10 @@ export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
 
 export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
-    page: number;
-    perPage: number;
     todoId: number;
 };
 
-export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = PaginateModel_Todo_;
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = Todo;
 
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
     page: number;
@@ -331,7 +329,7 @@ export type $OpenApiTs = {
                 /**
                  * Successful Response
                  */
-                200: PaginateModel_Todo_;
+                200: Todo;
                 /**
                  * Validation Error
                  */

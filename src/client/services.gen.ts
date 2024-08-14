@@ -230,9 +230,7 @@ export const getTodosByImportanceGetTodosByItemImportanceItemImportanceGet = (da
  * Get todo by the todo_id
  * @param data The data for the request.
  * @param data.todoId
- * @param data.page
- * @param data.perPage
- * @returns PaginateModel_Todo_ Successful Response
+ * @returns Todo Successful Response
  * @throws ApiError
  */
 export const getTodoByTodoIdGetTodoByTodoIdTodoIdGet = (data: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData): CancelablePromise<GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse> => { return __request(OpenAPI, {
@@ -240,10 +238,6 @@ export const getTodoByTodoIdGetTodoByTodoIdTodoIdGet = (data: GetTodoByTodoIdGet
     url: '/get_todo_by_todo_id/{todo_id}',
     path: {
         todo_id: data.todoId
-    },
-    query: {
-        page: data.page,
-        per_page: data.perPage
     },
     errors: {
         422: 'Validation Error'
