@@ -12,11 +12,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from './components/ui/button';
-import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { DateTimePickerForm } from './components/ui/date-time-picker-form.tsx';
 
 interface TodoItemProps {
   item: Todo;
+  isSelected: boolean;
   onDelete: (item: Todo) => void;
   onCheck?: () => void;
   onUpdate: (updatedText: string) => void; // Callback to update the todo text
@@ -26,6 +27,7 @@ interface TodoItemProps {
 
 const TodoItem: React.FC<TodoItemProps> = ({
   item,
+  isSelected,
   onDelete,
   onCheck,
   onUpdate,
@@ -46,12 +48,12 @@ const TodoItem: React.FC<TodoItemProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditText(e.target.value);
-    // onUpdate(e.target.value);
+    onUpdate(e.target.value);
   };
 
   const handleInputBlur = () => {
     setIsEditing(false);
-    onUpdate(editText); // Update the todo text when input loses focus
+    // onUpdate(editText); // Update the todo text when input loses focus
   };
 
   const handleClickDelete = () => {
@@ -65,6 +67,13 @@ const TodoItem: React.FC<TodoItemProps> = ({
     }
   };
 
+  const handleDateTimeChange = (date: Date) => {
+    console.log(date)
+    setSelectedDate(date);
+    onTimeUpdate(date); // Update the todo item's time
+  };
+
+
   // Use useEffect to focus the input when isEditing becomes true
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -73,7 +82,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
   }, [isEditing]);
 
   return (
-    <div className="flex items-center justify-between py-2 px-4 border-b border-gray-200">
+    <div className={`flex items-center m-2 rounded-lg justify-between py-2 px-4 border-b border-gray-200 ${isSelected ? 'bg-[#D1E9F6]' : 'hover:bg-gray-200'}`}>
       <div className="flex items-center flex-1 gap-2">
         <Checkbox
           onCheckedChange={onCheck}
@@ -82,7 +91,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           <input
             ref={inputRef}
             type="text"
-            className="text-gray-800 focus:outline-none w-full"
+            className="text-gray-800 focus:outline-none w-full bg-[#D1E9F6]"
             value={editText}
             onChange={handleInputChange}
             onBlur={handleInputBlur}
@@ -106,15 +115,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="datetime"
-            selected={selectedDate}
-            onSelect={(date) => {
-              setSelectedDate(date)
-              onTimeUpdate(date)
-            }}
-            initialFocus
-          />
+          <DateTimePickerForm onSubmit={handleDateTimeChange} />
         </PopoverContent>
       </Popover>
       <div>
