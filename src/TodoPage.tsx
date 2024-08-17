@@ -40,12 +40,15 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import PaginationDemo from './Pagination'
+import { useToast } from './components/ui/use-toast'
 
 function TodoPage() {
 
   const [todoPage, setTodoPage] = useState<PaginateModel_Todo_>()
   const [page, setPage] = useState<number>(1)
   const [perPage, setPerPage] = useState<number>(5)
+  const { toast } = useToast()
+
 
   const [userId, setUserId] = useState<number>(1)
 
@@ -116,7 +119,20 @@ function TodoPage() {
   //////////////////////////////////////////////////
 
   const handlePageChange = (newPage: number) => {
-    setPage(newPage)
+    if (newPage >= 1 && newPage <= Math.ceil(todoPage?.total_items! / perPage)) {
+      setPage(newPage)
+    }
+    else if (newPage < 1) {
+      toast({
+        title: "Already first page!",
+        description: "That's enough, man!",
+      })
+    } else {
+      toast({
+        title: "Already last page!",
+        description: "That's enough, man!",
+      })
+    }
   }
 
   const handlePerPageChange = (newPerPage: number) => {
@@ -292,6 +308,12 @@ function TodoPage() {
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel>
 
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+
+        <ResizablePanel>
+
           {/* <DataTable columns={columns} data={todoTableData} /> */}
           {todoPage.items.map((item) => (
             <TodoItem
@@ -304,14 +326,6 @@ function TodoPage() {
               onClick={clickItem}
               onTimeUpdate={(newTime) => runUpdateTodoPlanTime(dayjs(newTime).format('YYYY-MM-DD HH:mm:ss'), item)} />
           ))}
-          {/* <Pagination
-            currentPage={page}
-            perPage={perPage}
-            totalItems={todoPage.total_items}
-            onPageChange={handlePageChange}
-            onPerPageChange={handlePerPageChange}
-          >
-          </Pagination> */}
           <PaginationDemo currentPage={page} perPage={perPage} totalItems={todoPage.total_items} onPageChange={handlePageChange} onPerPageChange={handlePerPageChange}></PaginationDemo>
 
         </ResizablePanel>
