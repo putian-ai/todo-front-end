@@ -71,6 +71,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
     console.log(date)
     setSelectedDate(date);
     onTimeUpdate(date); // Update the todo item's time
+    setOpen(false);
   };
 
 
@@ -80,6 +81,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
       inputRef.current.focus();
     }
   }, [isEditing]);
+
+  const [open, setOpen] = useState(false)
 
   return (
     <div className={`flex items-center m-2 rounded-lg justify-between py-2 px-4 border-b border-gray-200 ${isSelected ? 'bg-[#D1E9F6]' : 'hover:bg-gray-200'}`}>
@@ -106,7 +109,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </span>
         )}
       </div>
-      <Popover>
+      <Popover open={open} onOpenChange={(o) => { setOpen(o) }}>
         <PopoverTrigger asChild>
           <div
             className="text-gray-500 text-[12px] cursor-pointer"
@@ -115,7 +118,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
-          <DateTimePickerForm onSubmit={handleDateTimeChange} />
+          <DateTimePickerForm onSubmit={handleDateTimeChange} initialDateTime={dayjs(item.plan_time).toDate()} />
         </PopoverContent>
       </Popover>
       <div>
@@ -135,7 +138,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </div>
+    </div >
   );
 };
 

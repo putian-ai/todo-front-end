@@ -28,13 +28,21 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-export function DateTimePickerForm({ onSubmit }: { onSubmit: (date: Date) => void }) { // Added onSubmit prop
+interface DateTimePickerFormProps {
+  onSubmit: (date: Date) => void;
+  initialDateTime?: Date | null; // Add this prop for the initial date
+}
+
+export function DateTimePickerForm({ onSubmit, initialDateTime }: DateTimePickerFormProps) {
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
+    defaultValues: { // Set the default value here
+      dateTime: initialDateTime || new Date(),
+    },
   });
 
-  function handleFormSubmit(data: FormSchemaType) { // Renamed to handleFormSubmit
-    onSubmit(data.dateTime); // Call the provided onSubmit function
+  function handleFormSubmit(data: FormSchemaType) {
+    onSubmit(data.dateTime);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -74,9 +82,9 @@ export function DateTimePickerForm({ onSubmit }: { onSubmit: (date: Date) => voi
             </FormItem>
           )}
         />
-        <div>
-          <Button type="submit" >Submit</Button>
-          <Button type="submit">Cancel</Button>
+        <div className="flex justify-between mx-4 mb-4">
+          <Button type="submit">Submit</Button>
+          <Button type="reset" variant="outline" >Cancel</Button>
         </div>
       </form>
     </Form>
