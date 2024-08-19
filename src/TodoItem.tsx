@@ -18,6 +18,7 @@ import { DateTimePickerForm } from './components/ui/date-time-picker-form.tsx';
 interface TodoItemProps {
   item: Todo;
   isSelected: boolean;
+  timeVisible: boolean;
   onDelete: (item: Todo) => void;
   onCheck?: () => void;
   onUpdate: (updatedText: string) => void; // Callback to update the todo text
@@ -28,6 +29,7 @@ interface TodoItemProps {
 const TodoItem: React.FC<TodoItemProps> = ({
   item,
   isSelected,
+  timeVisible,
   onDelete,
   onCheck,
   onUpdate,
@@ -109,7 +111,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
           </span>
         )}
       </div>
-      <Popover open={open} onOpenChange={(o) => { setOpen(o) }}>
+
+      {timeVisible ? <Popover open={open} onOpenChange={(o) => { setOpen(o) }}>
         <PopoverTrigger asChild>
           <div
             className="text-gray-500 text-[12px] cursor-pointer"
@@ -120,7 +123,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
         <PopoverContent className="w-auto p-0">
           <DateTimePickerForm onSubmit={handleDateTimeChange} initialDateTime={dayjs(item.plan_time).toDate()} />
         </PopoverContent>
-      </Popover>
+      </Popover> : <></>}
+
       <div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
