@@ -10,9 +10,7 @@ import {
   GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData,
   getTodoByTodoIdGetTodoByTodoIdTodoIdGet,
 } from './client'
-import { TextField, Box } from '@mui/material'
 import dayjs from 'dayjs'
-// import Pagination from './Pagination'
 import InlineTimeEdit from './InLineTimeEdit'
 import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
@@ -27,20 +25,12 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 
-import { TodoTableData, columns } from "./columns"
-import { DataTable } from "./data-table"
 import TodoItem from './TodoItem'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+
 import PaginationDemo from './Pagination'
 import { useToast } from './components/ui/use-toast'
+import { Search } from 'lucide-react'
+import SearchComponent from './SearchTodo'
 
 function TodoPage() {
 
@@ -304,14 +294,7 @@ function TodoPage() {
   if (todoPage)
 
     return (
-
-      <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel>
-
-        </ResizablePanel>
-
-        <ResizableHandle withHandle />
-
+      <>
         <ResizablePanel>
 
           {/* <DataTable columns={columns} data={todoTableData} /> */}
@@ -319,6 +302,7 @@ function TodoPage() {
             <TodoItem
               key={item.id}
               item={item}
+              timeVisible={true}
               isSelected={selectedTodo?.id === item.id}
               onDelete={() => deleteTodo(item.id!)} // Pass a function to handle deletion
               onCheck={() => handleToggle(item.id)} // Pass a function to handle toggle
@@ -344,7 +328,8 @@ function TodoPage() {
             <span>Pick one!</span>
           }
         </ResizablePanel>
-      </ResizablePanelGroup>
+      </>
+
     );
 
 
