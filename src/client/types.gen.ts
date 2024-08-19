@@ -6,6 +6,15 @@ export type HTTPValidationError = {
 
 export type Importance = 0 | 1 | 2 | 3;
 
+export type LoginDto = {
+    username: string;
+    password: string;
+};
+
+export type LoginResponse = {
+    access_token: string;
+};
+
 export type PaginateModel_Todo_ = {
     page: number;
     per_page: number;
@@ -67,6 +76,20 @@ export type ValidationError = {
     msg: string;
     type: string;
 };
+
+export type LoginLoginPostData = {
+    requestBody: LoginDto;
+};
+
+export type LoginLoginPostResponse = LoginResponse;
+
+export type RefreshRefreshPostResponse = unknown;
+
+export type GetProtectedProtectedGetData = {
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+};
+
+export type GetProtectedProtectedGetResponse = unknown;
 
 export type CreateUserCreateUsersPostData = {
     requestBody: UserDto;
@@ -143,12 +166,10 @@ export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
 
 export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
-    page: number;
-    perPage: number;
     todoId: number;
 };
 
-export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = PaginateModel_Todo_;
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = Todo;
 
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
     page: number;
@@ -159,6 +180,46 @@ export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse = PaginateModel_Todo_;
 
 export type $OpenApiTs = {
+    '/login': {
+        post: {
+            req: LoginLoginPostData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: LoginResponse;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/refresh': {
+        post: {
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: unknown;
+            };
+        };
+    };
+    '/protected': {
+        get: {
+            req: GetProtectedProtectedGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: unknown;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
     '/create_users/': {
         post: {
             req: CreateUserCreateUsersPostData;
@@ -331,7 +392,7 @@ export type $OpenApiTs = {
                 /**
                  * Successful Response
                  */
-                200: PaginateModel_Todo_;
+                200: Todo;
                 /**
                  * Validation Error
                  */

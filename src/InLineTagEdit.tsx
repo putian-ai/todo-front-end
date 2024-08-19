@@ -32,30 +32,11 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAdd
         }))
         , [value])
 
-    // const handleDelete = (index: number) => {
-    //     setTags(tags.filter((_, i) => i !== index));
-    // };
-
-    // const onTagUpdate = (index: number, newTag: ITag) => {
-    //     const updatedTags = [...tags];
-    //     updatedTags.splice(index, 1, newTag);
-    //     setTags(updatedTags);
-    // };
-
-    // const handleAddition = (tag: ITag) => {
-    //     setTags((prevTags) => {
-    //         return [...prevTags, tag];
-    //     });
-    // };
-
     const handleDrag = (tag: ITag, currPos: number, newPos: number) => {
         const newTags = tags.slice();
 
         newTags.splice(currPos, 1);
         newTags.splice(newPos, 0, tag);
-
-        // re-render
-        // setTags(newTags);
     };
 
     const handleTagClick = (index: number) => {
