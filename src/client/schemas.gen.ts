@@ -20,6 +20,34 @@ export const $Importance = {
     title: 'Importance'
 } as const;
 
+export const $LoginDto = {
+    properties: {
+        username: {
+            type: 'string',
+            title: 'Username'
+        },
+        password: {
+            type: 'string',
+            title: 'Password'
+        }
+    },
+    type: 'object',
+    required: ['username', 'password'],
+    title: 'LoginDto'
+} as const;
+
+export const $LoginResponse = {
+    properties: {
+        access_token: {
+            type: 'string',
+            title: 'Access Token'
+        }
+    },
+    type: 'object',
+    required: ['access_token'],
+    title: 'LoginResponse'
+} as const;
+
 export const $PaginateModel_Todo_ = {
     properties: {
         page: {

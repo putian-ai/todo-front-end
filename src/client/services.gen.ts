@@ -3,7 +3,51 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+import type { LoginLoginPostData, LoginLoginPostResponse, RefreshRefreshPostResponse, GetProtectedProtectedGetData, GetProtectedProtectedGetResponse, CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+
+/**
+ * Login
+ * @param data The data for the request.
+ * @param data.requestBody
+ * @returns LoginResponse Successful Response
+ * @throws ApiError
+ */
+export const loginLoginPost = (data: LoginLoginPostData): CancelablePromise<LoginLoginPostResponse> => { return __request(OpenAPI, {
+    method: 'POST',
+    url: '/login',
+    body: data.requestBody,
+    mediaType: 'application/json',
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
+
+/**
+ * Refresh
+ * @returns unknown Successful Response
+ * @throws ApiError
+ */
+export const refreshRefreshPost = (): CancelablePromise<RefreshRefreshPostResponse> => { return __request(OpenAPI, {
+    method: 'POST',
+    url: '/refresh'
+}); };
+
+/**
+ * Get Protected
+ * @param data The data for the request.
+ * @param data.requestBody
+ * @returns unknown Successful Response
+ * @throws ApiError
+ */
+export const getProtectedProtectedGet = (data: GetProtectedProtectedGetData = {}): CancelablePromise<GetProtectedProtectedGetResponse> => { return __request(OpenAPI, {
+    method: 'GET',
+    url: '/protected',
+    body: data.requestBody,
+    mediaType: 'application/json',
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
 
 /**
  * Create User
