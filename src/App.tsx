@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 import './App.css'
 import { Toaster } from './components/ui/toaster';
 import { Layout } from './layout';
@@ -6,38 +6,55 @@ import PublicPage from './views/public';
 import LoginPage from './views/login';
 import ProtectedPage from './views/protected';
 import TodoPage from './TodoPage';
+import { tokenAtom, userAtom, UserInfo } from './atom';
+import { useAtom } from 'jotai';
 
-const router = createBrowserRouter([
-  {
-    id: "root",
-    path: "/",
-    loader() {
-      // Our root route always provides the user, if logged in
-      return { user: 'fake user' };
-    },
-    Component: Layout,
-    children: [
-      {
-        index: true,
-        Component: TodoPage,
-      },
-
-      {
-        path: "protected",
-        // loader: protectedLoader,
-        Component: ProtectedPage,
-      },
-    ],
-  },
-  {
-    id: "login",
-    path: "login",
-    Component: LoginPage,
+const authLoader = (getUser: () => UserInfo | null) => async () => {
+  const user = getUser();
+  if (!user) {
+    return redirect('/login')
   }
-]);
+  return { user }
+}
 
 
 function App() {
+  const [user] = useAtom(userAtom);
+  const [token] = useAtom(tokenAtom);
+
+
+  const router = createBrowserRouter([
+    {
+      id: "root",
+      path: "/",
+      loader: () => ({ user }),
+      Component: Layout,
+      children: [
+        {
+          index: true,
+          loader: authLoader(() => user),
+          Component: TodoPage,
+        },
+
+        {
+          path: "protected",
+          loader: authLoader(() => user),
+          Component: ProtectedPage,
+        },
+      ],
+    },
+    {
+      id: "login",
+      path: "login",
+      loader: () => {
+        if (user) {
+          return redirect('/');
+        }
+        return null;
+      },
+      Component: LoginPage,
+    }
+  ]);
 
   return (
     <>
