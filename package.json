@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "openapi-ts": "openapi-ts -i http://127.0.0.1:8001/openapi.json -o src/client",
+    "openapi-ts": "openapi-ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -14,6 +14,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
+    "@hey-api/client-axios": "^0.2.3",
     "@hey-api/client-fetch": "^0.1.6",
     "@hookform/resolvers": "^3.9.0",
     "@mdxeditor/editor": "^3.10.1",
@@ -33,6 +34,7 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
+    "jotai": "^2.9.3",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.424.0",
     "react": "^18.3.1",
