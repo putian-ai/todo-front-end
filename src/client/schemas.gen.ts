@@ -20,6 +20,34 @@ export const $Importance = {
     title: 'Importance'
 } as const;
 
+export const $LoginDto = {
+    properties: {
+        username: {
+            type: 'string',
+            title: 'Username'
+        },
+        password: {
+            type: 'string',
+            title: 'Password'
+        }
+    },
+    type: 'object',
+    required: ['username', 'password'],
+    title: 'LoginDto'
+} as const;
+
+export const $LoginResponse = {
+    properties: {
+        access_token: {
+            type: 'string',
+            title: 'Access Token'
+        }
+    },
+    type: 'object',
+    required: ['access_token'],
+    title: 'LoginResponse'
+} as const;
+
 export const $PaginateModel_Todo_ = {
     properties: {
         page: {
@@ -67,6 +95,32 @@ export const $Tag = {
     title: 'Tag'
 } as const;
 
+export const $TagDto = {
+    properties: {
+        user_id: {
+            type: 'integer',
+            title: 'User Id'
+        },
+        todo_id: {
+            type: 'integer',
+            title: 'Todo Id'
+        },
+        name: {
+            type: 'string',
+            title: 'Name'
+        },
+        color: {
+            type: 'string',
+            maxLength: 7,
+            minLength: 7,
+            title: 'Color'
+        }
+    },
+    type: 'object',
+    required: ['user_id', 'todo_id', 'name', 'color'],
+    title: 'TagDto'
+} as const;
+
 export const $Todo = {
     properties: {
         id: {
@@ -105,12 +159,11 @@ export const $Todo = {
             ],
             title: 'Content'
         },
-        user_id: {
-            type: 'integer',
-            title: 'User Id'
-        },
         importance: {
             '$ref': '#/components/schemas/Importance'
+        },
+        user: {
+            '$ref': '#/components/schemas/User'
         },
         tags: {
             anyOf: [
@@ -128,7 +181,7 @@ export const $Todo = {
         }
     },
     type: 'object',
-    required: ['id', 'item', 'create_time', 'plan_time', 'content', 'user_id', 'importance', 'tags'],
+    required: ['id', 'item', 'create_time', 'plan_time', 'content', 'importance', 'user', 'tags'],
     title: 'Todo'
 } as const;
 
@@ -191,14 +244,10 @@ export const $User = {
         user_name: {
             type: 'string',
             title: 'User Name'
-        },
-        pwd: {
-            type: 'string',
-            title: 'Pwd'
         }
     },
     type: 'object',
-    required: ['id', 'user_name', 'pwd'],
+    required: ['id', 'user_name'],
     title: 'User'
 } as const;
 

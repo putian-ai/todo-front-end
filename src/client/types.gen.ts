@@ -6,6 +6,15 @@ export type HTTPValidationError = {
 
 export type Importance = 0 | 1 | 2 | 3;
 
+export type LoginDto = {
+    username: string;
+    password: string;
+};
+
+export type LoginResponse = {
+    access_token: string;
+};
+
 export type PaginateModel_Todo_ = {
     page: number;
     per_page: number;
@@ -19,14 +28,21 @@ export type Tag = {
     color: string;
 };
 
+export type TagDto = {
+    user_id: number;
+    todo_id: number;
+    name: string;
+    color: string;
+};
+
 export type Todo = {
     id: number;
     item: string;
     create_time: string;
     plan_time: string | null;
     content: string | null;
-    user_id: number;
     importance: Importance;
+    user: User;
     tags: Array<Tag> | null;
 };
 
@@ -48,7 +64,6 @@ export type UpdateTodoDto = {
 export type User = {
     id: number;
     user_name: string;
-    pwd: string;
 };
 
 export type UserDto = {
@@ -62,11 +77,31 @@ export type ValidationError = {
     type: string;
 };
 
+export type LoginLoginPostData = {
+    requestBody: LoginDto;
+};
+
+export type LoginLoginPostResponse = LoginResponse;
+
+export type RefreshRefreshPostResponse = unknown;
+
+export type GetProtectedProtectedGetData = {
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+};
+
+export type GetProtectedProtectedGetResponse = unknown;
+
 export type CreateUserCreateUsersPostData = {
     requestBody: UserDto;
 };
 
 export type CreateUserCreateUsersPostResponse = User;
+
+export type CreateTagCreateTagPostData = {
+    requestBody: TagDto;
+};
+
+export type CreateTagCreateTagPostResponse = Tag;
 
 export type CreateTodoCreateTodosPostData = {
     requestBody: TodoDto;
@@ -86,6 +121,12 @@ export type DeleteTodosDeleteTodosTodoIdDeleteData = {
 };
 
 export type DeleteTodosDeleteTodosTodoIdDeleteResponse = unknown;
+
+export type DeleteTagsDeleteTagTagIdDeleteData = {
+    tagId: number;
+};
+
+export type DeleteTagsDeleteTagTagIdDeleteResponse = unknown;
 
 export type UpdateTodosUpdateTodosTodoIdPostData = {
     requestBody: UpdateTodoDto;
@@ -124,6 +165,12 @@ export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = 
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
 
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
+    todoId: number;
+};
+
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = Todo;
+
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
     page: number;
     perPage: number;
@@ -133,6 +180,46 @@ export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse = PaginateModel_Todo_;
 
 export type $OpenApiTs = {
+    '/login': {
+        post: {
+            req: LoginLoginPostData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: LoginResponse;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/refresh': {
+        post: {
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: unknown;
+            };
+        };
+    };
+    '/protected': {
+        get: {
+            req: GetProtectedProtectedGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: unknown;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
     '/create_users/': {
         post: {
             req: CreateUserCreateUsersPostData;
@@ -141,6 +228,21 @@ export type $OpenApiTs = {
                  * Successful Response
                  */
                 200: User;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/create_tag/': {
+        post: {
+            req: CreateTagCreateTagPostData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: Tag;
                 /**
                  * Validation Error
                  */
@@ -181,6 +283,21 @@ export type $OpenApiTs = {
     '/delete_todos/{todo_id}': {
         delete: {
             req: DeleteTodosDeleteTodosTodoIdDeleteData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: unknown;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/delete_tag/{tag_id}': {
+        delete: {
+            req: DeleteTagsDeleteTagTagIdDeleteData;
             res: {
                 /**
                  * Successful Response
@@ -261,6 +378,21 @@ export type $OpenApiTs = {
                  * Successful Response
                  */
                 200: PaginateModel_Todo_;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/get_todo_by_todo_id/{todo_id}': {
+        get: {
+            req: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: Todo;
                 /**
                  * Validation Error
                  */

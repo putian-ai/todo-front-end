@@ -1,4 +1,11 @@
-import React from "react"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
 
 interface PaginationProps {
     currentPage: number
@@ -8,7 +15,7 @@ interface PaginationProps {
     onPerPageChange: (newPage: number) => void
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const MyPagination: React.FC<PaginationProps> = ({
     currentPage,
     perPage,
     totalItems,
@@ -18,38 +25,42 @@ const Pagination: React.FC<PaginationProps> = ({
     const totalPages = Math.ceil(totalItems / perPage)
     const hasNext = currentPage < totalPages
     const hasPrev = currentPage > 1
-
-    const perPageOptions = [
-        { value: 5, label: '5' },
-        { value: 10, label: '10' },
-        { value: 20, label: '20' },
-    ]
+    // const perPageOptions = [
+    //   { value: 5, label: "5" },
+    //   { value: 10, label: "10" },
+    //   { value: 20, label: "20" },
+    // ]
 
     return (
         <div className="flex items-center justify-between py-4">
-            <div className="flex items-center text-gray-700">
-                <span className="mr-2">TotalPage: {totalPages}</span>
-                <span className="mr-2">Page: {currentPage}</span>
-                <span className="mr-2">Per Page:</span>
-                <select
-                    value={perPage}
-                    onChange={(e) => onPerPageChange(parseInt(e.target.value))}
-                    className="border rounded-md px-2 py-1 focus:outline-none focus:ring focus:ring-blue-500"
-                >
-                    {perPageOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
-                        </option>
+            {/* ... (Per-page selection remains the same) ... */}
+
+            <Pagination
+            >
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious onClick={() => onPageChange(currentPage - 1)} ></PaginationPrevious>
+                    </PaginationItem>
+
+                    {/* Loop through page numbers */}
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                        <PaginationItem key={index + 1}>
+                            <PaginationLink
+                                href="#" // Update with actual route
+                                onClick={() => onPageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </PaginationLink>
+                        </PaginationItem>
                     ))}
-                </select>
-            </div>
-            <div className="flex items-center">
-                <span className="mr-2 text-gray-700">Total: {totalItems}</span>
-                <button onClick={() => onPageChange(currentPage - 1)} disabled={!hasPrev}>Prev page</button>
-                <button onClick={() => onPageChange(currentPage + 1)} disabled={!hasNext}>Next page</button>
-            </div>
+
+                    <PaginationItem>
+                        <PaginationNext onClick={() => onPageChange(currentPage + 1)} ></PaginationNext>
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
     )
 }
 
-export default Pagination
+export default MyPagination
