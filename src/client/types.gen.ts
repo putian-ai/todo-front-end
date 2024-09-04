@@ -91,11 +91,11 @@ export type GetProtectedProtectedGetData = {
 
 export type GetProtectedProtectedGetResponse = unknown;
 
-export type CreateUserCreateUsersPostData = {
+export type CreateUserCreateUserPostData = {
     requestBody: UserDto;
 };
 
-export type CreateUserCreateUsersPostResponse = User;
+export type CreateUserCreateUserPostResponse = User;
 
 export type CreateTagCreateTagPostData = {
     requestBody: TagDto;
@@ -144,7 +144,7 @@ export type GetUserByTodoGetUserByTodoTodoIdGetResponse = User;
 export type ReadTodosByUserGetTodosByUserUserIdGetData = {
     page: number;
     perPage: number;
-    userId: number;
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
 export type ReadTodosByUserGetTodosByUserUserIdGetResponse = PaginateModel_Todo_;
@@ -220,9 +220,9 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/create_users/': {
+    '/create_user/': {
         post: {
-            req: CreateUserCreateUsersPostData;
+            req: CreateUserCreateUserPostData;
             res: {
                 /**
                  * Successful Response

@@ -11,6 +11,8 @@ import { LoaderCircle } from "lucide-react";
 import { loginLoginPost } from "@/client";
 import { jwtDecode } from "jwt-decode"
 import { useToast } from "../ui/use-toast";
+import { tokenAtom, userAtom } from "@/atom";
+import { useAtom } from "jotai";
 
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters").max(12, "Username must be at most 12 characters"),
@@ -20,6 +22,10 @@ const loginSchema = z.object({
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface DecodedToken {
+  id: number
+  sub: string
+}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -31,6 +37,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     resolver: zodResolver(loginSchema),
   });
   const { toast } = useToast();
+  const [, setUser] = useAtom(userAtom);
+  const [, setToken] = useAtom(tokenAtom);
 
   async function onSubmit(data: LoginSchemaType) {
     setIsLoading(true);
@@ -45,9 +53,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
       // Handle successful login (e.g., redirect, update state)
       const token = response.access_token
-      const decoded = jwtDecode(token);
+      const decoded = jwtDecode<DecodedToken>(token)
+      setUser({
+        id: decoded.id,
+        username: decoded.sub,
+      });
+      setToken(token);
+      toast({
+        title: "Success!",
+        description: `Welcome back! ${decoded.sub}`,
+      })
       console.log("Login successful:", decoded);
-      localStorage.setItem('token', token);
     } catch (error) {
       // Handle login error (e.g., display error message)
       console.error("Login error:", error);
