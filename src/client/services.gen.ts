@@ -3,7 +3,24 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { LoginLoginPostData, LoginLoginPostResponse, RefreshRefreshPostResponse, GetProtectedProtectedGetData, GetProtectedProtectedGetResponse, CreateUserCreateUsersPostData, CreateUserCreateUsersPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+import type { GetProtectedProtectedGetData, GetProtectedProtectedGetResponse, LoginLoginPostData, LoginLoginPostResponse, RefreshRefreshPostResponse, CreateUserCreateUserPostData, CreateUserCreateUserPostResponse, CreateTagCreateTagPostData, CreateTagCreateTagPostResponse, CreateTodoCreateTodosPostData, CreateTodoCreateTodosPostResponse, ReadTodosGetTodosGetData, ReadTodosGetTodosGetResponse, DeleteTodosDeleteTodosTodoIdDeleteData, DeleteTodosDeleteTodosTodoIdDeleteResponse, DeleteTagsDeleteTagTagIdDeleteData, DeleteTagsDeleteTagTagIdDeleteResponse, UpdateTodosUpdateTodosTodoIdPostData, UpdateTodosUpdateTodosTodoIdPostResponse, GetUserByTodoGetUserByTodoTodoIdGetData, GetUserByTodoGetUserByTodoTodoIdGetResponse, ReadTodosByUserGetTodosByUserUserIdGetData, ReadTodosByUserGetTodosByUserUserIdGetResponse, GetTodosByItemNameGetTodosByItemNameItemNameGetData, GetTodosByItemNameGetTodosByItemNameItemNameGetResponse, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData, GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData, GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData, GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse } from './types.gen';
+
+/**
+ * Get Protected
+ * @param data The data for the request.
+ * @param data.requestBody
+ * @returns unknown Successful Response
+ * @throws ApiError
+ */
+export const getProtectedProtectedGet = (data: GetProtectedProtectedGetData = {}): CancelablePromise<GetProtectedProtectedGetResponse> => { return __request(OpenAPI, {
+    method: 'GET',
+    url: '/protected',
+    body: data.requestBody,
+    mediaType: 'application/json',
+    errors: {
+        422: 'Validation Error'
+    }
+}); };
 
 /**
  * Login
@@ -33,32 +50,15 @@ export const refreshRefreshPost = (): CancelablePromise<RefreshRefreshPostRespon
 }); };
 
 /**
- * Get Protected
- * @param data The data for the request.
- * @param data.requestBody
- * @returns unknown Successful Response
- * @throws ApiError
- */
-export const getProtectedProtectedGet = (data: GetProtectedProtectedGetData = {}): CancelablePromise<GetProtectedProtectedGetResponse> => { return __request(OpenAPI, {
-    method: 'GET',
-    url: '/protected',
-    body: data.requestBody,
-    mediaType: 'application/json',
-    errors: {
-        422: 'Validation Error'
-    }
-}); };
-
-/**
  * Create User
  * @param data The data for the request.
  * @param data.requestBody
  * @returns User Successful Response
  * @throws ApiError
  */
-export const createUserCreateUsersPost = (data: CreateUserCreateUsersPostData): CancelablePromise<CreateUserCreateUsersPostResponse> => { return __request(OpenAPI, {
+export const createUserCreateUserPost = (data: CreateUserCreateUserPostData): CancelablePromise<CreateUserCreateUserPostResponse> => { return __request(OpenAPI, {
     method: 'POST',
-    url: '/create_users/',
+    url: '/create_user/',
     body: data.requestBody,
     mediaType: 'application/json',
     errors: {
@@ -198,22 +198,21 @@ export const getUserByTodoGetUserByTodoTodoIdGet = (data: GetUserByTodoGetUserBy
 /**
  * Read Todos By User
  * @param data The data for the request.
- * @param data.userId
  * @param data.page
  * @param data.perPage
+ * @param data.requestBody
  * @returns PaginateModel_Todo_ Successful Response
  * @throws ApiError
  */
 export const readTodosByUserGetTodosByUserUserIdGet = (data: ReadTodosByUserGetTodosByUserUserIdGetData): CancelablePromise<ReadTodosByUserGetTodosByUserUserIdGetResponse> => { return __request(OpenAPI, {
     method: 'GET',
     url: '/get_todos_by_user/{user_id}',
-    path: {
-        user_id: data.userId
-    },
     query: {
         page: data.page,
         per_page: data.perPage
     },
+    body: data.requestBody,
+    mediaType: 'application/json',
     errors: {
         422: 'Validation Error'
     }
@@ -226,6 +225,7 @@ export const readTodosByUserGetTodosByUserUserIdGet = (data: ReadTodosByUserGetT
  * @param data.itemName
  * @param data.page
  * @param data.perPage
+ * @param data.requestBody
  * @returns PaginateModel_Todo_ Successful Response
  * @throws ApiError
  */
@@ -239,6 +239,8 @@ export const getTodosByItemNameGetTodosByItemNameItemNameGet = (data: GetTodosBy
         page: data.page,
         per_page: data.perPage
     },
+    body: data.requestBody,
+    mediaType: 'application/json',
     errors: {
         422: 'Validation Error'
     }
@@ -251,6 +253,7 @@ export const getTodosByItemNameGetTodosByItemNameItemNameGet = (data: GetTodosBy
  * @param data.itemImportance
  * @param data.page
  * @param data.perPage
+ * @param data.requestBody
  * @returns PaginateModel_Todo_ Successful Response
  * @throws ApiError
  */
@@ -264,6 +267,8 @@ export const getTodosByImportanceGetTodosByItemImportanceItemImportanceGet = (da
         page: data.page,
         per_page: data.perPage
     },
+    body: data.requestBody,
+    mediaType: 'application/json',
     errors: {
         422: 'Validation Error'
     }
@@ -274,6 +279,7 @@ export const getTodosByImportanceGetTodosByItemImportanceItemImportanceGet = (da
  * Get todo by the todo_id
  * @param data The data for the request.
  * @param data.todoId
+ * @param data.requestBody
  * @returns Todo Successful Response
  * @throws ApiError
  */
@@ -283,6 +289,8 @@ export const getTodoByTodoIdGetTodoByTodoIdTodoIdGet = (data: GetTodoByTodoIdGet
     path: {
         todo_id: data.todoId
     },
+    body: data.requestBody,
+    mediaType: 'application/json',
     errors: {
         422: 'Validation Error'
     }
@@ -295,6 +303,7 @@ export const getTodoByTodoIdGetTodoByTodoIdTodoIdGet = (data: GetTodoByTodoIdGet
  * @param data.planTimeStr
  * @param data.page
  * @param data.perPage
+ * @param data.requestBody
  * @returns PaginateModel_Todo_ Successful Response
  * @throws ApiError
  */
@@ -308,6 +317,8 @@ export const getTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGet = (data: GetTodoB
         page: data.page,
         per_page: data.perPage
     },
+    body: data.requestBody,
+    mediaType: 'application/json',
     errors: {
         422: 'Validation Error'
     }
