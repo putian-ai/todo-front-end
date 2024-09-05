@@ -77,6 +77,12 @@ export type ValidationError = {
     type: string;
 };
 
+export type GetProtectedProtectedGetData = {
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+};
+
+export type GetProtectedProtectedGetResponse = unknown;
+
 export type LoginLoginPostData = {
     requestBody: LoginDto;
 };
@@ -84,12 +90,6 @@ export type LoginLoginPostData = {
 export type LoginLoginPostResponse = LoginResponse;
 
 export type RefreshRefreshPostResponse = unknown;
-
-export type GetProtectedProtectedGetData = {
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
-};
-
-export type GetProtectedProtectedGetResponse = unknown;
 
 export type CreateUserCreateUserPostData = {
     requestBody: UserDto;
@@ -153,6 +153,7 @@ export type GetTodosByItemNameGetTodosByItemNameItemNameGetData = {
     itemName: string;
     page: number;
     perPage: number;
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
 export type GetTodosByItemNameGetTodosByItemNameItemNameGetResponse = PaginateModel_Todo_;
@@ -161,11 +162,13 @@ export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = 
     itemImportance: Importance;
     page: number;
     perPage: number;
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
 
 export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
     todoId: number;
 };
 
@@ -175,11 +178,27 @@ export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
     page: number;
     perPage: number;
     planTimeStr: string;
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse = PaginateModel_Todo_;
 
 export type $OpenApiTs = {
+    '/protected': {
+        get: {
+            req: GetProtectedProtectedGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: unknown;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
     '/login': {
         post: {
             req: LoginLoginPostData;
@@ -202,21 +221,6 @@ export type $OpenApiTs = {
                  * Successful Response
                  */
                 200: unknown;
-            };
-        };
-    };
-    '/protected': {
-        get: {
-            req: GetProtectedProtectedGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
             };
         };
     };
