@@ -2,7 +2,7 @@ import { useDebounceFn } from "ahooks";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./components/ui/resizable";
 import SearchComponent from "./SearchTodo";
 import { Outlet } from 'react-router-dom'
-import { CreateTagCreateTagPostData, getProtectedProtectedGet, GetProtectedProtectedGetData, getTodosByItemNameGetTodosByItemNameItemNameGet, GetTodosByItemNameGetTodosByItemNameItemNameGetData, OpenAPI, PaginateModel_Todo_ } from "./client";
+import { CreateTagCreateTagPostData, getProtectedProtectedGet, GetProtectedProtectedGetData, getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, OpenAPI, PaginateModel_Todo_ } from "./client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { tokenAtom, userAtom } from "./atom";
@@ -51,12 +51,13 @@ export function Layout() {
   );
 
   const handleSearchTodo = async (newSearchTerm: string) => {
-    const data: GetTodosByItemNameGetTodosByItemNameItemNameGetData = {
+    const data: GetTodosByItemNameGetTodosByItemNameGetData = {
       itemName: newSearchTerm,
       page: page,
       perPage: perPage
     }
-    const data2 = await getTodosByItemNameGetTodosByItemNameItemNameGet(data)
+    
+    const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
     setSearchTodoPage(data2);
   }
   return (

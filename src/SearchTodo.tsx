@@ -13,12 +13,13 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Search } from 'lucide-react';
-import { getTodosByItemNameGetTodosByItemNameItemNameGet, GetTodosByItemNameGetTodosByItemNameItemNameGetData, PaginateModel_Todo_ } from './client';
+import { getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData , PaginateModel_Todo_ } from './client';
 import { useDebounceFn } from 'ahooks';
 import TodoItem from './TodoItem';
 import { useNavigate } from 'react-router-dom';
@@ -50,12 +51,12 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   );
 
   const handleSearchTodo = async (searchTerm: string) => {
-    const data: GetTodosByItemNameGetTodosByItemNameItemNameGetData = {
+    const data: GetTodosByItemNameGetTodosByItemNameGetData  = {
       itemName: searchTerm,
       page: page,
       perPage: perPage
     }
-    const data2 = await getTodosByItemNameGetTodosByItemNameItemNameGet(data)
+    const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
     setSearchTodoPage(data2);
   }
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +73,9 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
         <Search className="h-4 w-4 cursor-pointer transition-transform duration-200 hover:scale-110 m-5" />
       </DialogTrigger>
       <DialogContent className="w-[460px] p-0">
+        <DialogHeader>
+          <DialogTitle></DialogTitle>
+        </DialogHeader>
         <Command>
           <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />

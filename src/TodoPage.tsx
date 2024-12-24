@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
-  getTodosByItemNameGetTodosByItemNameItemNameGet,
+  DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, UpdateTodosUpdateTodosTodoIdPostData, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  getTodosByItemNameGetTodosByItemNameGet,
   Importance,
   DeleteTagsDeleteTagTagIdDeleteData,
   deleteTagsDeleteTagTagIdDelete,
@@ -11,26 +11,20 @@ import {
   getTodoByTodoIdGetTodoByTodoIdTodoIdGet,
 } from './client'
 import dayjs from 'dayjs'
-import InlineTimeEdit from './InLineTimeEdit'
-import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
 import InlineMarkDownEdit from './InLineMarkDownEdit'
 import Markdown from 'react-markdown'
-import InlineSelectEdit from './InlineSelectEdit'
 import InlineTagEdit from './InLineTagEdit'
 import { Button } from './components/ui/button'
 import {
   ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup,
 } from "@/components/ui/resizable"
 
 import TodoItem from './TodoItem'
 
 import PaginationDemo from './Pagination'
 import { useToast } from './components/ui/use-toast'
-import { Search } from 'lucide-react'
-import SearchComponent from './SearchTodo'
 
 function TodoPage() {
 
@@ -82,7 +76,7 @@ function TodoPage() {
   const searchTodos = async (itemName: string, page: number, perPage: number) => {
     setLoading(true);
     try {
-      const data = await getTodosByItemNameGetTodosByItemNameItemNameGet({ itemName, page, perPage })
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ itemName, page, perPage })
       setTodoPage(data);
     } catch (error) {
       console.error('Failed to search todos', error);
