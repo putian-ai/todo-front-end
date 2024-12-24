@@ -134,11 +134,11 @@ export const getHeaders = async <T>(config: OpenAPIConfig, options: ApiRequestOp
 		...additionalHeaders,
 		...options.headers,
 	})
-		.filter(([, value]) => value !== undefined && value !== null)
-		.reduce((headers, [key, value]) => ({
-			...headers,
-			[key]: String(value),
-		}), {} as Record<string, string>);
+	.filter(([, value]) => value !== undefined && value !== null)
+	.reduce((headers, [key, value]) => ({
+		...headers,
+		[key]: String(value),
+	}), {} as Record<string, string>);
 
 	if (isStringWithValue(token)) {
 		headers['Authorization'] = `Bearer ${token}`;

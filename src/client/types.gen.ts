@@ -112,6 +112,7 @@ export type CreateTodoCreateTodosPostResponse = Todo;
 export type ReadTodosGetTodosGetData = {
     page: number;
     perPage: number;
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
 export type ReadTodosGetTodosGetResponse = PaginateModel_Todo_;
@@ -149,14 +150,14 @@ export type ReadTodosByUserGetTodosByUserUserIdGetData = {
 
 export type ReadTodosByUserGetTodosByUserUserIdGetResponse = PaginateModel_Todo_;
 
-export type GetTodosByItemNameGetTodosByItemNameItemNameGetData = {
+export type GetTodosByItemNameGetTodosByItemNameGetData = {
     itemName: string;
     page: number;
     perPage: number;
     requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
-export type GetTodosByItemNameGetTodosByItemNameItemNameGetResponse = PaginateModel_Todo_;
+export type GetTodosByItemNameGetTodosByItemNameGetResponse = PaginateModel_Todo_;
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = {
     itemImportance: Importance;
@@ -359,9 +360,9 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/get_todos_by_item_name/{item_name}': {
+    '/get_todos_by_item_name/': {
         get: {
-            req: GetTodosByItemNameGetTodosByItemNameItemNameGetData;
+            req: GetTodosByItemNameGetTodosByItemNameGetData;
             res: {
                 /**
                  * Successful Response
