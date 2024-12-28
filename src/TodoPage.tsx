@@ -61,7 +61,7 @@ function TodoPage() {
     setLoading(true);
     try {
       const data = await getTodosByItemNameGetTodosByItemNameGet({ page: page, perPage: perPage })
-      
+
       setTodoPage(data);
       // let result2 = data.items.find((item) => item.id == selectedTodo?.id)
       // if (result2) setSelectedTodo(result2)
@@ -234,20 +234,14 @@ function TodoPage() {
 
   //delete searchQuery in hook
   useEffect(() => {
-    if (searchQuery) {
-      searchTodos(searchQuery, page, perPage);
-    } else {
-      fetchTodos(page, perPage)
-    }
+    searchTodos(searchQuery, page, perPage);
   }, [page, perPage])
 
 
   //use debounce for query entering
   useDebounceEffect(
     () => {
-      if (searchQuery) {
-        searchTodos(searchQuery, page, perPage);
-      }
+      searchTodos(searchQuery, page, perPage);
     },
     [searchQuery],
     {
@@ -291,7 +285,13 @@ function TodoPage() {
     return (
       <>
         <ResizablePanel>
-
+          <input
+            className='w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none'
+            type="text"
+            placeholder="Search todo"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           {/* <DataTable columns={columns} data={todoTableData} /> */}
           {todoPage.items.map((item) => (
             <TodoItem

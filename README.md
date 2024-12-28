@@ -35,3 +35,17 @@ export default {
 ```bash
 npm run openapi-ts
 ```
+
+# install nvm
+
+```bash
+brew install nvm
+```
+
+
+# install node
+
+```bash
+nvm install 20.14.0
+nvm use 20.14.0
+```

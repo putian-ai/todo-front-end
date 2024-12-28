@@ -55,6 +55,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
       itemName: searchTerm,
       page: page,
       perPage: perPage
+      
     }
     const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
     setSearchTodoPage(data2);
