@@ -15,6 +15,13 @@ export type LoginResponse = {
     access_token: string;
 };
 
+export type PaginateModel_Tag_ = {
+    page: number;
+    per_page: number;
+    total_items: number;
+    items: Array<Tag>;
+};
+
 export type PaginateModel_Todo_ = {
     page: number;
     per_page: number;
@@ -151,13 +158,23 @@ export type ReadTodosByUserGetTodosByUserUserIdGetData = {
 export type ReadTodosByUserGetTodosByUserUserIdGetResponse = PaginateModel_Todo_;
 
 export type GetTodosByItemNameGetTodosByItemNameGetData = {
-    itemName: string;
+    itemImportance?: number;
+    itemName?: string;
+    page: number;
+    perPage: number;
+    planTimeStr?: string;
+    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+};
+
+export type GetTodosByItemNameGetTodosByItemNameGetResponse = PaginateModel_Todo_;
+
+export type GetTagsByUserGetTagsByUserGetData = {
     page: number;
     perPage: number;
     requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
 };
 
-export type GetTodosByItemNameGetTodosByItemNameGetResponse = PaginateModel_Todo_;
+export type GetTagsByUserGetTagsByUserGetResponse = PaginateModel_Tag_;
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = {
     itemImportance: Importance;
@@ -368,6 +385,21 @@ export type $OpenApiTs = {
                  * Successful Response
                  */
                 200: PaginateModel_Todo_;
+                /**
+                 * Validation Error
+                 */
+                422: HTTPValidationError;
+            };
+        };
+    };
+    '/get_tags_by_user/': {
+        get: {
+            req: GetTagsByUserGetTagsByUserGetData;
+            res: {
+                /**
+                 * Successful Response
+                 */
+                200: PaginateModel_Tag_;
                 /**
                  * Validation Error
                  */
