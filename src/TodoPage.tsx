@@ -60,7 +60,8 @@ function TodoPage() {
   const fetchTodos = async (page: number, perPage: number) => {
     setLoading(true);
     try {
-      const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ page: page, perPage: perPage })
+      
       setTodoPage(data);
       // let result2 = data.items.find((item) => item.id == selectedTodo?.id)
       // if (result2) setSelectedTodo(result2)
