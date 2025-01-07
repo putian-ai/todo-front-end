@@ -62,7 +62,7 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAdd
             handleDrag={handleDrag}
             handleTagClick={handleTagClick}
             inputFieldPosition="inline"
-            maxTags={7}
+            maxTags={10}
         />
     );
 
