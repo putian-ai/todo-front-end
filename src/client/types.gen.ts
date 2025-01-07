@@ -33,6 +33,7 @@ export type Tag = {
     id: number;
     name: string;
     color: string;
+    isSelected?: boolean;
 };
 
 export type TagDto = {
@@ -164,6 +165,7 @@ export type GetTodosByItemNameGetTodosByItemNameGetData = {
     perPage: number;
     planTimeStr?: string;
     requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+    tagId?: number;
 };
 
 export type GetTodosByItemNameGetTodosByItemNameGetResponse = PaginateModel_Todo_;

@@ -115,6 +115,11 @@ export const $Tag = {
         color: {
             type: 'string',
             title: 'Color'
+        },
+        isSelected: {
+            type: 'boolean',
+            title: 'Isselected',
+            default: false
         }
     },
     type: 'object',

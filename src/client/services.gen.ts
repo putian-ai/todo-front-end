@@ -230,6 +230,7 @@ export const readTodosByUserGetTodosByUserUserIdGet = (data: ReadTodosByUserGetT
  * @param data.itemName
  * @param data.planTimeStr
  * @param data.itemImportance
+ * @param data.tagId
  * @param data.requestBody
  * @returns PaginateModel_Todo_ Successful Response
  * @throws ApiError
@@ -242,7 +243,8 @@ export const getTodosByItemNameGetTodosByItemNameGet = (data: GetTodosByItemName
         per_page: data.perPage,
         item_name: data.itemName,
         plan_time_str: data.planTimeStr,
-        item_importance: data.itemImportance
+        item_importance: data.itemImportance,
+        tag_id: data.tagId
     },
     body: data.requestBody,
     mediaType: 'application/json',
