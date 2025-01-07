@@ -6,8 +6,9 @@ import PublicPage from './views/public';
 import LoginPage from './views/login';
 import ProtectedPage from './views/protected';
 import TodoPage from './TodoPage';
-import { tokenAtom, userAtom, UserInfo } from './atom';
+import { tagPageAtom, tokenAtom, userAtom, UserInfo } from './atom';
 import { useAtom } from 'jotai';
+import { OpenAPI } from './client';
 
 const authLoader = (getUser: () => UserInfo | null) => async () => {
   const user = getUser();
@@ -17,10 +18,13 @@ const authLoader = (getUser: () => UserInfo | null) => async () => {
   return { user }
 }
 
+OpenAPI.BASE = import.meta.env.VITE_API_URL;
+
 
 function App() {
   const [user] = useAtom(userAtom);
   const [token] = useAtom(tokenAtom);
+  const [Tags] = useAtom(tagPageAtom);
 
 
   const router = createBrowserRouter([

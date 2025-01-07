@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  CreateTodoCreateTodosPostData, DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, TodoDto, UpdateTodosUpdateTodosTodoIdPostData, createTodoCreateTodosPost, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
-  getTodosByItemNameGetTodosByItemNameItemNameGet,
+  DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, UpdateTodosUpdateTodosTodoIdPostData, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  getTodosByItemNameGetTodosByItemNameGet,
   Importance,
   DeleteTagsDeleteTagTagIdDeleteData,
   deleteTagsDeleteTagTagIdDelete,
@@ -11,26 +11,20 @@ import {
   getTodoByTodoIdGetTodoByTodoIdTodoIdGet,
 } from './client'
 import dayjs from 'dayjs'
-import InlineTimeEdit from './InLineTimeEdit'
-import InlineTextEdit from './InLineTextEdit'
 import { useDebounceEffect, useDebounceFn } from 'ahooks'
 import InlineMarkDownEdit from './InLineMarkDownEdit'
 import Markdown from 'react-markdown'
-import InlineSelectEdit from './InlineSelectEdit'
 import InlineTagEdit from './InLineTagEdit'
 import { Button } from './components/ui/button'
 import {
   ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup,
 } from "@/components/ui/resizable"
 
 import TodoItem from './TodoItem'
 
 import PaginationDemo from './Pagination'
 import { useToast } from './components/ui/use-toast'
-import { Search } from 'lucide-react'
-import SearchComponent from './SearchTodo'
 
 function TodoPage() {
 
@@ -66,7 +60,8 @@ function TodoPage() {
   const fetchTodos = async (page: number, perPage: number) => {
     setLoading(true);
     try {
-      const data = await readTodosGetTodosGet({ page: page, perPage: perPage })
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ page: page, perPage: perPage })
+
       setTodoPage(data);
       // let result2 = data.items.find((item) => item.id == selectedTodo?.id)
       // if (result2) setSelectedTodo(result2)
@@ -82,7 +77,7 @@ function TodoPage() {
   const searchTodos = async (itemName: string, page: number, perPage: number) => {
     setLoading(true);
     try {
-      const data = await getTodosByItemNameGetTodosByItemNameItemNameGet({ itemName, page, perPage })
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ itemName, page, perPage })
       setTodoPage(data);
     } catch (error) {
       console.error('Failed to search todos', error);
@@ -239,20 +234,14 @@ function TodoPage() {
 
   //delete searchQuery in hook
   useEffect(() => {
-    if (searchQuery) {
-      searchTodos(searchQuery, page, perPage);
-    } else {
-      fetchTodos(page, perPage)
-    }
+    searchTodos(searchQuery, page, perPage);
   }, [page, perPage])
 
 
   //use debounce for query entering
   useDebounceEffect(
     () => {
-      if (searchQuery) {
-        searchTodos(searchQuery, page, perPage);
-      }
+      searchTodos(searchQuery, page, perPage);
     },
     [searchQuery],
     {
@@ -296,7 +285,13 @@ function TodoPage() {
     return (
       <>
         <ResizablePanel>
-
+          <input
+            className='w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none'
+            type="text"
+            placeholder="Search todo"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           {/* <DataTable columns={columns} data={todoTableData} /> */}
           {todoPage.items.map((item) => (
             <TodoItem
@@ -318,7 +313,12 @@ function TodoPage() {
           {selectedTodo ?
             <div >
 
-              <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
+              <InlineTagEdit
+                value={selectedTodo.tags ?? []}
+                item={selectedTodo}
+                onDelete={async (index) => await handleClickDeleteTodoTag(index)}
+                onAddition={async (newTagName, newTodoUserId) => await handleClickAdditionTodoTag(newTagName, newTodoUserId)}>
+              </InlineTagEdit>
 
               <Markdown className='text-4xl flex justify-start'>
                 {selectedTodo.item}
@@ -328,6 +328,7 @@ function TodoPage() {
             <span>Pick one!</span>
           }
         </ResizablePanel>
+
       </>
 
     );

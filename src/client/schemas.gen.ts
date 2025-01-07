@@ -48,6 +48,33 @@ export const $LoginResponse = {
     title: 'LoginResponse'
 } as const;
 
+export const $PaginateModel_Tag_ = {
+    properties: {
+        page: {
+            type: 'integer',
+            title: 'Page'
+        },
+        per_page: {
+            type: 'integer',
+            title: 'Per Page'
+        },
+        total_items: {
+            type: 'integer',
+            title: 'Total Items'
+        },
+        items: {
+            items: {
+                '$ref': '#/components/schemas/Tag'
+            },
+            type: 'array',
+            title: 'Items'
+        }
+    },
+    type: 'object',
+    required: ['page', 'per_page', 'total_items', 'items'],
+    title: 'PaginateModel[Tag]'
+} as const;
+
 export const $PaginateModel_Todo_ = {
     properties: {
         page: {
@@ -88,6 +115,11 @@ export const $Tag = {
         color: {
             type: 'string',
             title: 'Color'
+        },
+        isSelected: {
+            type: 'boolean',
+            title: 'Isselected',
+            default: false
         }
     },
     type: 'object',
