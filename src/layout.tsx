@@ -2,12 +2,14 @@ import { useDebounceFn } from "ahooks";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./components/ui/resizable";
 import SearchComponent from "./SearchTodo";
 import { Outlet } from 'react-router-dom'
-import { CreateTagCreateTagPostData, getProtectedProtectedGet, GetProtectedProtectedGetData, getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, OpenAPI, PaginateModel_Todo_ } from "./client";
+import { CreateTagCreateTagPostData, getProtectedProtectedGet, GetProtectedProtectedGetData, getTagsByUserGetTagsByUserGet, getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, OpenAPI, PaginateModel_Todo_ } from "./client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { tokenAtom, userAtom } from "./atom";
-import { LogOut, TestTube } from "lucide-react";
+import { tagPageAtom, tokenAtom, userAtom } from "./atom";
+import { LogOut, Tag, TestTube } from "lucide-react";
 import { useToast } from "./components/ui/use-toast";
+import TagList from "./TagList";
+import { set } from "date-fns";
 
 
 
@@ -17,6 +19,7 @@ export function Layout() {
   const [searchTodoPage, setSearchTodoPage] = useState<PaginateModel_Todo_>()
   const [user, setUser] = useAtom(userAtom)
   const [token, setToken] = useAtom(tokenAtom)
+  const [Tags, setTags] = useAtom(tagPageAtom)
   const { toast } = useToast();
 
   useEffect(() => {
@@ -56,24 +59,28 @@ export function Layout() {
       page: page,
       perPage: perPage
     }
-    
+
     const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
     setSearchTodoPage(data2);
+
+
   }
   return (
-
-    <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel>
+    <div className="flex h-full">
+      <div className="w-13 bg-gray-200 ">
         <SearchComponent onSearch={(searchTerm) => runSearchTodo(searchTerm)}></SearchComponent>
         <LogOut onClick={logout} className="h-4 w-4 cursor-pointer transition-transform duration-200 hover:scale-110 hover:bg-accent m-5" />
         <TestTube onClick={getProtected} className="h-4 w-4 cursor-pointer transition-transform duration-200 hover:scale-110 hover:bg-accent m-5" />
+      </div>
+      <ResizablePanelGroup direction="horizontal">
+        <ResizablePanel >
+          <TagList></TagList>
+        </ResizablePanel>
 
-        {JSON.stringify(user)}
-      </ResizablePanel>
+        <ResizableHandle withHandle />
 
-      <ResizableHandle withHandle />
-
-      <Outlet />
-    </ResizablePanelGroup>
+        <Outlet />
+      </ResizablePanelGroup>
+    </div>
   );
 }
