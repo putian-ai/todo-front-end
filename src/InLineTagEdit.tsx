@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
-import { Todo } from "./client";
+import { getTagsByUserGetTagsByUserGet, Todo } from "./client";
 import { Tag } from "./client";
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
 import './styles/tag.scss'
+import { useAtom } from "jotai";
+import { tagPageAtom } from "./atom";
 
 interface ITag {
     id: string;
@@ -13,11 +15,21 @@ interface ITag {
 interface InlineEditProps {
     value: Tag[];
     item: Todo
-    onAddition: (tagName: string, todoUserId: number) => void;
-    onDelete: (index: number) => void;
+    onAddition: (tagName: string, todoUserId: number) => Promise<void>;
+    onDelete: (index: number) => Promise<void>;
 }
 
 const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAddition }) => {
+    const [tagPage, setTagPage] = useAtom(tagPageAtom);
+    const fetchTags = async () => {
+        try {
+            const data = await getTagsByUserGetTagsByUserGet({ page: 1, perPage: 100 });
+            setTagPage(data);
+        } catch (error) {
+            console.error('Failed to fetch todos', error);
+        } finally {
+        }
+    }
 
     const suggestions = [
         { id: "India", text: "India", className: "red" },
@@ -44,11 +56,14 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAdd
     };
 
 
-    const handleDelete = (index: number) => {
-        onDelete(value[index].id);
+    const handleDelete = async (index: number) => {
+        await onDelete(value[index].id);
+        fetchTags()
+
     }
-    const handleAddition = (tag: ITag) => {
-        onAddition(tag.id, item.user.id)
+    const handleAddition = async (tag: ITag) => {
+        await onAddition(tag.id, item.user.id)
+        fetchTags()
     }
 
 

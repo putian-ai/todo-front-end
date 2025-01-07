@@ -313,7 +313,12 @@ function TodoPage() {
           {selectedTodo ?
             <div >
 
-              <InlineTagEdit value={selectedTodo.tags ?? []} item={selectedTodo} onDelete={(index) => handleClickDeleteTodoTag(index)} onAddition={(newTagName, newTodoUserId) => handleClickAdditionTodoTag(newTagName, newTodoUserId)}></InlineTagEdit>
+              <InlineTagEdit
+                value={selectedTodo.tags ?? []}
+                item={selectedTodo}
+                onDelete={async (index) => await handleClickDeleteTodoTag(index)}
+                onAddition={async (newTagName, newTodoUserId) => await handleClickAdditionTodoTag(newTagName, newTodoUserId)}>
+              </InlineTagEdit>
 
               <Markdown className='text-4xl flex justify-start'>
                 {selectedTodo.item}
