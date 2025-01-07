@@ -6,9 +6,8 @@ import { tagPageAtom } from "./atom";
 
 function TagList() {
 
-  const [tagList, setTagList] = useState<PaginateModel_Tag_>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [Tags, setTags] = useAtom(tagPageAtom)
+  const [tagPage, setTagPage] = useAtom(tagPageAtom)
   const [page, setPage] = useState<number>(1)
   const [perPage, setPerPage] = useState<number>(100)
 
@@ -16,8 +15,7 @@ function TagList() {
     setLoading(true);
     try {
       const data = await getTagsByUserGetTagsByUserGet({ page, perPage });
-      setTagList(data);
-      setTags(data);
+      setTagPage(data);
     } catch (error) {
       console.error('Failed to fetch todos', error);
     } finally {
@@ -30,24 +28,31 @@ function TagList() {
   }, [page, perPage])
 
 
-  console.log(Tags)
+  const onClick = (clickedItem: Tag) => {
+    if (tagPage) {
+      const updatedItems = tagPage.items.map((item) =>
+        item.id === clickedItem.id
+          ? { ...item, isSelected: !item.isSelected }
+          : { ...item, isSelected: false }
+      );
+      setTagPage({ ...tagPage, items: updatedItems });
+    }
+  };
 
-  if (Tags) {
+  if (tagPage) {
     return (
       <div>
         <h1>Tags</h1>
-        {Tags?.items.map((tag) => (
-          <TagItem key={tag.id} item={tag} isSelected={false} onDelete={function (item: Tag): void {
-            throw new Error("Function not implemented.");
-          }} onUpdate={function (updatedText: string): void {
-            throw new Error("Function not implemented.");
-          }} onClick={function (item: Tag): void {
-            throw new Error("Function not implemented.");
-          }} />
+        {tagPage?.items.map((tag) => (
+          <TagItem
+            key={tag.id}
+            item={tag}
+            onDelete={function (item: Tag): void { }}
+            onUpdate={function (updatedText: string): void { }}
+            onClick={onClick}
+          />
         ))}
       </div>
     );
   }
 }
-
-export default TagList;
