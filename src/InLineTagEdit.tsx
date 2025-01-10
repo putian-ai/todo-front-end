@@ -40,7 +40,7 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAdd
         value.map(t => ({
             id: t.name,
             text: t.name,
-            className: t.color
+            className: "black"
         }))
         , [value])
 
