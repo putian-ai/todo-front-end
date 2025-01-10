@@ -25,6 +25,8 @@ import TodoItem from './TodoItem'
 
 import PaginationDemo from './Pagination'
 import { useToast } from './components/ui/use-toast'
+import { useAtom } from 'jotai'
+import { selectedTagIDAtom } from './atom'
 
 function TodoPage() {
 
@@ -42,6 +44,8 @@ function TodoPage() {
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
   const [updateTodoImportance, setUpdatetodoImportance] = useState<Importance>(0)
+
+  const [selectedTagID, setSelectedTagID] = useAtom(selectedTagIDAtom)
 
 
 
@@ -74,10 +78,10 @@ function TodoPage() {
 
 
   //add method to search todos by its name
-  const searchTodos = async (itemName: string, page: number, perPage: number) => {
+  const searchTodos = async (itemName: string, page: number, perPage: number, tagId: number) => {
     setLoading(true);
     try {
-      const data = await getTodosByItemNameGetTodosByItemNameGet({ itemName, page, perPage })
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ itemName, page, perPage, tagId });
       setTodoPage(data);
     } catch (error) {
       console.error('Failed to search todos', error);
@@ -204,6 +208,7 @@ function TodoPage() {
       tagId: deleteTodoTagId
     }
     await deleteTagsDeleteTagTagIdDelete(data)
+    await fetchTodos(page, perPage)
     await updateSelectedTodo()
   }
 
@@ -220,6 +225,7 @@ function TodoPage() {
       }
     }
     await createTagCreateTagPost(data)
+    await fetchTodos(page, perPage)
     await updateSelectedTodo()
   }
 
@@ -234,14 +240,14 @@ function TodoPage() {
 
   //delete searchQuery in hook
   useEffect(() => {
-    searchTodos(searchQuery, page, perPage);
-  }, [page, perPage])
+    searchTodos(searchQuery, page, perPage, selectedTagID!);
+  }, [page, perPage, selectedTagID])
 
 
   //use debounce for query entering
   useDebounceEffect(
     () => {
-      searchTodos(searchQuery, page, perPage);
+      searchTodos(searchQuery, page, perPage, selectedTagID!);
     },
     [searchQuery],
     {
