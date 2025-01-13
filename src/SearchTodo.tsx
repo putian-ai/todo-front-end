@@ -1,10 +1,6 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import {
   Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
@@ -12,14 +8,13 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Search } from 'lucide-react';
-import { getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData , PaginateModel_Todo_ } from './client';
+import { getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, PaginateModel_Todo_ } from './client';
 import { useDebounceFn } from 'ahooks';
 import TodoItem from './TodoItem';
 import { useNavigate } from 'react-router-dom';
@@ -36,8 +31,8 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [page, setPage] = useState<number>(1)
-  const [perPage, setPerPage] = useState<number>(5)
+  const [page,] = useState<number>(1)
+  const [perPage,] = useState<number>(5)
   const [searchTodoPage, setSearchTodoPage] = useState<PaginateModel_Todo_>()
   const navigate = useNavigate()
 
@@ -51,11 +46,11 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
   );
 
   const handleSearchTodo = async (searchTerm: string) => {
-    const data: GetTodosByItemNameGetTodosByItemNameGetData  = {
+    const data: GetTodosByItemNameGetTodosByItemNameGetData = {
       itemName: searchTerm,
       page: page,
       perPage: perPage
-      
+
     }
     const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
     setSearchTodoPage(data2);
@@ -78,7 +73,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
           <DialogTitle></DialogTitle>
         </DialogHeader>
         <Command>
-          <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
+          <div className="flex items-center border-b px-3" >
             <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
             <input placeholder="Search todos..." value={searchTerm} onChange={handleValueChange} className='flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50' />
           </div>

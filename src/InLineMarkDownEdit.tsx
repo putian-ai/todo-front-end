@@ -1,9 +1,9 @@
+import React from 'react';
 import { useEffect, useRef, useState } from "react";
 import {
     diffSourcePlugin,
     markdownShortcutPlugin,
     AdmonitionDirectiveDescriptor,
-    DirectiveDescriptor,
     directivesPlugin,
     frontmatterPlugin,
     headingsPlugin,
@@ -15,10 +15,8 @@ import {
     tablePlugin,
     thematicBreakPlugin,
     toolbarPlugin,
-    SandpackConfig,
     codeBlockPlugin,
     codeMirrorPlugin,
-    sandpackPlugin,
     KitchenSinkToolbar,
     MDXEditor,
     MDXEditorMethods
@@ -26,7 +24,6 @@ import {
 
 
 import '@mdxeditor/editor/style.css'
-import Markdown from "react-markdown";
 
 interface InlineEditProps {
     value: string;
@@ -61,9 +58,6 @@ const InlineMarkDownEdit: React.FC<InlineEditProps> = ({ value, onChange }) => {
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const mdxEditorRef = useRef<MDXEditorMethods>(null)
 
-    const handleBlur = () => {
-        setIsEditing(false);
-    };
 
     const handleChange = (md: string) => {
         setCurrentValue(md);

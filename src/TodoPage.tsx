@@ -1,8 +1,8 @@
+import React from 'react'
 import { useEffect, useState } from 'react'
 import {
-  DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, UpdateTodosUpdateTodosTodoIdPostData, deleteTodosDeleteTodosTodoIdDelete, readTodosGetTodosGet, updateTodosUpdateTodosTodoIdPost,
+  DeleteTodosDeleteTodosTodoIdDeleteData, PaginateModel_Todo_, Todo, UpdateTodosUpdateTodosTodoIdPostData, deleteTodosDeleteTodosTodoIdDelete, updateTodosUpdateTodosTodoIdPost,
   getTodosByItemNameGetTodosByItemNameGet,
-  Importance,
   DeleteTagsDeleteTagTagIdDeleteData,
   deleteTagsDeleteTagTagIdDelete,
   createTagCreateTagPost,
@@ -36,26 +36,21 @@ function TodoPage() {
   const { toast } = useToast()
 
 
-  const [userId, setUserId] = useState<number>(1)
-
-  const [addTodoItem, setAddtodoItem] = useState<string>('')
-  const [addTodoPlanTime, setAddtodoPlanTime] = useState<string>('')
 
   const [updateTodoItem, setUpdatetodoItem] = useState<string>('')
   const [updateTodoContent, setUpdatetodoContent] = useState<string>('')
-  const [updateTodoImportance, setUpdatetodoImportance] = useState<Importance>(0)
 
-  const [selectedTagID, setSelectedTagID] = useAtom(selectedTagIDAtom)
+
+  const [selectedTagID,] = useAtom(selectedTagIDAtom)
 
 
 
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
+  const [, setLoading] = useState<boolean>(false)
 
   const [selectedTodo, setSelectedTodo] = useState<Todo>()
 
-  // TODO: needs to be delete
-  const [tempTodoTagColorString, setTempTodoTagColorString] = useState("1111111")
+  const [tempTodoTagColorString,] = useState("1111111")
 
 
 
@@ -108,7 +103,8 @@ function TodoPage() {
   //////////////////////////////////////////////////
 
   const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= Math.ceil(todoPage?.total_items! / perPage)) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    if (newPage >= 1 && newPage <= Math.ceil(todoPage?.total_items! / perPage)) { //disabled using a non-null assertion is unsafe and wrong.eslint@typescript-eslint/no-non-null-asserted-optional-chain
       setPage(newPage)
     }
     else if (newPage < 1) {
@@ -283,9 +279,7 @@ function TodoPage() {
   const GetTodoPageButton = <Button onClick={() => fetchTodos(page, perPage)}>get todo page</Button>
 
 
-  function handleToggle(index: number): void {
 
-  }
   if (todoPage)
 
     return (
@@ -306,7 +300,7 @@ function TodoPage() {
               timeVisible={true}
               isSelected={selectedTodo?.id === item.id}
               onDelete={() => deleteTodo(item.id!)} // Pass a function to handle deletion
-              onCheck={() => handleToggle(item.id)} // Pass a function to handle toggle
+
               onUpdate={(newValue) => runUpdateTodoItem(newValue, item)}
               onClick={clickItem}
               onTimeUpdate={(newTime) => runUpdateTodoPlanTime(dayjs(newTime).format('YYYY-MM-DD HH:mm:ss'), item)} />

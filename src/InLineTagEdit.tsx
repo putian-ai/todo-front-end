@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import React from 'react';
+import { useMemo } from "react";
 import { getTagsByUserGetTagsByUserGet, Todo } from "./client";
 import { Tag } from "./client";
 import { WithContext as ReactTags, SEPARATORS } from "react-tag-input";
@@ -20,14 +21,13 @@ interface InlineEditProps {
 }
 
 const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAddition }) => {
-    const [tagPage, setTagPage] = useAtom(tagPageAtom);
+    const [, setTagPage] = useAtom(tagPageAtom);
     const fetchTags = async () => {
         try {
             const data = await getTagsByUserGetTagsByUserGet({ page: 1, perPage: 100 });
             setTagPage(data);
         } catch (error) {
             console.error('Failed to fetch todos', error);
-        } finally {
         }
     }
 

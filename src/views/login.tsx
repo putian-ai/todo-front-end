@@ -1,3 +1,4 @@
+import React from "react";
 import { UserAuthForm } from "@/components/auth/user-auth-form";
 
 function LoginPage() {

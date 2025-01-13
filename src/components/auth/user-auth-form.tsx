@@ -21,6 +21,7 @@ const loginSchema = z.object({
 
 type LoginSchemaType = z.infer<typeof loginSchema>;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 interface DecodedToken {
   id: number

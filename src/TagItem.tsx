@@ -13,7 +13,6 @@ interface TagItemProps {
 const TagItem: React.FC<TagItemProps> = ({
   item,
   onDelete,
-  onUpdate,
   onClick,
 }) => {
   const handleSpanClick = () => {

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { getTagsByUserGetTagsByUserGet, PaginateModel_Tag_, Tag } from "./client";
+import React, { useEffect, useState } from "react";
+import { getTagsByUserGetTagsByUserGet, Tag } from "./client";
 import TagItem from "./TagItem";
 import { useAtom } from "jotai";
 import { tagPageAtom, selectedTagIDAtom } from "./atom";
 
 function TagList() {
 
-  const [loading, setLoading] = useState<boolean>(false)
+  const [, setLoading] = useState<boolean>(false)
   const [tagPage, setTagPage] = useAtom(tagPageAtom)
-  const [selectedTagID, setSelectedTagID] = useAtom(selectedTagIDAtom)
-  const [page, setPage] = useState<number>(1)
-  const [perPage, setPerPage] = useState<number>(100)
+  const [, setSelectedTagID] = useAtom(selectedTagIDAtom)
+  const [page,] = useState<number>(1)
+  const [perPage,] = useState<number>(100)
 
   const fetchTags = async (page: number, perPage: number) => {
     setLoading(true);
@@ -42,7 +42,7 @@ function TagList() {
           : { ...item, isSelected: false }
       );
       setTagPage({ ...tagPage, items: updatedItems });
-    };
+    }
   }
 
   if (tagPage) {
@@ -53,10 +53,9 @@ function TagList() {
           <TagItem
             key={tag.id}
             item={tag}
-            onDelete={function (item: Tag): void { }}
-            onUpdate={function (updatedText: string): void { }}
+            onDelete={function (): void { }}
+            onUpdate={function (): void { }}
             onClick={onClick}
-
           />
         ))}
       </div>

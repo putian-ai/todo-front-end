@@ -1,12 +1,12 @@
+import React from 'react';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 import './App.css'
 import { Toaster } from './components/ui/toaster';
 import { Layout } from './layout';
-import PublicPage from './views/public';
 import LoginPage from './views/login';
 import ProtectedPage from './views/protected';
 import TodoPage from './TodoPage';
-import { tagPageAtom, tokenAtom, userAtom, UserInfo } from './atom';
+import { userAtom, UserInfo } from './atom';
 import { useAtom } from 'jotai';
 import { OpenAPI } from './client';
 
@@ -23,8 +23,6 @@ OpenAPI.BASE = import.meta.env.VITE_API_URL;
 
 function App() {
   const [user] = useAtom(userAtom);
-  const [token] = useAtom(tokenAtom);
-  const [Tags] = useAtom(tagPageAtom);
 
 
   const router = createBrowserRouter([
@@ -57,6 +55,16 @@ function App() {
         return null;
       },
       Component: LoginPage,
+    },
+    {
+      id: "register",
+      path: "register",
+      loader: () => {
+        if (user) {
+          return redirect('/');
+        }
+        return null;
+      },
     }
   ]);
 

@@ -1,3 +1,4 @@
+import React from "react";
 import { useDebounceFn } from "ahooks";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./components/ui/resizable";
 import SearchComponent from "./SearchTodo";
@@ -5,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 import { getProtectedProtectedGet, getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, OpenAPI, PaginateModel_Todo_ } from "./client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { tagPageAtom, tokenAtom, userAtom, selectedTagIDAtom } from "./atom";
+import { tokenAtom, userAtom, selectedTagIDAtom } from "./atom";
 import { LogOut, TestTube } from "lucide-react";
 import { useToast } from "./components/ui/use-toast";
 import TagList from "./TagList";
@@ -13,13 +14,12 @@ import TagList from "./TagList";
 
 
 export function Layout() {
-  const [page, setPage] = useState<number>(1)
-  const [perPage, setPerPage] = useState<number>(5)
-  const [searchTodoPage, setSearchTodoPage] = useState<PaginateModel_Todo_>()
-  const [user, setUser] = useAtom(userAtom)
+  const [page,] = useState<number>(1)
+  const [perPage,] = useState<number>(5)
+  const [, setSearchTodoPage] = useState<PaginateModel_Todo_>()
+  const [, setUser] = useAtom(userAtom)
   const [token, setToken] = useAtom(tokenAtom)
-  const [Tags, setTags] = useAtom(tagPageAtom)
-  const [selectedTagID, setSelectedTagID] = useAtom(selectedTagIDAtom)
+  const [, setSelectedTagID] = useAtom(selectedTagIDAtom)
   const { toast } = useToast();
 
   useEffect(() => {

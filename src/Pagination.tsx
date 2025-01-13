@@ -1,3 +1,4 @@
+import React from "react"
 import {
     Pagination,
     PaginationContent,
@@ -20,11 +21,8 @@ const MyPagination: React.FC<PaginationProps> = ({
     perPage,
     totalItems,
     onPageChange,
-    onPerPageChange,
 }) => {
     const totalPages = Math.ceil(totalItems / perPage)
-    const hasNext = currentPage < totalPages
-    const hasPrev = currentPage > 1
     // const perPageOptions = [
     //   { value: 5, label: "5" },
     //   { value: 10, label: "10" },
