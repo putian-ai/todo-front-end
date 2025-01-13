@@ -29,7 +29,7 @@ const TagItem: React.FC<TagItemProps> = ({
       <div className="flex items-center">
         <span>
           <TagIcon className="h-4 w-4 mr-2" />
-          {item.name} {item.isSelected ? 'selected' : 'unselected'}
+          {item.name}
         </span>
       </div>
       <Button onClick={() => onDelete(item)}>Delete</Button>
