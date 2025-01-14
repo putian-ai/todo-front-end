@@ -9,6 +9,8 @@ import TodoPage from './TodoPage';
 import { userAtom, UserInfo } from './atom';
 import { useAtom } from 'jotai';
 import { OpenAPI } from './client';
+import RegisterPage from './views/register';
+
 
 const authLoader = (getUser: () => UserInfo | null) => async () => {
   const user = getUser();
@@ -65,6 +67,7 @@ function App() {
         }
         return null;
       },
+      Component: RegisterPage
     }
   ]);
 
