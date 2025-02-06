@@ -17,7 +17,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.13",
-    "@hey-api/client-axios": "^0.2.3",
+    "@hey-api/client-axios": "^0.4.0",
     "@hey-api/client-fetch": "^0.1.6",
     "@hookform/resolvers": "^3.9.0",
     "@mdxeditor/editor": "^3.10.1",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@hey-api/openapi-ts": "^0.48.0",
+    "@hey-api/openapi-ts": "^0.61.3",
     "@tailwindcss/typography": "^0.5.13",
     "@types/node": "^22.1.0",
     "@types/react": "^18.3.3",
