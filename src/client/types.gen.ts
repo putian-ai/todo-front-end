@@ -47,11 +47,11 @@ export type Todo = {
     id: number;
     item: string;
     create_time: string;
-    plan_time: string | null;
-    content: string | null;
+    plan_time: (string | null);
+    content: (string | null);
     importance: Importance;
     user: User;
-    tags: Array<Tag> | null;
+    tags: (Array<Tag> | null);
 };
 
 export type TodoDto = {
@@ -86,372 +86,179 @@ export type ValidationError = {
 };
 
 export type GetProtectedProtectedGetData = {
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
 };
 
-export type GetProtectedProtectedGetResponse = unknown;
+export type GetProtectedProtectedGetResponse = (unknown);
+
+export type GetProtectedProtectedGetError = (HTTPValidationError);
 
 export type LoginLoginPostData = {
-    requestBody: LoginDto;
+    body: LoginDto;
 };
 
-export type LoginLoginPostResponse = LoginResponse;
+export type LoginLoginPostResponse = (LoginResponse);
 
-export type RefreshRefreshPostResponse = unknown;
+export type LoginLoginPostError = (HTTPValidationError);
+
+export type RefreshRefreshPostResponse = (unknown);
+
+export type RefreshRefreshPostError = unknown;
 
 export type CreateUserCreateUserPostData = {
-    requestBody: UserDto;
+    body: UserDto;
 };
 
-export type CreateUserCreateUserPostResponse = User;
+export type CreateUserCreateUserPostResponse = (User);
+
+export type CreateUserCreateUserPostError = (HTTPValidationError);
 
 export type CreateTagCreateTagPostData = {
-    requestBody: TagDto;
+    body: TagDto;
 };
 
-export type CreateTagCreateTagPostResponse = Tag;
+export type CreateTagCreateTagPostResponse = (Tag);
+
+export type CreateTagCreateTagPostError = (HTTPValidationError);
 
 export type CreateTodoCreateTodosPostData = {
-    requestBody: TodoDto;
+    body: TodoDto;
 };
 
-export type CreateTodoCreateTodosPostResponse = Todo;
+export type CreateTodoCreateTodosPostResponse = (Todo);
+
+export type CreateTodoCreateTodosPostError = (HTTPValidationError);
 
 export type ReadTodosGetTodosGetData = {
-    page: number;
-    perPage: number;
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    query: {
+        page: number;
+        per_page: number;
+    };
 };
 
-export type ReadTodosGetTodosGetResponse = PaginateModel_Todo_;
+export type ReadTodosGetTodosGetResponse = (PaginateModel_Todo_);
+
+export type ReadTodosGetTodosGetError = (HTTPValidationError);
 
 export type DeleteTodosDeleteTodosTodoIdDeleteData = {
-    todoId: number;
+    path: {
+        todo_id: number;
+    };
 };
 
-export type DeleteTodosDeleteTodosTodoIdDeleteResponse = unknown;
+export type DeleteTodosDeleteTodosTodoIdDeleteResponse = (unknown);
+
+export type DeleteTodosDeleteTodosTodoIdDeleteError = (HTTPValidationError);
 
 export type DeleteTagsDeleteTagTagIdDeleteData = {
-    tagId: number;
+    path: {
+        tag_id: number;
+    };
 };
 
-export type DeleteTagsDeleteTagTagIdDeleteResponse = unknown;
+export type DeleteTagsDeleteTagTagIdDeleteResponse = (unknown);
+
+export type DeleteTagsDeleteTagTagIdDeleteError = (HTTPValidationError);
 
 export type UpdateTodosUpdateTodosTodoIdPostData = {
-    requestBody: UpdateTodoDto;
-    todoId: number;
+    body: UpdateTodoDto;
+    path: {
+        todo_id: number;
+    };
 };
 
-export type UpdateTodosUpdateTodosTodoIdPostResponse = Todo;
+export type UpdateTodosUpdateTodosTodoIdPostResponse = (Todo);
+
+export type UpdateTodosUpdateTodosTodoIdPostError = (HTTPValidationError);
 
 export type GetUserByTodoGetUserByTodoTodoIdGetData = {
-    todoId: number;
+    path: {
+        todo_id: number;
+    };
 };
 
-export type GetUserByTodoGetUserByTodoTodoIdGetResponse = User;
+export type GetUserByTodoGetUserByTodoTodoIdGetResponse = (User);
+
+export type GetUserByTodoGetUserByTodoTodoIdGetError = (HTTPValidationError);
 
 export type ReadTodosByUserGetTodosByUserUserIdGetData = {
-    page: number;
-    perPage: number;
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    query: {
+        page: number;
+        per_page: number;
+    };
 };
 
-export type ReadTodosByUserGetTodosByUserUserIdGetResponse = PaginateModel_Todo_;
+export type ReadTodosByUserGetTodosByUserUserIdGetResponse = (PaginateModel_Todo_);
+
+export type ReadTodosByUserGetTodosByUserUserIdGetError = (HTTPValidationError);
 
 export type GetTodosByItemNameGetTodosByItemNameGetData = {
-    itemImportance?: number;
-    itemName?: string;
-    page: number;
-    perPage: number;
-    planTimeStr?: string;
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
-    tagId?: number;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    query: {
+        item_importance?: number;
+        item_name?: string;
+        page: number;
+        per_page: number;
+        plan_time_str?: string;
+        tag_id?: number;
+    };
 };
 
-export type GetTodosByItemNameGetTodosByItemNameGetResponse = PaginateModel_Todo_;
+export type GetTodosByItemNameGetTodosByItemNameGetResponse = (PaginateModel_Todo_);
+
+export type GetTodosByItemNameGetTodosByItemNameGetError = (HTTPValidationError);
 
 export type GetTagsByUserGetTagsByUserGetData = {
-    page: number;
-    perPage: number;
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    query: {
+        page: number;
+        per_page: number;
+    };
 };
 
-export type GetTagsByUserGetTagsByUserGetResponse = PaginateModel_Tag_;
+export type GetTagsByUserGetTagsByUserGetResponse = (PaginateModel_Tag_);
+
+export type GetTagsByUserGetTagsByUserGetError = (HTTPValidationError);
 
 export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData = {
-    itemImportance: Importance;
-    page: number;
-    perPage: number;
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    path: {
+        item_importance: Importance;
+    };
+    query: {
+        page: number;
+        per_page: number;
+    };
 };
 
-export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = PaginateModel_Todo_;
+export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetResponse = (PaginateModel_Todo_);
+
+export type GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetError = (HTTPValidationError);
 
 export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
-    todoId: number;
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    path: {
+        todo_id: number;
+    };
 };
 
-export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = Todo;
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetResponse = (Todo);
+
+export type GetTodoByTodoIdGetTodoByTodoIdTodoIdGetError = (HTTPValidationError);
 
 export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData = {
-    page: number;
-    perPage: number;
-    planTimeStr: string;
-    requestBody?: Array<('headers' | 'cookies' | 'json' | 'query')> | null;
-};
-
-export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse = PaginateModel_Todo_;
-
-export type $OpenApiTs = {
-    '/protected': {
-        get: {
-            req: GetProtectedProtectedGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
+    body?: (Array<('headers' | 'cookies' | 'json' | 'query')> | null);
+    path: {
+        plan_time_str: string;
     };
-    '/login': {
-        post: {
-            req: LoginLoginPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: LoginResponse;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/refresh': {
-        post: {
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
-            };
-        };
-    };
-    '/create_user/': {
-        post: {
-            req: CreateUserCreateUserPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: User;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/create_tag/': {
-        post: {
-            req: CreateTagCreateTagPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: Tag;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/create_todos/': {
-        post: {
-            req: CreateTodoCreateTodosPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: Todo;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_todos/': {
-        get: {
-            req: ReadTodosGetTodosGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_Todo_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/delete_todos/{todo_id}': {
-        delete: {
-            req: DeleteTodosDeleteTodosTodoIdDeleteData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/delete_tag/{tag_id}': {
-        delete: {
-            req: DeleteTagsDeleteTagTagIdDeleteData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: unknown;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/update_todos/{todo_id}': {
-        post: {
-            req: UpdateTodosUpdateTodosTodoIdPostData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: Todo;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_user_by_todo/{todo_id}': {
-        get: {
-            req: GetUserByTodoGetUserByTodoTodoIdGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: User;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_todos_by_user/{user_id}': {
-        get: {
-            req: ReadTodosByUserGetTodosByUserUserIdGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_Todo_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_todos_by_item_name/': {
-        get: {
-            req: GetTodosByItemNameGetTodosByItemNameGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_Todo_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_tags_by_user/': {
-        get: {
-            req: GetTagsByUserGetTagsByUserGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_Tag_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_todos_by_item_importance/{item_importance}': {
-        get: {
-            req: GetTodosByImportanceGetTodosByItemImportanceItemImportanceGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_Todo_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_todo_by_todo_id/{todo_id}': {
-        get: {
-            req: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: Todo;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
-    };
-    '/get_todos_by_plan_time/{plan_time_str}': {
-        get: {
-            req: GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetData;
-            res: {
-                /**
-                 * Successful Response
-                 */
-                200: PaginateModel_Todo_;
-                /**
-                 * Validation Error
-                 */
-                422: HTTPValidationError;
-            };
-        };
+    query: {
+        page: number;
+        per_page: number;
     };
 };
+
+export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetResponse = (PaginateModel_Todo_);
+
+export type GetTodoByPlanTimeGetTodosByPlanTimePlanTimeStrGetError = (HTTPValidationError);

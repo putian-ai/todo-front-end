@@ -61,7 +61,7 @@ function TodoPage() {
     try {
       const data = await getTodosByItemNameGetTodosByItemNameGet({ page: page, perPage: perPage })
 
-      setTodoPage(data);
+      setTodoPage(data.data);
       // let result2 = data.items.find((item) => item.id == selectedTodo?.id)
       // if (result2) setSelectedTodo(result2)
     } catch (error) {
@@ -77,7 +77,7 @@ function TodoPage() {
     setLoading(true);
     try {
       const data = await getTodosByItemNameGetTodosByItemNameGet({ itemName, page, perPage, tagId });
-      setTodoPage(data);
+      setTodoPage(data.data);
     } catch (error) {
       console.error('Failed to search todos', error);
     } finally {
@@ -90,7 +90,9 @@ function TodoPage() {
   const deleteTodo = async (id: number) => {
     console.log(`Delete: ${id}`)
     const data: DeleteTodosDeleteTodosTodoIdDeleteData = {
-      todoId: id
+      path: {
+        todo_id: id
+      }
     }
     await deleteTodosDeleteTodosTodoIdDelete(data)
     await fetchTodos(page, perPage)
@@ -227,11 +229,13 @@ function TodoPage() {
 
   const updateSelectedTodo = async () => {
     const data: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
-      todoId: selectedTodo?.id ?? -1
+      path: {
+        todo_id: selectedTodo?.id ?? -1,
+      }
     }
 
     const todo = await getTodoByTodoIdGetTodoByTodoIdTodoIdGet(data)
-    setSelectedTodo(todo)
+    setSelectedTodo(todo.data)
   }
 
   //delete searchQuery in hook

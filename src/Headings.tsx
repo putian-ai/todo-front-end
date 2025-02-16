@@ -1,5 +1,6 @@
+import React from 'react'
 function Heading() {
-    let a = 1;
+
     return (
         <>
             <h1>Heading 1</h1>

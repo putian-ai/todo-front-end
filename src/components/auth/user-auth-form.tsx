@@ -46,14 +46,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     try {
       const response = await loginLoginPost({
-        requestBody: {
+        body: {
           username: data.username,
           password: data.password,
-        },
+        }
       });
-
+      if (!response.data?.access_token) {
+        throw new Error("No access token in response");
+      }
       // Handle successful login (e.g., redirect, update state)
-      const token = response.access_token
+      const token = response.data?.access_token;
       const decoded = jwtDecode<DecodedToken>(token)
       setUser({
         id: decoded.id,

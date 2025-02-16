@@ -3,14 +3,14 @@ import { useDebounceFn } from "ahooks";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./components/ui/resizable";
 import SearchComponent from "./SearchTodo";
 import { Outlet } from 'react-router-dom'
-import { getProtectedProtectedGet, getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, OpenAPI, PaginateModel_Todo_ } from "./client";
+import { getProtectedProtectedGet, getTodosByItemNameGetTodosByItemNameGet, GetTodosByItemNameGetTodosByItemNameGetData, PaginateModel_Todo_ } from "./client";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { tokenAtom, userAtom, selectedTagIDAtom } from "./atom";
 import { LogOut, TestTube } from "lucide-react";
 import { useToast } from "./components/ui/use-toast";
 import TagList from "./TagList";
-
+import { client } from './client/sdk.gen';
 
 
 export function Layout() {
@@ -23,8 +23,8 @@ export function Layout() {
   const { toast } = useToast();
 
   useEffect(() => {
-    OpenAPI.interceptors.request.use((config) => {
-      config.headers = { 'Authorization': `Bearer ${token}` }
+    client.instance.interceptors.request.use((config) => {
+      config.headers.set('Authorization', `Bearer ${token}`);
       return config;
     });
   }, [token])
@@ -56,15 +56,15 @@ export function Layout() {
 
   const handleSearchTodo = async (newSearchTerm: string) => {
     const data: GetTodosByItemNameGetTodosByItemNameGetData = {
-      itemName: newSearchTerm,
-      page: page,
-      perPage: perPage
+      query: {
+        item_name: newSearchTerm,
+        page: page,
+        per_page: perPage
+      }
     }
 
     const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
-    setSearchTodoPage(data2);
-
-
+    setSearchTodoPage(data2.data);
   }
   return (
     <div className="flex h-full">

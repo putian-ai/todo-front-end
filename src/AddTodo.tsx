@@ -18,23 +18,14 @@ interface TodoItemProps {
 const AddTodo: React.FC<TodoItemProps> = ({
   item,
   isSelected,
-  timeVisible,
-  onDelete,
   onUpdate,
   onTimeUpdate,
-  onClick,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(item.item);
   const [selectedDate, setSelectedDate] = useState(dayjs(item.plan_time).toDate());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSpanClick = () => {
-    setIsEditing(true);
-    onClick(item);
-    console.log("click item: " + item.item)
-
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditText(e.target.value);
@@ -46,9 +37,6 @@ const AddTodo: React.FC<TodoItemProps> = ({
     // onUpdate(editText); // Update the todo text when input loses focus
   };
 
-  const handleClickDelete = () => {
-    onDelete(item);
-  };
 
 
   const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,7 +67,7 @@ const AddTodo: React.FC<TodoItemProps> = ({
       <div className="flex items-center flex-1 gap-2">
         {isEditing ? (
           <div >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
             <span className='icon-add-kanban-task text-grey-20 w-[24px] h-[24px] inline-block flex-none'>
               Add Todo
             </span>

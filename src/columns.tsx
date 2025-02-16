@@ -22,7 +22,10 @@ export type TodoTableData = {
 const deleteTodo = async (id: number) => {
     console.log(`Delete: ${id}`)
     const data: DeleteTodosDeleteTodosTodoIdDeleteData = {
-        todoId: id
+        path: {
+            todo_id: id,
+
+        }
     }
     await deleteTodosDeleteTodosTodoIdDelete(data)
 }

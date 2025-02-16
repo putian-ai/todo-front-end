@@ -43,26 +43,24 @@ export function UserRegisterForm({ className, ...props }: UserRegisterFormProps)
   const onSubmit = async (data: registerSchemaType) => {
     setIsLoading(true);
     console.log("Registering...");
-    try {
-      const payload: CreateUserCreateUserPostData = {
-        requestBody: {
-          user_name: data.username,
-          pwd: data.password,
-        },
-      };
-      await createUserCreateUserPost(payload);
+    const payload: CreateUserCreateUserPostData = {
+      body: {
+        user_name: data.username,
+        pwd: data.password,
+      },
+    };
+    const response = await createUserCreateUserPost(payload);
+    console.log("User registered", response);
+    if (response.error) {
+      console.error("Error registering user");
+      setIsLoading(false);
+    } else {
       toast({
         title: "User registered",
         description: "User has been registered successfully",
       })
-      setIsLoading(false);
       navigate("/login");
-    } catch {
       setIsLoading(false);
-      toast({
-        title: "Error",
-        description: "An error occurred while registering user",
-      });
     }
   };
 
