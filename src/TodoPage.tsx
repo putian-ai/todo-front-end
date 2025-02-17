@@ -59,7 +59,7 @@ function TodoPage() {
   const fetchTodos = async (page: number, perPage: number) => {
     setLoading(true);
     try {
-      const data = await getTodosByItemNameGetTodosByItemNameGet({ page: page, perPage: perPage })
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ query: { page: page, per_page: perPage } })
 
       setTodoPage(data.data);
       // let result2 = data.items.find((item) => item.id == selectedTodo?.id)
@@ -76,7 +76,7 @@ function TodoPage() {
   const searchTodos = async (itemName: string, page: number, perPage: number, tagId: number) => {
     setLoading(true);
     try {
-      const data = await getTodosByItemNameGetTodosByItemNameGet({ itemName, page, perPage, tagId });
+      const data = await getTodosByItemNameGetTodosByItemNameGet({ query: { item_name: itemName, page: page, per_page: perPage, tag_id: tagId } });
       setTodoPage(data.data);
     } catch (error) {
       console.error('Failed to search todos', error);
@@ -139,8 +139,8 @@ function TodoPage() {
   const handleClickUpdateTodoItemChange = async (newTodoItem: string, todoItem: Todo) => {
     setUpdatetodoItem(newTodoItem);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
-      todoId: todoItem.id!,
-      requestBody: {
+      path: { todo_id: todoItem.id! },
+      body: {
         item: newTodoItem,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
         content: todoItem.content ?? '',
@@ -163,8 +163,8 @@ function TodoPage() {
 
   const handleClickUpdateTodoPlanTimeChange = async (newTodoPlanTime: string, todoItem: Todo) => {
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
-      todoId: todoItem.id!,
-      requestBody: {
+      path: { todo_id: todoItem.id! },
+      body: {
         item: todoItem.item,
         plan_time: dayjs(newTodoPlanTime).format('YYYY-MM-DD HH:mm:ss'),
         content: todoItem.content ?? '',
@@ -187,8 +187,8 @@ function TodoPage() {
   const handleClickUpdateTodoContentChange = async (newTodoContent: string, todoItem: Todo) => {
     setUpdatetodoContent(newTodoContent);
     const data: UpdateTodosUpdateTodosTodoIdPostData = {
-      todoId: todoItem.id!,
-      requestBody: {
+      path: { todo_id: todoItem.id! },
+      body: {
         item: todoItem.item,
         plan_time: dayjs(todoItem.plan_time).format('YYYY-MM-DD HH:mm:ss'),
         content: newTodoContent,
@@ -203,7 +203,7 @@ function TodoPage() {
 
   const handleClickDeleteTodoTag = async (deleteTodoTagId: number) => {
     const data: DeleteTagsDeleteTagTagIdDeleteData = {
-      tagId: deleteTodoTagId
+      path: { tag_id: deleteTodoTagId }
     }
     await deleteTagsDeleteTagTagIdDelete(data)
     await fetchTodos(page, perPage)
@@ -215,7 +215,7 @@ function TodoPage() {
       throw new Error('NO SELECTED ERROR!')
     }
     const data: CreateTagCreateTagPostData = {
-      requestBody: {
+      body: {
         todo_id: selectedTodo?.id,
         user_id: newTodoTagUserId,
         name: newTodoTagName,

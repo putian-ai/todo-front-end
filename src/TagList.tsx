@@ -15,8 +15,8 @@ function TagList() {
   const fetchTags = async (page: number, perPage: number) => {
     setLoading(true);
     try {
-      const data = await getTagsByUserGetTagsByUserGet({ page, perPage });
-      setTagPage(data);
+      const data = await getTagsByUserGetTagsByUserGet({ query: { page: page, per_page: perPage } });
+      setTagPage(data.data!);
     } catch (error) {
       console.error('Failed to fetch todos', error);
     } finally {

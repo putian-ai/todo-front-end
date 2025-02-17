@@ -24,7 +24,9 @@ const InlineTagEdit: React.FC<InlineEditProps> = ({ value, item, onDelete, onAdd
     const [, setTagPage] = useAtom(tagPageAtom);
     const fetchTags = async () => {
         try {
-            const data = await getTagsByUserGetTagsByUserGet({ page: 1, perPage: 100 });
+            const data = await getTagsByUserGetTagsByUserGet({
+                query: { page: 1, per_page: 100 }
+            });
             setTagPage(data.data!);
         } catch (error) {
             console.error('Failed to fetch todos', error);

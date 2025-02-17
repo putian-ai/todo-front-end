@@ -47,13 +47,15 @@ const SearchComponent: React.FC<SearchComponentProps> = ({
 
   const handleSearchTodo = async (searchTerm: string) => {
     const data: GetTodosByItemNameGetTodosByItemNameGetData = {
-      itemName: searchTerm,
-      page: page,
-      perPage: perPage
+      query: {
+        item_name: searchTerm,
+        page: page,
+        per_page: perPage
+      }
 
     }
     const data2 = await getTodosByItemNameGetTodosByItemNameGet(data)
-    setSearchTodoPage(data2);
+    setSearchTodoPage(data2.data);
   }
   const handleValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value)
