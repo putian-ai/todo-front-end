@@ -26,9 +26,12 @@ const authLoader = (getUser: () => UserInfo | null) => async () => {
   return { user }
 }
 
+
 function App() {
   const [user] = useAtom(userAtom);
   const { toast } = useToast();
+  const [token, setToken] = useAtom(userAtom)
+
 
 
   useEffect(() => {
@@ -45,6 +48,7 @@ function App() {
           title: "Error!",
           description: "Unauthorized"
         })
+        setToken(null)
       } else if (error.response.status === 403) {
         toast({
           title: "Error!",
@@ -59,6 +63,12 @@ function App() {
       return Promise.reject(error);
     });
   }, [toast]);
+
+  useEffect(() => {
+    if (token === null) redirect("/login")
+  },
+    [token]
+  )
 
 
   const router = createBrowserRouter([

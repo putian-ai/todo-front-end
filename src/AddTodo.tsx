@@ -1,110 +1,99 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Todo } from './client';
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { createTodoCreateTodoPost, CreateTodoCreateTodoPostData, Todo } from './client';
 import dayjs from 'dayjs';
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { DateTimePickerForm } from './components/ui/date-time-picker-form.tsx';
+import { DateTimePickerForm } from './components/ui/date-time-picker-form';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface TodoItemProps {
-  item: Todo;
-  isSelected: boolean;
-  timeVisible: boolean;
-  onDelete: (item: Todo) => void;
-  onCheck?: () => void;
-  onUpdate: (updatedText: string) => void; // Callback to update the todo text
-  onTimeUpdate: (updatedTime: Date) => void; // Callback to update the todo time
-  onClick: (item: Todo) => void;
+  onCreated: (item: Todo) => void
 }
 
 const AddTodo: React.FC<TodoItemProps> = ({
-  item,
-  isSelected,
-  onUpdate,
-  onTimeUpdate,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(item.item);
-  const [selectedDate, setSelectedDate] = useState(dayjs(item.plan_time).toDate());
-  const inputRef = useRef<HTMLInputElement>(null);
+  onCreated,
+}
 
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditText(e.target.value);
-    onUpdate(e.target.value);
-  };
-
-  const handleInputBlur = () => {
-    setIsEditing(false);
-    // onUpdate(editText); // Update the todo text when input loses focus
-  };
+) => {
+  const [name, setName] = useState("");
+  const [date, setDate] = useState(dayjs().toDate());
 
 
 
-  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      inputRef.current?.blur(); // Trigger blur to update and exit edit mode
+
+  const handleSubmit = async (todoName: string, todoDate: string) => {
+    const data: CreateTodoCreateTodoPostData = {
+      body: {
+        todoDto: {
+          item: todoName,
+          plan_time: todoDate,
+          content: '',
+          importance: 0
+        }
+      }
     }
-  };
-
-  const handleDateTimeChange = (date: Date) => {
-    console.log(date)
-    setSelectedDate(date);
-    onTimeUpdate(date); // Update the todo item's time
-    setOpen(false);
-  };
-
-
-  // Use useEffect to focus the input when isEditing becomes true
-  useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isEditing]);
-
-  const [open, setOpen] = useState(false)
+    const res = await createTodoCreateTodoPost(data)
+    onCreated(res.data!)
+  }
 
   return (
-    <div className={`flex items-center m-2 rounded-lg justify-between py-2 px-4 border-b border-gray-200 ${isSelected ? 'bg-[#D1E9F6]' : 'hover:bg-gray-200'}`}>
-      <div className="flex items-center flex-1 gap-2">
-        {isEditing ? (
-          <div >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
-            <span className='icon-add-kanban-task text-grey-20 w-[24px] h-[24px] inline-block flex-none'>
-              Add Todo
-            </span>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Edit Profile</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle>Add Todo</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you&apos;re done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              TodoName: {name}
+            </Label>
+            <Input id="name"
+              value={name}
+              className="col-span-3"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
-
-        ) : (
-          <div>
-            <input
-              ref={inputRef}
-              type="text"
-              className="text-gray-800 focus:outline-none w-full bg-[#D1E9F6] cursor-pointer"
-              value={editText}
-              onChange={handleInputChange}
-              onBlur={handleInputBlur}
-              onKeyDown={handleEditKeyDown}
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="username" className="text-right">
+              TodoDate
+            </Label>
+            <div
+              className="text-gray-500 text-[12px] cursor-pointer"
+            >
+              {dayjs(date).format('YYYY-MM-DD HH:mm:ss')}
+            </div>
+            <DateTimePickerForm onSubmit={
+              (date: Date) => {
+                setDate(date)
+              }
+            } initialDateTime={date}
             />
 
-            <Popover open={open} onOpenChange={(o) => { setOpen(o) }}>
-              <PopoverTrigger asChild>
-                <div
-                  className="text-gray-500 text-[12px] cursor-pointer"
-                >
-                  {dayjs(selectedDate).format('YYYY-MM-DD HH:mm')}
-                </div>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <DateTimePickerForm onSubmit={handleDateTimeChange} initialDateTime={dayjs(item.plan_time).toDate()} />
-              </PopoverContent>
-            </Popover>
           </div>
+        </div>
+        <DialogFooter>
+          <Button type="button" onClick={() => handleSubmit(name, dayjs(date).format('YYYY-MM-DD HH:mm:ss'))}>Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
-        )}
-      </div>
-
-
-    </div >
-  );
-};
 
 export default AddTodo;
