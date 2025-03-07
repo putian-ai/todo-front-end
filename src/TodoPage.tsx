@@ -27,6 +27,7 @@ import PaginationDemo from './Pagination'
 import { useToast } from './components/ui/use-toast'
 import { useAtom } from 'jotai'
 import { selectedTagIDAtom } from './atom'
+import AddTodo from './AddTodo'
 
 function TodoPage() {
 
@@ -226,6 +227,9 @@ function TodoPage() {
     await fetchTodos(page, perPage)
     await updateSelectedTodo()
   }
+  const handleAddTodoCreate = async () => {
+    fetchTodos(page, perPage)
+  }
 
   const updateSelectedTodo = async () => {
     const data: GetTodoByTodoIdGetTodoByTodoIdTodoIdGetData = {
@@ -286,6 +290,8 @@ function TodoPage() {
 
   if (todoPage)
 
+
+
     return (
       <>
         <ResizablePanel>
@@ -296,6 +302,7 @@ function TodoPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <AddTodo onCreated={handleAddTodoCreate}          ></AddTodo>
           {/* <DataTable columns={columns} data={todoTableData} /> */}
           {todoPage.items.map((item) => (
             <TodoItem
